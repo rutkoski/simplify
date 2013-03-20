@@ -1,10 +1,6 @@
 <?php
 
-define('SY_DIR', dirname(__file__));
-
-global $__sy_include_path;
-
-$__sy_include_path = array();
+define('SY_DIR', __dir__);
 
 require_once ('Simplify' . DIRECTORY_SEPARATOR . 'Simplify.php');
 require_once ('Simplify' . DIRECTORY_SEPARATOR . 'Autoload.php');

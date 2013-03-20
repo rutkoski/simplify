@@ -2,7 +2,7 @@
 
 global $config;
 
-sy_debug_level(SY_DEBUG_NONE);
+sy_debug_level(SY_DEBUG_ERRORS);
 
 $config['database'] = array(
   'default' => array(

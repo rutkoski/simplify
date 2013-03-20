@@ -1,5 +1,5 @@
 <?php
 
-class HomeController extends ControllerImpl
+class HomeController extends Simplify_Controller
 {
 }
