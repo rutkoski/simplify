@@ -1,0 +1,20 @@
+{
+    "name": "rutkoski/simplify-php",
+    "type": "library",
+    "description": "Simplify PHP Framework",
+    "keywords": ["framework"],
+    "homepage": "https://github.com/rutkoski/simplify-php",
+    "license": "GPL",
+    "authors": [
+        {
+            "name": "Rodrigo Rutkoski Rodrigues",
+            "email": "rutkoski@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.2.4"
+    },
+    "autoload": {
+        "files": ["lib/autoload.php"]
+    }
+}

@@ -1,2 +1,4 @@
-simplify
-========
+simplify-php
+============
+
+Simplify PHP
