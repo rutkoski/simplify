@@ -22,6 +22,6 @@
  * @copyright Copyright 2008 Rodrigo Rutkoski Rodrigues
  */
 
-class Simplify_UploadException extends Simplify_Validation_ValidationException
+class Simplify_UploadException extends Simplify_ValidationException
 {
 }

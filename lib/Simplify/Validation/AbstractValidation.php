@@ -19,35 +19,54 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
+ * @copyright Copyright 2008 Rodrigo Rutkoski Rodrigues
  */
 
 /**
  * 
- * A DataHolder is a Simplify_Dictionary that keeps track of changes to values
+ * Base class for validation
  *
  */
-interface Simplify_Data_HolderInterface extends Simplify_DictionaryInterface
+abstract class Simplify_Validation_AbstractValidation implements Simplify_ValidationInterface
 {
 
   /**
-   * Make all changes to data permanent
+   * Error message
    *
-   * @param string[] $names names to commit 
-   * @return DataHolderInterface
+   * @var string
    */
-  public function commit($names = null);
+  protected $message;
 
   /**
-   * Get an array with name/values pairs that have been modified since the last call commit
-   *
-   * @return mixed[string]
+   * Constructor
+   * 
+   * @param string $message validation fail message
    */
-  public function getModified();
+  function __construct($message = '')
+  {
+    $this->message = $message;
+  }
 
   /**
-   *
-   * @return boolean
+   * (non-PHPdoc)
+   * @see Simplify_ValidationInterface::getError()
    */
-  public function isDirty();
+  public function getError()
+  {
+    return $this->message;
+  }
+
+  /**
+   * 
+   * @param string $message
+   * @throws Simplify_ValidationException
+   */
+  protected function fail($message = null)
+  {
+    if (empty($message)) {
+      $message = $this->message;
+    }
+    throw new Simplify_ValidationException(empty($message) ? 'Validation failed' : $message);
+  }
 
 }

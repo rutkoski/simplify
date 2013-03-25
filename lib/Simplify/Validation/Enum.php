@@ -19,35 +19,59 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
+ * @copyright Copyright 2008 Rodrigo Rutkoski Rodrigues
  */
 
 /**
  * 
- * A DataHolder is a Simplify_Dictionary that keeps track of changes to values
+ * Validate that value exists in a given set of elements
  *
  */
-interface Simplify_Data_HolderInterface extends Simplify_DictionaryInterface
+class Simplify_Validation_Enum extends Simplify_Validation_AbstractValidation
 {
 
   /**
-   * Make all changes to data permanent
+   * Set of valid elements
    *
-   * @param string[] $names names to commit 
-   * @return DataHolderInterface
+   * @var mixed[]
    */
-  public function commit($names = null);
-
-  /**
-   * Get an array with name/values pairs that have been modified since the last call commit
-   *
-   * @return mixed[string]
-   */
-  public function getModified();
+  public $enum;
 
   /**
    *
-   * @return boolean
+   * @var boolean
    */
-  public function isDirty();
+  public $negate;
+
+  /**
+   * Constructor
+   * 
+   * @param string $message
+   * @param mixed[] $enum
+   * @param boolean $negate
+   */
+  public function __construct($message, array $enum = null, $negate = false)
+  {
+    parent::__construct($message);
+    
+    $this->enum = $enum;
+    $this->negate = $negate;
+  }
+
+  /**
+   * (non-PHPdoc)
+   * @see Simplify_ValidationInterface::validate()
+   */
+  public function validate($value)
+  {
+    if ($this->negate) {
+      if (in_array($value, $this->enum)) {
+        $this->fail();
+      }
+    }
+    elseif (!in_array($value, $this->enum)) {
+      $this->fail();
+    }
+  }
 
 }

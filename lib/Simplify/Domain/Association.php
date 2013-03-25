@@ -23,31 +23,46 @@
 
 /**
  * 
- * A DataHolder is a Simplify_Dictionary that keeps track of changes to values
+ * Domain association
  *
  */
-interface Simplify_Data_HolderInterface extends Simplify_DictionaryInterface
+class Simplify_Domain_Association
 {
 
-  /**
-   * Make all changes to data permanent
-   *
-   * @param string[] $names names to commit 
-   * @return DataHolderInterface
-   */
-  public function commit($names = null);
+  const HAS_ONE = 'hasOne';
+
+  const HAS_MANY = 'hasMany';
+
+  const BELONGS_TO = 'belongsTo';
+
+  const HABTM = 'habtm';
 
   /**
-   * Get an array with name/values pairs that have been modified since the last call commit
-   *
-   * @return mixed[string]
+   * 
+   * @var Simplify_Domain_Model_Association
    */
-  public function getModified();
+  public $model;
 
   /**
-   *
-   * @return boolean
+   * 
+   * @param Simplify_Domain_Model_Association $model
    */
-  public function isDirty();
+  public function __construct($model = null)
+  {
+    $this->model = (array) $model;
+  }
+
+  /**
+   * 
+   * @return Simplify_Domain_Model_Entity
+   */
+  public function getTargetModel()
+  {
+    if (! isset($this->model['target'])) {
+      $this->model['target'] = Simplify_Domain::getEntity(sy_get_param($this->model, 1));
+    }
+
+    return $this->model['target'];
+  }
 
 }

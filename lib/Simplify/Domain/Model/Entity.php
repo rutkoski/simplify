@@ -1,10 +1,44 @@
 <?php
 
+/**
+ * SimplifyPHP Framework
+ *
+ * This file is part of SimplifyPHP Framework.
+ *
+ * SimplifyPHP Framework is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * SimplifyPHP Framework is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
+ */
+
+/**
+ * 
+ * Domain Entity Model
+ *
+ */
 class Simplify_Domain_Model_Entity extends Simplify_Domain_Model_DomObj
 {
 
+  /**
+   * 
+   * @var Simplify_Domain_Association[]
+   */
   protected $associations = array();
 
+  /**
+   * 
+   * @param Simplify_Domain_Model_Entity $model
+   */
   public function __construct($model = null)
   {
     parent::__construct($model);
@@ -12,7 +46,7 @@ class Simplify_Domain_Model_Entity extends Simplify_Domain_Model_DomObj
 
   /**
    *
-   * @return Entity
+   * @return Simplify_Domain_Entity
    */
   public function factory($data = null)
   {
@@ -22,7 +56,7 @@ class Simplify_Domain_Model_Entity extends Simplify_Domain_Model_DomObj
       $obj = new $class($data);
     }
     else {
-      $obj = new Entity();
+      $obj = new Simplify_Domain_Entity();
       $obj->model = $this->getName();
       $obj->copyAll($data);
     }
@@ -32,7 +66,7 @@ class Simplify_Domain_Model_Entity extends Simplify_Domain_Model_DomObj
 
   /**
    *
-   * @return AttributeModel
+   * @return Simplify_Domain_Model_Attribute
    */
   public function getPrimaryKey()
   {
@@ -54,7 +88,7 @@ class Simplify_Domain_Model_Entity extends Simplify_Domain_Model_DomObj
       }
     }
 
-    return $name;//$this->getAttribute($name);
+    return $name;
   }
 
   /**
@@ -74,16 +108,16 @@ class Simplify_Domain_Model_Entity extends Simplify_Domain_Model_DomObj
 
   /**
    *
-   * @return AttributeModel
+   * @return Simplify_Domain_Model_Attribute
    */
   public function getAttribute($name)
   {
     if (! $this->hasAttribute($name)) {
-      throw new AttributeNotFoundException("Attribute {$name} not found in entity {$this->getName()}");
+      throw new Simplify_Domain_AttributeNotFoundException("Attribute {$name} not found in entity {$this->getName()}");
     }
 
-    if (! ($this->model['attributes'][$name] instanceof AttributeModel)) {
-      $this->model['attributes'][$name] = new AttributeModel($this->model['attributes'][$name]);
+    if (! ($this->model['attributes'][$name] instanceof Simplify_Domain_Model_Attribute)) {
+      $this->model['attributes'][$name] = new Simplify_Domain_Model_Attribute($this->model['attributes'][$name]);
     }
 
     return $this->model['attributes'][$name];
@@ -101,12 +135,12 @@ class Simplify_Domain_Model_Entity extends Simplify_Domain_Model_DomObj
       }
     }
 
-    throw new AttributeNotFoundException('Attribute not found in entity');
+    throw new Simplify_Domain_AttributeNotFoundException('Attribute not found in entity');
   }
 
   /**
    *
-   * @return array
+   * @return Simplify_Domain_Model_Attribute[]
    */
   public function getAttributes()
   {
@@ -115,7 +149,7 @@ class Simplify_Domain_Model_Entity extends Simplify_Domain_Model_DomObj
 
   /**
    *
-   * @return void
+   * @return boolean
    */
   public function hasAttribute($name)
   {
@@ -124,7 +158,7 @@ class Simplify_Domain_Model_Entity extends Simplify_Domain_Model_DomObj
 
   /**
    *
-   * @return void
+   * @return boolean
    */
   public function hasAssociation($name)
   {
@@ -133,7 +167,7 @@ class Simplify_Domain_Model_Entity extends Simplify_Domain_Model_DomObj
 
   /**
    *
-   * @return array
+   * @return Simplify_Domain_Association[]
    */
   public function getAssociations()
   {
@@ -142,7 +176,7 @@ class Simplify_Domain_Model_Entity extends Simplify_Domain_Model_DomObj
 
   /**
    *
-   * @return AssociationModel
+   * @return Simplify_Domain_Association
    */
   public function getAssociation($name)
   {
@@ -151,7 +185,13 @@ class Simplify_Domain_Model_Entity extends Simplify_Domain_Model_DomObj
     return $this->model['associations'][$name];
   }
 
-  public function factoryAssociation(/*Entity $source, */$name)
+  /**
+   * 
+   * @param string $name
+   * @throws DomainException
+   * @return Simplify_Domain_Association
+   */
+  public function factoryAssociation($name)
   {
     //$id = spl_object_hash($source);
 

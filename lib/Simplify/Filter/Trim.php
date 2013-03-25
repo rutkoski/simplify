@@ -28,54 +28,20 @@
  * @author Rodrigo Rutkoski Rodrigues, <rutkoski@gmail.com>
  * @package Simplify_Kernel_Data_Filter
  */
-class CallbackFilter implements FilterInterface
+class Simplify_Filter_Trim implements Simplify_FilterInterface
 {
 
   /**
-   * Callback.
-   *
-   * @var string|array
-   */
-  public $callback;
-
-  /**
-   * Extra parameters for callback.
-   *
-   * @var array
-   */
-  public $extraParams;
-
-  /**
-   * Value parameter positon.
-   *
-   * @var integer
-   */
-  public $valueParamPos;
-
-  /**
-   * Constructor.
-   *
-   * @param string|array $callback Valid PHP callback.
-   * @return void
-   */
-  public function __construct($callback = null, $extraParams = array(), $valueParamPos = 0)
-  {
-    $this->callback = $callback;
-    $this->extraParams = $extraParams;
-    $this->valueParamPos = $valueParamPos;
-  }
-
-  /**
    * (non-PHPdoc)
-   * @see simplify/kernel/data/filter/IFilter#filter($value)
+   * @see Simplify_FilterInterface::filter()
    */
   public function filter($value)
   {
-    $args = $this->extraParams;
-    array_splice($args, $this->valueParamPos, 0, $value);
-    return call_user_func_array($this->callback, $args);
+    if (is_string($value)) {
+      $value = trim($value);
+    }
+    
+    return $value;
   }
 
 }
-
-?>

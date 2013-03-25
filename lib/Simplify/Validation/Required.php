@@ -19,35 +19,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
+ * @copyright Copyright 2008 Rodrigo Rutkoski Rodrigues
  */
 
 /**
  * 
- * A DataHolder is a Simplify_Dictionary that keeps track of changes to values
+ * Required value
  *
  */
-interface Simplify_Data_HolderInterface extends Simplify_DictionaryInterface
+class Simplify_Validation_Required extends Simplify_Validation_AbstractValidation
 {
 
   /**
-   * Make all changes to data permanent
-   *
-   * @param string[] $names names to commit 
-   * @return DataHolderInterface
+   * (non-PHPdoc)
+   * @see Simplify_ValidationInterface::validate()
    */
-  public function commit($names = null);
-
-  /**
-   * Get an array with name/values pairs that have been modified since the last call commit
-   *
-   * @return mixed[string]
-   */
-  public function getModified();
-
-  /**
-   *
-   * @return boolean
-   */
-  public function isDirty();
+  protected function validate($value)
+  {
+    if (empty($value)) {
+      $this->fail();
+    }
+  }
 
 }

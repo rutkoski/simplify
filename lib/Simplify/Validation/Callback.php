@@ -22,43 +22,41 @@
  */
 
 /**
- * Use a callback to validate data.
+ * 
+ * Use a callback to validate data
  *
- * @author Rodrigo Rutkoski Rodrigues, <rutkoski@gmail.com>
- * @package Simplify_Kernel_Data_Validation
  */
-class Simplify_Validation_CallbackValidator extends Simplify_Validation_AbstractValidator
+class Simplify_Validation_Callback extends Simplify_Validation_AbstractValidation
 {
 
   /**
-   * Callback.
+   * Callback
    *
-   * @var string|array
+   * @var callback
    */
   public $callback;
 
   /**
-   * Extra parameters for callback.
+   * Extra parameters for callback
    *
    * @var array
    */
   public $extraParams;
 
   /**
-   * Value parameter positon.
+   * Value parameter positon in callback
    *
    * @var integer
    */
   public $valueParamPos;
 
   /**
-   * Constructor.
+   * Constructor
    *
-   * @param string|array $callback Valid PHP callback.
-   * @param string $message Error message for failing validation.
-   * @param array $extraParams Extra parameters for callback.
-   * @param integer $valueParamPos In with position does the callback require the value parameter to be.
-   * @return void
+   * @param callback $callback palid PHP callback
+   * @param string $message validation fail message
+   * @param array $extraParams extra parameters for callback
+   * @param integer $valueParamPos the position the callback requires the value parameter to be at
    */
   public function __construct($message, $callback = null, $extraParams = array(), $valueParamPos = 0)
   {
@@ -71,7 +69,7 @@ class Simplify_Validation_CallbackValidator extends Simplify_Validation_Abstract
 
   /**
    * (non-PHPdoc)
-   * @see simplify/kernel/data/validation/IValidator#validate($value)
+   * @see Simplify_ValidationInterface::validate()
    */
   public function validate($value)
   {

@@ -118,7 +118,7 @@ class Simplify_Db_TableDataGateway implements Simplify_Db_RepositoryInterface
     $limit = $params['limit'];
     $offset = $params['offset'];
 
-    return new Pager($this->findCount($params), $limit, $offset);
+    return new Simplify_Pager($this->findCount($params), $limit, $offset);
   }
 
   /**
@@ -177,7 +177,7 @@ class Simplify_Db_TableDataGateway implements Simplify_Db_RepositoryInterface
    */
   public function deleteAll($params = null)
   {
-    $result = s::db()->delete($this->table, "$this->pk = ?")->setParams($params)->execute($id);
+    $result = s::db()->delete($this->table, "$this->pk = ?")->setParams($params)->execute();
     return $result->numRows();
   }
 

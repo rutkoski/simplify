@@ -61,7 +61,7 @@ class Simplify_Db_MPTT
   public static function getInstance($table, $pk = 'id', $parent = 'parent_id', $left = 'left_id', $right = 'right_id')
   {
     if (! isset(self::$instances[$table])) {
-      self::$instances[$table] = new Mptt($table, $pk, $parent, $left, $right);
+      self::$instances[$table] = new self($table, $pk, $parent, $left, $right);
     }
 
     return self::$instances[$table];
@@ -570,7 +570,7 @@ class Simplify_Db_MPTT
         $right_id = $dao->query()->from($this->table)->select($this->right)->where("$this->pk = ?")->execute($ref_id)->fetchOne();
 
         if (is_null($right_id)) {
-          throw new Simplify_Db_MpttException("Row not found in table <b>$this->table</b> where <b>$this->pk</b> = <b>$id</b>");
+          throw new Simplify_Db_MpttException("Row not found in table <b>$this->table</b> where <b>$this->pk</b> = <b>$ref_id</b>");
         }
 
         $dao->query("UPDATE $this->table SET $this->right = $this->right + $width WHERE $this->right > ? AND $this->pk NOT IN ($_ids)")->execute($right_id);
@@ -584,7 +584,7 @@ class Simplify_Db_MPTT
         $left_id = $dao->query()->from($this->table)->select($this->left)->where("$this->pk = ?")->execute($ref_id)->fetchOne();
 
         if (is_null($left_id)) {
-          throw new Simplify_Db_MpttException("Row not found in table <b>$this->table</b> where <b>$this->pk</b> = <b>$id</b>");
+          throw new Simplify_Db_MpttException("Row not found in table <b>$this->table</b> where <b>$this->pk</b> = <b>$ref_id</b>");
         }
 
         $dao->query("UPDATE $this->table SET $this->right = $this->right + $width WHERE $this->right >= ? AND $this->pk NOT IN ($_ids)")->execute($left_id);
@@ -645,7 +645,7 @@ class Simplify_Db_MPTT
 
     $width = $this->__insertSpace($removed, $ref_id, $pos);
 
-    $dao->query("UPDATE $this->table SET $this->left = $this->left + $width, $this->right = $this->right + $width WHERE $this->pk IN ($_ids)")->execute($right_id);
+    $dao->query("UPDATE $this->table SET $this->left = $this->left + $width, $this->right = $this->right + $width WHERE $this->pk IN ($_ids)")->execute($ref_id);
   }
 
   protected function _rebuild($orderBy = null, $parent_id = 0, $left_id = 0)

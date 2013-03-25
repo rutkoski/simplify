@@ -1,6 +1,32 @@
 <?php
 
-class HabtmAssociation extends Association
+/**
+ * SimplifyPHP Framework
+ *
+ * This file is part of SimplifyPHP Framework.
+ *
+ * SimplifyPHP Framework is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * SimplifyPHP Framework is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
+ */
+
+/**
+ *
+ * Domain Has And Belongs To Many Association
+ *
+ */
+class Simplify_Domain_Association_Habtm extends Simplify_Domain_Association
 {
 
   public function afterSave(Entity $entity, $name)
@@ -19,7 +45,7 @@ class HabtmAssociation extends Association
       $associationForeignKey = $this->getAssociationForeignKey($source);
 
       foreach ($entity->{$name} as $i => &$row) {
-        RepositoryManager::factory($target)->save($row);
+        Simplify_Domain_RepositoryManager::factory($target)->save($row);
       }
 
       s::db()->delete($associationTable, "{$associationTable}.{$associationLocalKey} = ?")->execute($localKeyValue);
@@ -53,7 +79,7 @@ class HabtmAssociation extends Association
         'data' => $localKeyValue
       );
 
-      $data = RepositoryManager::factory($target)->findAll($params);
+      $data = Simplify_Domain_RepositoryManager::factory($target)->findAll($params);
 
       $entity->set($name, $data);
       $entity->commit($name);
@@ -74,7 +100,7 @@ class HabtmAssociation extends Association
     $localTable = $source->getTable();
     $localKey = $source->getAttribute($this->getLocalKey($source))->getColumn();
 
-    return "{$associationTable} ON ({$localTable}.{$localKey} = {$associationTable}.{$associaionLocalKey})"
+    return "{$associationTable} ON ({$localTable}.{$localKey} = {$associationTable}.{$associationLocalKey})"
       . " INNER JOIN {$foreignTable} ON ({$associationTable}.{$associationForeignKey} = {$foreignTable}.{$foreignKey})";
   }
 

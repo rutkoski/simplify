@@ -48,6 +48,12 @@ abstract class Simplify_Db_Database implements Simplify_Db_DatabaseInterface
    * @var array
    */
   protected $params;
+  
+  /**
+   * 
+   * @var mixed[]
+   */
+  protected static $log = array();
 
   /**
    * Constructor.
@@ -149,17 +155,11 @@ abstract class Simplify_Db_Database implements Simplify_Db_DatabaseInterface
    */
   public static function log($data = null)
   {
-    static $log;
-
-    if (empty($log)) {
-      $log = array();
-    }
-
     if (! empty($data)) {
-      $log[] = array_filter($data);
+      self::$log[] = array_filter($data);
     }
 
-    return $log;
+    return self::$log;
   }
 
   /**

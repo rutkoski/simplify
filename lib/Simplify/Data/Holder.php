@@ -1,4 +1,5 @@
 <?php
+
 /**
  * SimplifyPHP Framework
  *
@@ -21,9 +22,9 @@
  */
 
 /**
- * Default implementation of DataHolderInterface.
+ * 
+ * Default implementation of Simplify_Data_HolderInterface
  *
- * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
  */
 class Simplify_Data_Holder extends Simplify_Dictionary implements Simplify_Data_HolderInterface
 {
@@ -35,7 +36,7 @@ class Simplify_Data_Holder extends Simplify_Dictionary implements Simplify_Data_
   protected $dirty = false;
 
   /**
-   * Store modified data.
+   * Store modified data
    *
    * @var array
    */
@@ -47,22 +48,22 @@ class Simplify_Data_Holder extends Simplify_Dictionary implements Simplify_Data_
    */
   public function commit($names = null)
   {
-    if (empty($name)) {
+    if (empty($names)) {
       $this->data = array_merge($this->data, $this->modified);
       $this->modified = array();
       $this->dirty = false;
     }
-
+    
     else {
       $names = (array) $names;
-
+      
       foreach ($names as $name) {
         if (isset($this->modified[$name])) {
           $this->data[$name] = $this->modified[$name];
         }
       }
     }
-
+    
     return $this;
   }
 
@@ -121,9 +122,9 @@ class Simplify_Data_Holder extends Simplify_Dictionary implements Simplify_Data_
     if (isset($this->modified[$name])) {
       unset($this->modified[$name]);
     }
-
+    
     $this->dirty = (boolean) count($this->modified);
-
+    
     return parent::_del($name);
   }
 
@@ -136,7 +137,7 @@ class Simplify_Data_Holder extends Simplify_Dictionary implements Simplify_Data_
     if (isset($this->modified[$name])) {
       return $this->modified[$name];
     }
-
+    
     return parent::_get($name, $default, $flags);
   }
 
@@ -161,9 +162,9 @@ class Simplify_Data_Holder extends Simplify_Dictionary implements Simplify_Data_
     else {
       $this->modified[$name] = $value;
     }
-
+    
     $this->dirty = (boolean) count($this->modified);
-
+    
     return $this;
   }
 

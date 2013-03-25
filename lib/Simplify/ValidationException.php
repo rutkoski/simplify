@@ -23,31 +23,24 @@
 
 /**
  * 
- * A DataHolder is a Simplify_Dictionary that keeps track of changes to values
+ * Default exception for validation errors.
  *
  */
-interface Simplify_Data_HolderInterface extends Simplify_DictionaryInterface
+class Simplify_ValidationException extends Exception
 {
 
-  /**
-   * Make all changes to data permanent
-   *
-   * @param string[] $names names to commit 
-   * @return DataHolderInterface
-   */
-  public function commit($names = null);
+  protected $errors;
 
-  /**
-   * Get an array with name/values pairs that have been modified since the last call commit
-   *
-   * @return mixed[string]
-   */
-  public function getModified();
+  public function getErrors()
+  {
+    return $this->errors;
+  }
 
-  /**
-   *
-   * @return boolean
-   */
-  public function isDirty();
+  public function __construct($errors = null, $code = 0)
+  {
+    $this->errors = $errors;
+    
+    parent::__construct('Validation exception', $code);
+  }
 
 }

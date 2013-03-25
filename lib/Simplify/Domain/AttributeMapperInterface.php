@@ -23,9 +23,28 @@
 
 /**
  * 
- * Domain Association Not Found Exception
+ * Data Mapper Interface
+ * 
+ * Converts values between repository and domain formats
  *
  */
-class Simplify_Domain_AssociationNotFoundException extends Exception
+interface Simplify_Domain_AttributeMapperInterface
 {
+
+  /**
+   * Convert repository value format to domain value format 
+   * 
+   * @param mixed $value original value
+   * @return mixed converted value
+   */
+  public function inflate($value);
+
+  /**
+   * Convert domain value format to repository value format
+   *
+   * @param mixed $value original value
+   * @return mixed converted value
+   */
+  public function deflate($value);
+
 }

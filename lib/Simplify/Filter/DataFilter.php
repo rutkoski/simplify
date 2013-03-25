@@ -23,25 +23,25 @@
 
 /**
  *
- * @author "Rodrigo Rutkoski Rodrigues, <rutkoski@gmail.com>"
+ * Filter a data set
  *
  */
-class DataFilter
+class Simplify_Filter_DataFilter
 {
 
   const FILTER_ALL = '*';
 
   /**
-   * Filters.
+   * Filters
    *
-   * @var array
+   * @var Simplify_FilterInterface[]
    */
   protected $filters = array();
 
   /**
-   * Constructor.
+   * Constructor
    *
-   * @param array $rules
+   * @param Simplify_FilterInterface[] $filters
    */
   public function __construct(array $filters = null)
   {
@@ -52,20 +52,22 @@ class DataFilter
 
   /**
    *
-   * @return DataFilter
+   * @return Simplify_Filter_DataFilter
    */
-  public static function parseFrom($filters)
+  public static function parseFrom($filter)
   {
-    if (! ($filters instanceof DataFilter)) {
-      $filters = new self($filters);
+    if (! ($filter instanceof Simplify_Filter_DataFilter)) {
+      $filter = new self($filter);
     }
 
-    return $filters;
+    return $filter;
   }
 
   /**
-   * (non-PHPdoc)
-   * @see simplify/kernel/data/api/IDataFilter#applyFilters($data, $name)
+   * Apply filters to data set or a given key in data set
+   * 
+   * @param mixed $data data set
+   * @param string $name key in data set
    */
   public function applyFilters(&$data, $name = null)
   {
@@ -87,13 +89,13 @@ class DataFilter
         }
       }
     }
-
-    return $data;
   }
 
   /**
-   * (non-PHPdoc)
-   * @see simplify/kernel/data/api/IDataFilter#setFilter($name, $filter)
+   * 
+   * @param string $name
+   * @param Simplify_FilterInterface $filter
+   * @return Simplify_Filter_DataFilter
    */
   public function setFilter($name, FilterInterface $filter)
   {
@@ -138,7 +140,7 @@ class DataFilter
         }
       }
 
-      elseif ($filter instanceof FilterInterface) {
+      elseif ($filter instanceof Simplify_FilterInterface) {
         $Filter = $filter;
       }
 
@@ -151,8 +153,9 @@ class DataFilter
   }
 
   /**
+   * Factory a filter
    *
-   * @return FilterInterface
+   * @return Simplify_FilterInterface
    */
   protected function factory($class, array $params = null)
   {

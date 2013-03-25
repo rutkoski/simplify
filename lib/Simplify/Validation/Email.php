@@ -1,4 +1,5 @@
 <?php
+
 /**
  * SimplifyPHP Framework
  *
@@ -18,22 +19,47 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
+ * @copyright Copyright 2008 Rodrigo Rutkoski Rodrigues
  */
 
 /**
- * Interface for filtering data.
+ * 
+ * Validate email
  *
- * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
  */
-interface FilterInterface
+class Simplify_Validation_Email extends Simplify_Validation_AbstractValidation
 {
 
   /**
-   * Filter data.
    *
-   * @param mixed $value The value.
-   * @return mixed Filtered value.
+   * @var boolean
    */
-  public function filter($value);
+  public $required;
+
+  /**
+   * Constructor
+   * 
+   * @param string $message
+   * @param boolean $required
+   */
+  public function __construct($message, $required = true)
+  {
+    parent::__construct($message);
+    
+    $this->required = $required;
+  }
+
+  /**
+   * (non-PHPdoc)
+   * @see Simplify_ValidationInterface::validate()
+   */
+  public function validate($value)
+  {
+    if ($this->required && empty($value))
+      $this->fail();
+    
+    if (!preg_match('/^[a-z0-9][a-z0-9_\.-]{0,}[a-z0-9]@[a-z0-9][a-z0-9_\.-]{0,}[a-z0-9][\.][a-z0-9]{2,4}$/i', $value))
+      $this->fail();
+  }
 
 }

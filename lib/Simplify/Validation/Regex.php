@@ -23,50 +23,41 @@
  */
 
 /**
- * Callback filter.
+ * 
+ * Use a regular expression to validate data
  *
- * @author Rodrigo Rutkoski Rodrigues, <rutkoski@gmail.com>
- * @package Simplify_Kernel_Data_Filter
  */
-class StringFilter implements FilterInterface
+class Simplify_Validation_Regex extends Simplify_Validation_AbstractValidation
 {
 
-  const STRTOLOWER = 'strtolower';
-
-  const STRTOUPPER = 'strtoupper';
-
-  const TRIM = 'trim';
-
   /**
+   * Regular expression
    *
    * @var string
    */
-  public $filter;
+  public $regex;
 
   /**
-   * Constructor.
-   *
-   * @param string|array $callback Valid PHP callback.
-   * @return void
+   * Constructor
+   * 
+   * @param string $message validation fail message
+   * @param string $regex regular expression 
    */
-  public function __construct($filter = null)
+  public function __construct($message, $regex = null)
   {
-    $this->filter = $filter;
+    parent::__construct($message);
+    
+    $this->regex = $regex;
   }
 
   /**
    * (non-PHPdoc)
-   * @see simplify/kernel/data/filter/IFilter#filter($value)
+   * @see Simplify_ValidationInterface::validate()
    */
-  public function filter($value)
+  public function validate($value)
   {
-    if (! is_string($value)) {
-      return $value;
-    }
-
-    switch ($this->filter) {
-      default:
-        return call_user_func($this->filter, $value);
+    if (!preg_match($this->regex, $value)) {
+      $this->fail();
     }
   }
 

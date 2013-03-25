@@ -22,25 +22,19 @@
  */
 
 /**
- * Default exception for validation errors.
+ * 
+ * Interface for data filters
  *
- * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
  */
-class Simplify_Validation_ValidationException extends Exception
+interface Simplify_FilterInterface
 {
 
-  protected $errors;
-
-  public function getErrors()
-  {
-    return $this->errors;
-  }
-
-  public function __construct($errors = null, $code = 0)
-  {
-    $this->errors = $errors;
-
-    parent::__construct('Validation Exception', $code);
-  }
+  /**
+   * Filter value
+   *
+   * @param mixed $value the value
+   * @return mixed filtered value
+   */
+  public function filter($value);
 
 }

@@ -1,10 +1,36 @@
 <?php
 
+/**
+ * SimplifyPHP Framework
+ *
+ * This file is part of SimplifyPHP Framework.
+ *
+ * SimplifyPHP Framework is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * SimplifyPHP Framework is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
+ */
+
+/**
+ * 
+ * Default Application Controller
+ *
+ */
 class Simplify_Controller_ApplicationController
 {
 
   /**
-   * Execute current request.
+   * Execute current request
    *
    * @return controller/action result
    */
@@ -45,7 +71,7 @@ class Simplify_Controller_ApplicationController
   }
 
   /**
-   * Factory a controller from route parameters.
+   * Factory a controller from route parameters
    *
    * @return Controller
    */
@@ -85,51 +111,6 @@ class Simplify_Controller_ApplicationController
         }
       }
     }
-
-    if (! class_exists($class)) {
-      throw new Exception("Could not factory controller <b>{$controller}</b>: class not found");
-    }
-
-    $Controller = new $class();
-    $Controller->path = $path;
-    $Controller->module = $module;
-
-    return $Controller;
-  }
-
-  /**
-   * Factory a controller from route parameters.
-   *
-   * @return Controller
-   */
-  public function factory2($params)
-  {
-    $module = sy_get_param($params, Simplify_Router::MODULE);//Inflector::camelize(sy_get_param($params, Simplify_Router::MODULE));
-    $controller = Inflector::camelize(sy_get_param($params, Simplify_Router::CONTROLLER));
-
-    $class = $controller . 'Controller';
-
-    if ($module) {
-      $base = s::config()->get('modules_dir') . DIRECTORY_SEPARATOR . $module;
-
-      if (file_exists($base . DIRECTORY_SEPARATOR . 'module.php')) {
-        require_once($base . DIRECTORY_SEPARATOR . 'module.php');
-      }
-    } else {
-      $base = APP_DIR;
-    }
-
-    $base = $base . DIRECTORY_SEPARATOR . 'controller';
-
-    $path = (isset($params['path']) ? DIRECTORY_SEPARATOR . $params['path'] : '');
-
-    $filename = $base . $path . DIRECTORY_SEPARATOR . $class . '.php';
-
-    if (! file_exists($filename)) {
-      throw new Exception("Could not factory controller <b>{$controller}</b>: file not found");
-    }
-
-    require_once($filename);
 
     if (! class_exists($class)) {
       throw new Exception("Could not factory controller <b>{$controller}</b>: class not found");

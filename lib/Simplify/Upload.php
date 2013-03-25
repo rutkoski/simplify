@@ -304,7 +304,7 @@ class Simplify_Upload
       
       if (!preg_match('/\.(' . $type . ')$/i', $this->file['name'])) {
         $this->error = __('Invalid file type');
-        throw new Simplify_Validation_ValidationException($this->error);
+        throw new Simplify_ValidationException($this->error);
       }
     }
     
@@ -312,7 +312,7 @@ class Simplify_Upload
     if ($this->fileMimeType) {
       if (!preg_match('#' . $this->fileMimeType . '#i', $this->getMimeType())) {
         $this->error = sprintf(__('Invalid mime type. Required: %s Found: %s', $type, $this->getMimeType()));
-        throw new Simplify_Validation_ValidationException($this->error);
+        throw new Simplify_ValidationException($this->error);
       }
     }
     
@@ -320,7 +320,7 @@ class Simplify_Upload
     if ($this->maxFileSize) {
       if ($this->getFileSize() > $this->maxFileSize) {
         $this->error = __('Maximum file size exceded');
-        throw new Simplify_Validation_ValidationException($this->error);
+        throw new Simplify_ValidationException($this->error);
       }
     }
   }

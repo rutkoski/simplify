@@ -22,13 +22,17 @@
  */
 
 /**
- * DataView profides an ISimplify_Dictionary interface for an array.
+ * 
+ * Simplify_Data_View profides a Simplify_Dictionary interface to any array or array-like object
  *
- * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
  */
 class Simplify_Data_View extends Simplify_Dictionary
 {
 
+  /**
+   * 
+   * @param mixed $data
+   */
   public function __construct(& $data = null)
   {
     parent::__construct();
@@ -46,7 +50,7 @@ class Simplify_Data_View extends Simplify_Dictionary
 
   /**
    * (non-PHPdoc)
-   * @see SimpleSimplify_Dictionary::_del()
+   * @see Simplify_Dictionary::_del()
    */
   protected function _del($name)
   {
@@ -97,7 +101,7 @@ class Simplify_Data_View extends Simplify_Dictionary
 
   /**
    * (non-PHPdoc)
-   * @see SimpleSimplify_Dictionary::_set()
+   * @see Simplify_Dictionary::_set()
    */
   protected function _set($name, $value)
   {

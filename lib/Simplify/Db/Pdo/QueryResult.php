@@ -151,9 +151,6 @@ class Simplify_Db_Pdo_QueryResult extends Simplify_Db_QueryResult
   public function columnNames()
   {
     throw new Exception('TODO');
-
-    //$return = $this->stmt->getColumnNames();
-    return $return;
   }
 
 }

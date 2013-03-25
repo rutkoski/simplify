@@ -23,52 +23,37 @@
  */
 
 /**
- * Base class for validators.
- *
- * @author Rodrigo Rutkoski Rodrigues, <rutkoski@gmail.com>
- * @package Simplify_Kernel_Data_Validation
+ * 
+ * Validate date and time
+ * 
  */
-abstract class Simplify_Validation_AbstractValidator implements Simplify_Validation_ValidatorInterface
+class Simplify_Validation_DateTime extends Simplify_Validation_AbstractValidation
 {
-
-  /**
-   * Error message.
-   *
-   * @var string
-   */
-  protected $message;
 
   /**
    * Constructor.
    *
+   * @param string|array $callback Valid PHP callback.
+   * @param string $message Error message for failing validation.
+   * @param array $extraParams Extra parameters for callback.
+   * @param integer $valueParamPos In with position does the callback require the value parameter to be.
    * @return void
    */
-  function __construct($message = '')
+  public function __construct($message)
   {
-    $this->message = $message;
+    parent::__construct($message);
   }
 
   /**
    * (non-PHPdoc)
-   * @see simplify/kernel/data/validation/IValidator#getError()
+   * @see simplify/kernel/data/validation/IValidation#validate($value)
    */
-  public function getError()
+  public function validate($value)
   {
-    return $this->message;
-  }
-
-  /**
-   * Throws default validation failure exception.
-   *
-   * @throws ValidationException
-   * @return void
-   */
-  protected function fail($message = null)
-  {
-    if (empty($message)) {
-      $message = $this->message;
-    }
-    throw new Simplify_Validation_ValidationException(empty($message) ? 'Validation failed' : $message);
+    if (empty($value))
+      $this->fail();
+    if ($value instanceof DateTime && !preg_match('/\d{4}-\d{1,2}-\d{1,2}/', $value->format('Y-m-d')))
+      $this->fail();
   }
 
 }

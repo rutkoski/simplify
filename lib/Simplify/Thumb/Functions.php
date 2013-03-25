@@ -39,7 +39,7 @@ class Simplify_Thumb_Functions
   public static function load($file)
   {
     if (! file_exists($file) || ! is_file($file)) {
-      throw new Simplify_Thumb_ThumbException('File not found');
+      throw new Simplify_ThumbException('File not found');
     }
 
     $info = getimagesize($file);
@@ -163,11 +163,11 @@ class Simplify_Thumb_Functions
   public static function validateImageResource($image)
   {
     if ($image === null) {
-      throw new Simplify_Thumb_ThumbException('No image specified');
+      throw new Simplify_ThumbException('No image specified');
     }
 
     if ($image === false) {
-      throw new Simplify_Thumb_ThumbException('File not found or not a valid image file');
+      throw new Simplify_ThumbException('File not found or not a valid image file');
     }
   }
 
@@ -295,7 +295,7 @@ class Simplify_Thumb_Functions
     imagesavealpha($temp, false);
 
     if (! imagecopyresampled($temp, $image, $x0, $y0, 0, 0, $w2, $h2, $w0, $h0)) {
-      throw new Simplify_Thumb_ThumbException('There was an error resizing the image');
+      throw new Simplify_ThumbException('There was an error resizing the image');
     }
 
     return $temp;
@@ -319,7 +319,7 @@ class Simplify_Thumb_Functions
     $temp = imagecreatetruecolor($width, $height);
 
     if (! imagecopyresampled($temp, $image, 0, 0, $x, $y, $width, $height, $width, $height)) {
-      throw new Simplify_Thumb_ThumbException('There was an error cropping the image');
+      throw new Simplify_ThumbException('There was an error cropping the image');
     }
 
     return $temp;

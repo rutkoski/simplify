@@ -19,32 +19,47 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
+ * @copyright Copyright 2008 Rodrigo Rutkoski Rodrigues
  */
 
 /**
- * Interface for data validation.
+ * 
+ * Composite filter
  *
- * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
  */
-interface Simplify_Validation_ValidatorInterface
+class Simplify_Filter_Composite implements Simplify_FilterInterface
 {
 
   /**
-   * Get error message. This should be set in constructor.
+   * Filters
    *
-   * @return string
+   * @var array
    */
-  public function getError();
+  public $filters = array();
 
   /**
-   * Validates $value.
-   *
-   * If validation fails, ValidationException must be thrown.
-   *
-   * @param mixed $value Value that has to be validated.
-   * @return void
-   * @throws ValidationException
+   * (non-PHPdoc)
+   * @see Simplify_FilterInterface::filter()
    */
-  public function validate($value);
+  public function filter($value)
+  {
+    foreach ($this->filters as $filter) {
+      $value = $filter->filter($value);
+    }
+    
+    return $value;
+  }
+
+  /**
+   * Add filter
+   *
+   * @param Simplify_FilterInterface $filter
+   * @return Simplify_Filter_Composite
+   */
+  public function addFilter(IFilter $filter)
+  {
+    $this->filters[] = $filter;
+    return $this;
+  }
 
 }
