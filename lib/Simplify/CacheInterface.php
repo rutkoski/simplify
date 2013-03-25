@@ -1,4 +1,5 @@
 <?php
+
 /**
  * SimplifyPHP Framework
  *
@@ -21,11 +22,11 @@
  */
 
 /**
- * Interface for Cache.
+ * 
+ * Interface for cache
  *
- * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
  */
-interface Simplify_Cache_Interface
+interface Simplify_CacheInterface
 {
 
   /**

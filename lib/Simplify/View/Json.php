@@ -22,36 +22,36 @@
  */
 
 /**
- * Outputs data as a JSON string.
+ * 
+ * Outputs data as a JSON string
  *
- * @author Rodrigo Rutkoski Rodrigues, <rutkoski@gmail.com>
- * @package Simplify_Kernel_View
  */
 class Simplify_View_Json extends Simplify_View
 {
 
   /**
    * (non-PHPdoc)
-   * @see simplify/kernel/view/IView#render($object)
+   * @see Simplify_ViewInterface::render()
    */
   public function render(Simplify_RenderableInterface $object = null)
   {
     if (empty($object)) {
       $object = $this->object;
     }
-
+    
     if (s::request()->ajax()) {
       s::response()->header('Content-type: application/json; charset="utf-8"');
-    } else {
+    }
+    else {
       s::response()->header('Content-Type: text/html; charset=UTF-8');
     }
-
+    
     $data = $object->getAll();
-
+    
     array_walk_recursive($data, 'sy_array_map');
-
+    
     $output = json_encode($data);
-
+    
     return $output;
   }
 

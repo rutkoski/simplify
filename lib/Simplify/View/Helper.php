@@ -22,10 +22,9 @@
  */
 
 /**
- * Base class for helpers.
+ * 
+ * Base class for Simplify_View_Php helpers 
  *
- * @author Rodrigo Rutkoski Rodrigues, <rutkoski@gmail.com>
- * @package Simplify_Kernel
  */
 abstract class Simplify_View_Helper
 {
@@ -39,9 +38,11 @@ abstract class Simplify_View_Helper
   }
 
   /**
-   *
-   * @param string $helper
-   * @return Helper
+   * Factory a helper
+   * 
+   * @param string $name
+   * @throws Exception
+   * @return Simplify_View_Helper
    */
   public static function factory($name)
   {
@@ -71,7 +72,7 @@ abstract class Simplify_View_Helper
   /**
    *
    * @param $output
-   * @return unknown_type
+   * @return string
    */
   protected function output($output)
   {

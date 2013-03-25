@@ -1,4 +1,5 @@
 <?php
+
 /**
  * SimplifyPHP Framework
  *
@@ -21,17 +22,16 @@
  */
 
 /**
- * Defines the interface for views.
+ * 
+ * Defines the interface for views
  *
- * @author Rodrigo Rutkoski Rodrigues, <rutkoski@gmail.com>
- * @package Simplify_Kernel_View
  */
 interface Simplify_ViewInterface
 {
 
   /**
    *
-   * @param $object IRenderable Object to be rendered.
+   * @param Simplify_RenderableInterface $object renderable
    * @return mixed
    */
   public function render(Simplify_RenderableInterface $object = null);

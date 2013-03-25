@@ -22,19 +22,16 @@
  */
 
 /**
- * Abstract view.
+ * 
+ * Abstract view
  *
- * @author Rodrigo Rutkoski Rodrigues, <rutkoski@gmail.com>
- * @package Simplify_Kernel_View
-*/
+ */
 abstract class Simplify_View extends Simplify_Dictionary implements Simplify_ViewInterface, Simplify_RenderableInterface
 {
 
   const JSON = 'Simplify_View_Json';
 
   const PHP = 'Simplify_View_Php';
-
-  const XML = 'Simplify_View_Xml';
 
   /**
    * @var string
@@ -53,53 +50,31 @@ abstract class Simplify_View extends Simplify_Dictionary implements Simplify_Vie
 
   /**
    *
-   * @var IApplicationController
-  */
-  protected $app;
-
-  /**
-   *
-   * @var Config
-   */
-  protected $config;
-
-  /**
-   *
-   * @var ISimplify_Request
-   */
-  protected $request;
-
-  /**
-   *
-   * @var IResponse
-   */
-  protected $response;
-
-  /**
-   *
-   * @var IRouter
-   */
-  protected $router;
-
-  /**
-   *
    * @var IRenderable
    */
   protected $object;
 
   /**
-   *
-   * @return View
+   * Instantiate a view
+   * 
+   * @param string $class
+   * @param Simplify_RenderableInterface $object
+   * @return Simplify_ViewInterface
    */
   public static function factory($class = null, Simplify_RenderableInterface $object = null)
   {
     if (empty($class)) {
       $class = Simplify_View::PHP;
     }
-
+    
     return new $class($object);
   }
 
+  /**
+   * Constructor
+   * 
+   * @param Simplify_RenderableInterface $object
+   */
   public function __construct(Simplify_RenderableInterface $object = null)
   {
     $this->object = $object ? $object : $this;
@@ -107,71 +82,71 @@ abstract class Simplify_View extends Simplify_Dictionary implements Simplify_Vie
 
   /**
    * (non-PHPdoc)
-   * @see simplify/kernel/IRenderable#getLayout()
+   * @see Simplify_RenderableInterface::getLayout()
    */
   public function getLayout()
   {
     if ($this->layout === false) {
       return false;
     }
-
+    
     elseif (empty($this->layout)) {
       $layout = s::config()->get('templates_dir') . '/layouts/layout.php';
-
-      if (! file_exists($layout)) {
+      
+      if (!file_exists($layout)) {
         throw new Exception("Default layout file not found: <b>{$layout}</b>");
       }
     }
-
+    
     elseif (sy_path_is_absolute($this->layout)) {
       $layout = $this->layout;
     }
-
+    
     else {
       $layout = s::config()->get('templates_dir') . '/layouts/' . $this->layout . '.php';
     }
-
-    if (! file_exists($layout)) {
+    
+    if (!file_exists($layout)) {
       throw new Exception("Layout file not found: <b>{$layout}</b>");
     }
-
+    
     return $layout;
   }
 
   /**
    * (non-PHPdoc)
-   * @see simplify/kernel/IRenderable#getTemplate()
+   * @see Simplify_RenderableInterface::getTemplate()
    */
   public function getTemplate()
   {
     global $config;
-
+    
     if ($this->template === false) {
       return false;
     }
-
+    
     if (empty($this->template)) {
       throw new Exception('Template file not set');
     }
-
+    
     elseif (sy_path_is_absolute($this->template)) {
       $template = $this->template;
     }
-
+    
     else {
       $template = $config['templates_dir'] . '/' . $this->template . '.php';
     }
-
-    if (! file_exists($template)) {
+    
+    if (!file_exists($template)) {
       throw new Exception("Template file not found: <b>{$template}</b>");
     }
-
+    
     return $template;
   }
 
   /**
    * (non-PHPdoc)
-   * @see simplify/kernel/IRenderable#setTemplate($template)
+   * @see Simplify_RenderableInterface::setTemplate()
    */
   public function setTemplate($template)
   {
@@ -180,7 +155,7 @@ abstract class Simplify_View extends Simplify_Dictionary implements Simplify_Vie
 
   /**
    * (non-PHPdoc)
-   * @see simplify/kernel/IRenderable#setLayout($layout)
+   * @see Simplify_RenderableInterface::setLayout()
    */
   public function setLayout($layout)
   {
@@ -195,13 +170,13 @@ abstract class Simplify_View extends Simplify_Dictionary implements Simplify_Vie
     catch (Exception $e) {
       $output = $e->getMessage();
     }
-
+    
     return $output;
   }
 
   /**
    * (non-PHPdoc)
-   * @see ISimplify_Dictionary::getAll()
+   * @see Simplify_Dictionary::getAll()
    */
   public function getAll($flags = 0)
   {
@@ -210,20 +185,20 @@ abstract class Simplify_View extends Simplify_Dictionary implements Simplify_Vie
 
   /**
    * (non-PHPdoc)
-   * @see ISimplify_Dictionary::get($name)
+   * @see Simplify_Dictionary::_del()
    */
   protected function _del($name)
   {
     if (isset($this->object->data[$name])) {
       unset($this->object->data[$name]);
     }
-
+    
     return $this;
   }
 
   /**
    * (non-PHPdoc)
-   * @see ISimplify_Dictionary::get($name)
+   * @see Simplify_Dictionary::_get()
    */
   protected function _get($name)
   {
@@ -234,7 +209,7 @@ abstract class Simplify_View extends Simplify_Dictionary implements Simplify_Vie
 
   /**
    * (non-PHPdoc)
-   * @see ISimplify_Dictionary::set($name, $value)
+   * @see Simplify_Dictionary::_has()
    */
   protected function _has($name)
   {
@@ -243,7 +218,7 @@ abstract class Simplify_View extends Simplify_Dictionary implements Simplify_Vie
 
   /**
    * (non-PHPdoc)
-   * @see ISimplify_Dictionary::set($name, $value)
+   * @see Simplify_Dictionary::_set()
    */
   protected function _set($name, $value)
   {

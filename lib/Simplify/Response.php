@@ -1,4 +1,5 @@
 <?php
+
 /**
  * SimplifyPHP Framework
  *
@@ -21,9 +22,9 @@
  */
 
 /**
- * Default response manager.
+ * 
+ * Handle response
  *
- * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
  */
 class Simplify_Response
 {
@@ -34,7 +35,7 @@ class Simplify_Response
 
   /**
    *
-   * @var array
+   * @var array[]
    */
   protected static $headers = array();
 
@@ -43,52 +44,53 @@ class Simplify_Response
    *
    * @param string $string the header
    * @param int $http_response_code http response code
-   * @return Response
+   * @param boolean $replace replace previous queued headers
+   * @return Simplify_Response
    */
   public function header($header, $http_response_code = null, $replace = false)
   {
     if ($replace) {
       self::$headers = array();
     }
-
+    
     $header = array($header, $http_response_code);
-
+    
     self::$headers[md5(serialize($header))] = $header;
-
+    
     return $this;
   }
 
   /**
-   * Send headers and output $content.
+   * Output headers and $content.
    *
    * @param mixed $content the content
-   * @return string
+   * @return string the content
    */
   public function output($content)
   {
     // automagically call __toString if it exists in $content
     $content = '' . $content;
-
+    
     $this->outputHeaders();
-
+    
     echo $content;
-
+    
     return $content;
   }
 
   /**
-   * Send headers to the browser.
+   * Output headers to the browser
    *
-   * @return Response
+   * @return Simplify_Response
    */
   public function outputHeaders()
   {
-    if (! headers_sent() && ! empty(self::$headers)) {
+    if (!headers_sent() && !empty(self::$headers)) {
       foreach (array_unique(self::$headers) as $header) {
         header($header[0], false, $header[1]);
       }
     }
-
+    
     return $this;
   }
 

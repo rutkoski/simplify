@@ -22,9 +22,9 @@
  */
 
 /**
+ * 
  * Basic Simplify_DictionaryInterface implementation.
- *
- * @author "Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>"
+ * 
  */
 class Simplify_Dictionary implements Simplify_DictionaryInterface, ArrayAccess
 {
@@ -58,10 +58,8 @@ class Simplify_Dictionary implements Simplify_DictionaryInterface, ArrayAccess
   }
 
   /**
-   * Automagically calls Simplify_Dictionary::get($name).
-   *
    * (non-PHPdoc)
-   * @see Simplify_DictionaryInterface::get($name)
+   * @see Simplify_DictionaryInterface::get()
    */
   public function __get($name)
   {
@@ -69,10 +67,8 @@ class Simplify_Dictionary implements Simplify_DictionaryInterface, ArrayAccess
   }
 
   /**
-   * Automagically calls Simplify_Dictionary::set($name, $value).
-   *
    * (non-PHPdoc)
-   * @see Simplify_DictionaryInterface::set($name, $data)
+   * @see Simplify_DictionaryInterface::set()
    */
   public function __set($name, $value)
   {
@@ -140,14 +136,14 @@ class Simplify_Dictionary implements Simplify_DictionaryInterface, ArrayAccess
   public function get($name, $default = null, $flags = 0)
   {
     $args = func_get_args();
-
+    
     $func = array($this, '_get');
-
+    
     if ($this->hasGetter($name)) {
       $func = array($this, 'get_' . $name);
       unset($args[0]);
     }
-
+    
     return call_user_func_array($func, $args);
   }
 
@@ -158,55 +154,58 @@ class Simplify_Dictionary implements Simplify_DictionaryInterface, ArrayAccess
   public function getAll($flags = 0)
   {
     $data = $this->data;
-
+    
     foreach ($this->getGetterNames() as $name) {
       $data[$name] = $this->{$name};
     }
-
+    
     return $data;
   }
 
   /**
-   *
+   * Get the setter names
+   * 
    * @return string[]
    */
   public function getSetterNames()
   {
     $names = array();
-
+    
     $methods = get_class_methods($this);
-
+    
     foreach ($methods as $method) {
       if (strpos($method, 'set_') === 0) {
         $names[] = substr($method, 4);
       }
     }
-
+    
     return $names;
   }
 
   /**
+   * Get the getter names 
    *
    * @return string[]
    */
   public function getGetterNames()
   {
     $names = array();
-
+    
     $methods = get_class_methods($this);
-
+    
     foreach ($methods as $method) {
       if (strpos($method, 'get_') === 0) {
         $names[] = substr($method, 4);
       }
     }
-
+    
     return $names;
   }
 
   /**
-   *
-   * @param string $name
+   * Check if getter exists
+   * 
+   * @param string $name getter name
    * @return boolean
    */
   public function hasGetter($name)
@@ -215,8 +214,9 @@ class Simplify_Dictionary implements Simplify_DictionaryInterface, ArrayAccess
   }
 
   /**
+   * Check if setter exists
    *
-   * @param string $name
+   * @param string $name setter name
    * @return boolean
    */
   public function hasSetter($name)
@@ -244,7 +244,7 @@ class Simplify_Dictionary implements Simplify_DictionaryInterface, ArrayAccess
   }
 
   /**
-   * Create Simplify_Dictionary from $data.
+   * Create Simplify_Dictionary from $data
    *
    * If $data is already a Simplify_Dictionary, it is returned unchanged.
    *
@@ -253,10 +253,10 @@ class Simplify_Dictionary implements Simplify_DictionaryInterface, ArrayAccess
    */
   public static function parseFrom($data)
   {
-    if (! ($data instanceof Simplify_DictionaryInterface)) {
+    if (!($data instanceof Simplify_DictionaryInterface)) {
       $data = new Simplify_Dictionary($data);
     }
-
+    
     return $data;
   }
 
@@ -277,14 +277,14 @@ class Simplify_Dictionary implements Simplify_DictionaryInterface, ArrayAccess
   public function set($name, $value)
   {
     $args = func_get_args();
-
+    
     $func = array($this, '_set');
-
+    
     if ($this->hasSetter($name)) {
       $func = array($this, 'set_' . $name);
       unset($args[0]);
     }
-
+    
     return call_user_func_array($func, $args);
   }
 
@@ -293,7 +293,7 @@ class Simplify_Dictionary implements Simplify_DictionaryInterface, ArrayAccess
    *
    * @return array
    */
-  public function & getData()
+  public function &getData()
   {
     return $this->data;
   }
@@ -312,79 +312,80 @@ class Simplify_Dictionary implements Simplify_DictionaryInterface, ArrayAccess
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_DictionaryInterface::copyAll($data)
+   * @see Simplify_DictionaryInterface::copyAll()
    */
   protected function _copyAll($data, $flags = 0)
   {
-    if (empty($data)) return;
-
+    if (empty($data))
+      return;
+    
     if ($data instanceof Simplify_DictionaryInterface) {
       $data = $data->getAll();
     }
-
+    
     foreach ($data as $name => $value) {
       if ((Simplify_Dictionary::FILTER_NULL & $flags) == $flags && is_null($value))
         continue;
-
+      
       if ((Simplify_Dictionary::FILTER_EMPTY & $flags) == $flags && empty($value))
         continue;
-
+      
       $this->set($name, $value);
     }
-
+    
     return $this;
   }
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_DictionaryInterface::get($name)
+   * @see Simplify_DictionaryInterface::get()
    */
   protected function _del($name)
   {
     if (isset($this->data[$name])) {
       unset($this->data[$name]);
     }
-
+    
     return $this;
   }
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_DictionaryInterface::get($name)
+   * @see Simplify_DictionaryInterface::get()
    */
   protected function _get($name, $default = null, $flags = 0)
   {
     if ($this->_has($name, $flags)) {
       return $this->data[$name];
     }
-
+    
     return $default;
   }
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_DictionaryInterface::set($name, $value)
+   * @see Simplify_DictionaryInterface::has()
    */
   protected function _has($name, $flags = 0)
   {
-    if (! isset($this->data[$name])) {
+    if (!isset($this->data[$name])) {
       return false;
     }
-
+    
     if ((Simplify_Dictionary::FILTER_NULL & $flags) == $flags && is_null($this->data[$name])) {
       return false;
     }
-
+    
     if ((Simplify_Dictionary::FILTER_EMPTY & $flags) == $flags && empty($this->data[$name])) {
       return false;
     }
-
+    
     return true;
   }
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_DictionaryInterface::set($name, $value)
+   * @see Simplify_DictionaryInterface::set()
    */
   protected function _set($name, $value)
   {

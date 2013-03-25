@@ -32,17 +32,25 @@ class Simplify_Cache_Yaml extends Simplify_Cache_File
 
   public function __construct($path = null, $ttl = null)
   {
-    parent::__construct($path, $timeout);
+    parent::__construct($path, $ttl);
   }
 
+  /**
+   * (non-PHPdoc)
+   * @see Simplify_Cache_File::read()
+   */
   public function read($id)
   {
-    return Syml::load(parent::read($id));
+    return Simplify_Syml::load(parent::read($id));
   }
 
+  /**
+   * (non-PHPdoc)
+   * @see Simplify_Cache_File::write()
+   */
   public function write($id, $data = '', $ttl = null)
   {
-    return parent::write($id, Syml::dump($data), $ttl);
+    return parent::write($id, Simplify_Syml::dump($data), $ttl);
   }
 
 }

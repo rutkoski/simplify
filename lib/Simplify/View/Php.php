@@ -1,4 +1,5 @@
 <?php
+
 /**
  * SimplifyPHP Framework
  *
@@ -21,10 +22,9 @@
  */
 
 /**
- * Basic view using native PHP.
+ * 
+ * Basic view using native PHP
  *
- * @author Rodrigo Rutkoski Rodrigues, <rutkoski@gmail.com>
- * @package Simplify_Kernel_View
  */
 class Simplify_View_Php extends Simplify_View
 {
@@ -36,74 +36,77 @@ class Simplify_View_Php extends Simplify_View
 
   /**
    * (non-PHPdoc)
-   * @see simplify2/kernel/view/IView#render($object)
+   * @see Simplify_ViewInterface::render()
    */
   public function render(Simplify_RenderableInterface $object = null)
   {
     if (empty($object)) {
       $object = $this->object;
     }
-
+    
     $template = $object->getTemplate();
-
-    if ($template === false) return '';
-
-    if (! file_exists($template)) {
+    
+    if ($template === false)
+      return '';
+    
+    if (!file_exists($template)) {
       throw new Exception("Template file not found: <b>$template</b>");
     }
-
+    
     $output = $this->internalRender($object, $template);
-
+    
     $layout = $object->getLayout();
-
+    
     if ($layout !== false) {
       if (empty($layout)) {
         $layout = $this->getLayout();
       }
-
+      
       $view = new self();
       $view->copyAll($object);
       $view->copyAll($this);
       $view->set('layout_content', $output);
       $view->setTemplate($layout);
       $view->setLayout(false);
-
+      
       $output = $view->render();
     }
-
+    
     return $output;
   }
 
   /**
-   *
-   * @param $object
-   * @param $template
-   * @return unknown_type
+   * Renders the template
+   * 
+   * @param Simplify_RenderableInterface $object
+   * @param string $template
+   * @return string
    */
   protected function internalRender(Simplify_RenderableInterface $object, $template)
   {
     s::response()->header('Content-Type: text/html; charset=UTF-8');
-
+    
     extract($object->getAll(), EXTR_REFS);
-
+    
     ob_start();
-
-    require($template);
-
+    
+    require ($template);
+    
     $output = ob_get_clean();
-
+    
     return $output;
   }
 
   /**
-   *
+   * (non-PHPdoc)
+   * @see Simplify_Dictionary::__get()
    */
   public function __get($name)
   {
-    if (! isset(self::$helpers[$name])) {
+    if (!isset(self::$helpers[$name])) {
       self::$helpers[$name] = Simplify_View_Helper::factory($name);
     }
-
+    
     return self::$helpers[$name];
   }
 

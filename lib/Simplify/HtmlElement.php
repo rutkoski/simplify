@@ -1,5 +1,31 @@
 <?php
 
+/**
+ * SimplifyPHP Framework
+ *
+ * This file is part of SimplifyPHP Framework.
+ *
+ * SimplifyPHP Framework is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * SimplifyPHP Framework is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
+ */
+
+/**
+ * 
+ * Object that represents an HTML element
+ *
+ */
 class Simplify_HtmlElement
 {
 
@@ -30,7 +56,8 @@ class Simplify_HtmlElement
   {
     if (preg_match('/^<([a-z]+)>$/', $e, $o)) {
       $this->name = $o[1];
-    } else {
+    }
+    else {
       $this->html($e);
     }
     $this->attr($attrs);
@@ -44,7 +71,8 @@ class Simplify_HtmlElement
   {
     if (func_num_args() == 1) {
       return $this->attr("data-{$name}");
-    } else {
+    }
+    else {
       return $this->attr("data-{$name}", $value);
     }
   }
@@ -105,9 +133,11 @@ class Simplify_HtmlElement
       foreach ($attr as $name => $value) {
         $this->attrs[$name] = $value;
       }
-    } elseif (is_null($value)) {
+    }
+    elseif (is_null($value)) {
       return isset($this->attrs[$attr]) ? $this->attrs[$attr] : false;
-    } else {
+    }
+    else {
       $this->attrs[$attr] = $value;
     }
     return $this;
@@ -122,7 +152,8 @@ class Simplify_HtmlElement
     $e = e($e);
     if (empty($this->parent)) {
       $this->parent = e()->append($this)->append($e);
-    } elseif (($i = $this->index()) !== false) {
+    }
+    elseif (($i = $this->index()) !== false) {
       array_splice($this->parent->children, $i, 0, array($e));
       $e->parent = $this->parent;
     }
@@ -138,7 +169,8 @@ class Simplify_HtmlElement
     $e = e($e);
     if (empty($this->parent)) {
       $e->append($this);
-    } else {
+    }
+    else {
       $e->append($this->after($e));
     }
     return $this;
@@ -168,7 +200,8 @@ class Simplify_HtmlElement
   {
     if ($e) {
       return array_search($e, $this->children);
-    } elseif ($this->parent) {
+    }
+    elseif ($this->parent) {
       return array_search($this, $this->parent->children);
     }
     return false;
@@ -181,7 +214,7 @@ class Simplify_HtmlElement
   public function append($e)
   {
     $_e = is_array($e) ? $e : array($e);
-
+    
     foreach ($_e as $e) {
       $e = e($e)->remove();
       $e->parent = $this;
@@ -219,19 +252,21 @@ class Simplify_HtmlElement
   {
     if (is_null($e)) {
       $s = '';
-
+      
       foreach ($this->children as $child) {
         if ($child instanceof Simplify_HtmlElement) {
           $s .= $child->render();
-        } else {//if (is_string($child)) {
+        }
+        else { //if (is_string($child)) {
           $s .= $child;
         }
       }
-
+      
       return $s;
-    } else {
+    }
+    else {
       $this->children = array($e);
-
+      
       return $this;
     }
   }
@@ -248,27 +283,29 @@ class Simplify_HtmlElement
   protected function render()
   {
     $s = '';
-
+    
     $tag = $this->name;
-
+    
     $html = $this->html();
-
+    
     $attrs = array();
     foreach ($this->attrs as $name => $value) {
       $attrs[] = $name . '="' . $value . '"';
     }
     $attrs = empty($attrs) ? '' : ' ' . implode(' ', $attrs);
-
+    
     if ($tag) {
       if (in_array($tag, self::$closedElements)) {
         $s .= "<{$tag}{$attrs}/>";
-      } else {
+      }
+      else {
         $s .= "<{$tag}{$attrs}>{$html}</{$tag}>";
       }
-    } else {
+    }
+    else {
       $s = $html;
     }
-
+    
     return $s;
   }
 

@@ -1,10 +1,39 @@
 <?php
 
+/**
+ * SimplifyPHP Framework
+ *
+ * This file is part of SimplifyPHP Framework.
+ *
+ * SimplifyPHP Framework is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * SimplifyPHP Framework is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
+ */
+
+/**
+ * 
+ * Basic image operations
+ *
+ */
 class Simplify_Thumb_Functions
 {
 
   /**
-   *
+   * Load an image
+   * 
+   * @param string $file
+   * @throws Simplify_Thumb_ThumbException
    * @return resource
    */
   public static function load($file)
@@ -39,8 +68,12 @@ class Simplify_Thumb_Functions
   }
 
   /**
-   *
-   * @return void
+   * Output an image
+   * 
+   * @param resource $image
+   * @param string $type
+   * @param int $quality
+   * @param int $cacheSeconds
    */
   public static function output($image, $type = null, $quality = null, $cacheSeconds = 604800)
   {
@@ -77,6 +110,14 @@ class Simplify_Thumb_Functions
     exit();
   }
 
+  /**
+   * Save an image
+   * 
+   * @param resource $image
+   * @param string $file
+   * @param string $type
+   * @param int $quality
+   */
   public static function save($image, $file, $type = null, $quality = 99)
   {
     self::validateImageResource($image);
@@ -103,8 +144,9 @@ class Simplify_Thumb_Functions
   }
 
   /**
-   *
-   * @return void
+   * Destroy image resource
+   * 
+   * @param resource $image
    */
   public static function destroy($image)
   {
@@ -112,6 +154,12 @@ class Simplify_Thumb_Functions
     imagedestroy($image);
   }
 
+  /**
+   * Validate image resource
+   * 
+   * @param resource $image
+   * @throws Simplify_Thumb_ThumbException
+   */
   public static function validateImageResource($image)
   {
     if ($image === null) {
@@ -123,11 +171,29 @@ class Simplify_Thumb_Functions
     }
   }
 
+  /**
+   * Get mime type
+   * 
+   * @param string $type
+   * @return string
+   */
   public static function getImageMimeType($type)
   {
     return image_type_to_mime_type($type);
   }
 
+  /**
+   * Get the font size the fits text inside $width and $height
+   * 
+   * @param int $width
+   * @param int $height
+   * @param string $font
+   * @param string $text
+   * @param int $minsize
+   * @param int $maxsize
+   * @param int $inc
+   * @return int
+   */
   public static function fitText($width = null, $height = null, $font = null, $text = null, $minsize = 0, $maxsize = 200, $inc = 2)
   {
     $size = $minsize;
@@ -149,6 +215,19 @@ class Simplify_Thumb_Functions
     return $size;
   }
 
+  /**
+   * Resize image
+   * 
+   * @param resource $image
+   * @param int $width
+   * @param int $height
+   * @param bool $proportional
+   * @param bool $fitInside
+   * @param bool $far
+   * @param int $background
+   * @throws Simplify_Thumb_ThumbException
+   * @return unknown|Simplify_Thumb_Functions|resource
+   */
   public static function resize($image, $width = null, $height = null, $proportional = true, $fitInside = true, $far = false, $background = 0xffffff)
   {
     self::validateImageResource($image);
@@ -223,8 +302,15 @@ class Simplify_Thumb_Functions
   }
 
   /**
-   *
-   * @return void
+   * Crop image
+   * 
+   * @param resource $image
+   * @param int $x
+   * @param int $y
+   * @param int $width
+   * @param int $height
+   * @throws Simplify_Thumb_ThumbException
+   * @return resource
    */
   public static function crop($image, $x, $y, $width, $height)
   {

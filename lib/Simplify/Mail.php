@@ -26,7 +26,7 @@ require_once (SY_DIR . '/lib/html_mime_mail/htmlMimeMail5.php');
 
 /**
  *
- * @author Rutkoski
+ * Basic mail class
  *
  */
 class Simplify_Mail
@@ -47,9 +47,13 @@ class Simplify_Mail
   public $mailEngine = self::MAIL;
 
   public $smtpHost;
+
   public $smtpPort;
+
   public $smtpAuth;
+
   public $smtpUser;
+
   public $smtpPassword;
 
   /**
@@ -101,34 +105,34 @@ class Simplify_Mail
    */
   public function send($to, $subject, $data)
   {
-    if (! $this->mailFrom) {
+    if (!$this->mailFrom) {
       $this->error = __('Missing mail_from parameter.');
       throw new Exception($this->error);
     }
-
-    if (! $this->htmlTemplate) {
+    
+    if (!$this->htmlTemplate) {
       $this->error = __('Missing html_template parameter.');
       throw new Exception($this->error);
     }
-
+    
     $htmlTpl = $this->htmlTemplate;
     $textTpl = $this->textTemplate;
-
+    
     $this->render($data, $htmlTpl, $textTpl);
-
+    
     $mail = $this->getMail();
     $mail->setFrom($this->mailFrom);
     $mail->setSubject($subject);
-
+    
     $to = (array) $to;
-
+    
     $sent = $mail->send($to, $this->mailEngine);
-
+    
     if (false === $sent) {
       $this->error = $mail->errors;
-
+      
       sy_log('mail', $this->error);
-
+      
       throw new Exception($this->error);
     }
   }
@@ -143,14 +147,14 @@ class Simplify_Mail
     $html->setLayout($this->htmlLayout);
     $html->copyAll($data);
     $html = $html->render();
-
+    
     if (empty($textTpl)) {
       $crlf = "\r\n";
       $text = $html;
       $text = preg_replace('#< */ *p *>|< *br */? *>#i', $crlf, $text);
       $text = strip_tags($text);
     }
-
+    
     else {
       $text = Simplify_View::factory();
       $text->setTemplate($textTpl);
@@ -158,10 +162,10 @@ class Simplify_Mail
       $text->copyAll($data);
       $text = $text->render();
     }
-
+    
     $this->html = $html;
     $this->text = $text;
-
+    
     $mail = $this->getMail();
     $mail->setHTML($html);
     $mail->setText($text);
@@ -179,19 +183,13 @@ class Simplify_Mail
       self::$mail->setHTMLCharset('UTF-8');
       self::$mail->setHeadCharset('UTF-8');
       self::$mail->setPriority('high');
-
+      
       if ($this->mailEngine == self::SMTP) {
-        self::$mail->setSMTPParams(
-          $this->smtpHost,
-          $this->smtpPort,
-          null,
-          $this->smtpAuth,
-          $this->smtpUser,
-          $this->smtpPassword
-        );
+        self::$mail->setSMTPParams($this->smtpHost, $this->smtpPort, null, $this->smtpAuth, $this->smtpUser, $this->smtpPassword);
       }
     }
-
+    
     return self::$mail;
   }
+
 }

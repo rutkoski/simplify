@@ -24,7 +24,7 @@
 
 /**
  *
- * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
+ * 
  *
  */
 class Simplify_View_Helper_String extends Simplify_View_Helper
@@ -45,7 +45,7 @@ class Simplify_View_Helper_String extends Simplify_View_Helper
    * @param int $break use -1 to break before work, 1 to break after word or 0 to break at length
    * @return string truncated string
    */
-  public function truncate($string, $length = 80, $trail = '...', $break = TextHelper::BREAK_BEFORE, $breakstr = ' .,;-:!?')
+  public function truncate($string, $length = 80, $trail = '...', $break = Simplify_View_Helper_String::BREAK_BEFORE, $breakstr = ' .,;-:!?')
   {
     if (strlen(utf8_decode($string)) <= $length)
       return $string;
@@ -53,11 +53,11 @@ class Simplify_View_Helper_String extends Simplify_View_Helper
     $string = utf8_decode($string);
     $string = strip_tags($string);
 
-    if ($break == TextHelper::BREAK_BEFORE) {
+    if ($break == Simplify_View_Helper_String::BREAK_BEFORE) {
       while ($length > 0 && false === strpbrk(substr($string, $length, 1), $breakstr))
         $length --;
     }
-    elseif ($break == TextHelper::BREAK_AFTER) {
+    elseif ($break == Simplify_View_Helper_String::BREAK_AFTER) {
       while ($length < strlen($string) && false === strpbrk(substr($string, $length, 1), $breakstr))
         $length ++;
     }

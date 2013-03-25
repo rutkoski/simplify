@@ -27,9 +27,13 @@
  * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
  * @package Kernel_Cache
  */
-class Simplify_Cache_Session implements Simplify_Cache_Interface
+class Simplify_Cache_Session implements Simplify_CacheInterface
 {
 
+  /**
+   * (non-PHPdoc)
+   * @see Simplify_CacheInterface::cached()
+   */
   public function cached($id)
   {
     if (!isset($_SESSION['simplify_cache_session'][$id]))
@@ -40,21 +44,33 @@ class Simplify_Cache_Session implements Simplify_Cache_Interface
     return mktime() <= $data['expires'];
   }
 
+  /**
+   * (non-PHPdoc)
+   * @see Simplify_CacheInterface::delete()
+   */
   public function delete($id)
   {
     if (isset($_SESSION['simplify_cache_session'][$id]))
       unset($_SESSION['simplify_cache_session'][$id]);
   }
 
+  /**
+   * (non-PHPdoc)
+   * @see Simplify_CacheInterface::flush()
+   */
   public function flush()
   {
     $_SESSION['simplify_cache_session'] = null;
   }
 
+  /**
+   * (non-PHPdoc)
+   * @see Simplify_CacheInterface::read()
+   */
   public function read($id)
   {
     if (!$this->cached($id)) {
-      throw new CacheException('Not cached');
+      throw new Simplify_CacheException('Not cached');
     }
 
     $data = $_SESSION['simplify_cache_session'][$id];
@@ -62,12 +78,16 @@ class Simplify_Cache_Session implements Simplify_Cache_Interface
     if (mktime() > $data['expires']) {
       $this->delete($id);
 
-      throw new CacheException('Cache expired');
+      throw new Simplify_CacheException('Cache expired');
     }
 
     return $data['data'];
   }
 
+  /**
+   * (non-PHPdoc)
+   * @see Simplify_CacheInterface::write()
+   */
   public function write($id, $data = '', $ttl = 0)
   {
     $_SESSION['simplify_cache_session'][$id] = array('expires' => mktime() + $ttl, 'data' => $data, );

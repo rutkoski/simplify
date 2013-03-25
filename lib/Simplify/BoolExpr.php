@@ -1,4 +1,5 @@
 <?php
+
 /**
  * SimplifyPHP Framework
  *
@@ -21,6 +22,7 @@
  */
 
 /**
+ * 
  * Builds a boolean expression from an array
  *
  */
@@ -30,7 +32,7 @@ class Simplify_BoolExpr
   /**
    * Recursively parses an array into a boolean expression.
    * First level of the array uses AND operation if $and is TRUE, OR otherwise.
-   * Each level of the array inverts the operation.
+   * Each sub-level of the array inverts the operation.
    *
    * @return string the expression
    */
@@ -39,25 +41,25 @@ class Simplify_BoolExpr
     if (empty($expr)) {
       return null;
     }
-
-    if (! is_array($expr)) {
+    
+    if (!is_array($expr)) {
       return $expr;
     }
-
+    
     if (count($expr) == 1) {
-      return self::parse($expr[0], ! $and);
+      return self::parse($expr[0], !$and);
     }
-
+    
     foreach ($expr as &$v) {
-      $x = self::parse($v, ! $and);
-
+      $x = self::parse($v, !$and);
+      
       if (is_array($v) && count($v) > 1) {
         $x = "({$x})";
       }
-
+      
       $v = $x;
     }
-
+    
     return implode($and ? ' AND ' : ' OR ', $expr);
   }
 

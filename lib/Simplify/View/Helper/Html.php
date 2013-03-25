@@ -23,7 +23,7 @@
 
 /**
  *
- * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
+ * Html helper
  *
  */
 class Simplify_View_Helper_Html extends Simplify_View_Helper
@@ -50,9 +50,7 @@ class Simplify_View_Helper_Html extends Simplify_View_Helper
    */
   public function css($href, $attrs = array(), $params = array())
   {
-    if (! sy_url_is_absolute($href)) {
-      $href = sy_fix_url(s::config()->get('theme_url') . '/css/' . $href);
-    }
+    $href = sy_absolute_url($href, '/css');
 
     $href = sy_fix_extension($href, 'css');
 
@@ -67,9 +65,7 @@ class Simplify_View_Helper_Html extends Simplify_View_Helper
    */
   public function js($href, $attrs = array(), $params = array())
   {
-    if (! sy_url_is_absolute($href)) {
-      $href = sy_fix_url(s::config()->get('theme_url') . '/javascript/' . $href);
-    }
+    $href = sy_absolute_url($href, '/javascript');
 
     $href = sy_fix_extension($href, 'js');
 
@@ -80,7 +76,7 @@ class Simplify_View_Helper_Html extends Simplify_View_Helper
 
   /**
    *
-   * @return unknown_type
+   * @return Simplify_HtmlElement
    */
   public function link($href, $label, $title = null, $attrs = array(), $params = array())
   {

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * SimplifyPHP Framework
  *
@@ -20,16 +21,16 @@
  * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
  */
 
-if (! function_exists('syck_load')) {
-  require_once (SY_DIR . '/lib/spyc.php');
+if (!function_exists('syck_load')) {
+  require_once (SY_DIR . '/vendor/spyc.php');
 }
 
 /**
- * YAML wrapper.
+ * 
+ * YAML wrapper
  *
- * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
  */
-class Data_Syml
+class Simplify_Syml
 {
 
   /**
@@ -63,7 +64,7 @@ class Data_Syml
     if (function_exists('syck_load')) {
       return syck_load($yaml);
     }
-
+    
     return spyc_load($yaml);
   }
 
@@ -77,7 +78,7 @@ class Data_Syml
     if (function_exists('syck_dump')) {
       return syck_dump($data);
     }
-
+    
     return Spyc::YAMLDump($data);
   }
 

@@ -1,16 +1,50 @@
 <?php
 
+/**
+ * SimplifyPHP Framework
+ *
+ * This file is part of SimplifyPHP Framework.
+ *
+ * SimplifyPHP Framework is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * SimplifyPHP Framework is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
+ */
+
+/**
+ * 
+ * Image processing
+ *
+ */
 class Simplify_Thumb
 {
 
   const TOP = 'T';
+
   const TOP_LEFT = 'TL';
+
   const TOP_RIGHT = 'TR';
+
   const BOTTOM = 'B';
+
   const BOTTOM_LEFT = 'BL';
+
   const BOTTOM_RIGHT = 'BR';
+
   const LEFT = 'L';
+
   const RIGHT = 'R';
+
   const CENTER = 'C';
 
   public $baseDir;
@@ -28,8 +62,9 @@ class Simplify_Thumb
   protected $originalType;
 
   /**
+   * Instantiate a new instance of Simplify_Thumb
    *
-   * @return Thumb
+   * @return Simplify_Thumb
    */
   public static function factory()
   {
@@ -37,9 +72,8 @@ class Simplify_Thumb
   }
 
   /**
-   * Constructor.
+   * Constructor
    *
-   * @param IApplicationController $app
    * @return void
    */
   public function __construct()
@@ -50,8 +84,10 @@ class Simplify_Thumb
   }
 
   /**
-   *
-   * @return Thumb
+   * Ignore cached files
+   * 
+   * @param boolean $ignoreCache
+   * @return Simplify_Thumb
    */
   public function ignoreCache($ignoreCache = true)
   {
@@ -60,13 +96,15 @@ class Simplify_Thumb
   }
 
   /**
-   *
-   * @return Thumb
+   * Load image file
+   * 
+   * @param string $file
+   * @return Simplify_Thumb
    */
   public function load($file)
   {
     $this->originalFile = $file;
-    if (! sy_path_is_absolute($file)) {
+    if (!sy_path_is_absolute($file)) {
       $file = $this->baseDir . $this->filesPath . DIRECTORY_SEPARATOR . $file;
     }
     $info = @getimagesize($file);
@@ -75,8 +113,15 @@ class Simplify_Thumb
   }
 
   /**
-   *
-   * @return Thumb
+   * Resize image
+   * 
+   * @param int $width reference output width
+   * @param int $height reference output height
+   * @param bool $proportional keep original proportion
+   * @param bool $fitInside fit image inside (true) or outside (false) $width and $height
+   * @param bool $far output exactly $width and $height and fill empty space with $background color
+   * @param int $background background color or transparent (false)
+   * @return Simplify_Thumb
    */
   public function resize($width = null, $height = null, $proportional = true, $fitInside = true, $far = false, $background = 0xffffff)
   {
@@ -87,8 +132,13 @@ class Simplify_Thumb
   }
 
   /**
-   *
-   * @return Thumb
+   * Crop image
+   * 
+   * @param int $x crop top position
+   * @param int $y crop left position
+   * @param int $width crop width
+   * @param int $height crop height
+   * @return Simplify_Thumb
    */
   public function crop($x, $y, $width, $height)
   {
@@ -99,10 +149,14 @@ class Simplify_Thumb
   }
 
   /**
-   *
-   * @return Thumb
+   * Zoom and crop image
+   * 
+   * @param int $width final width
+   * @param int $height final height
+   * @param string $gravity position position
+   * @return Simplify_Thumb
    */
-  public function zoomCrop($width = null, $height = null, $gravity = Thumb::CENTER)
+  public function zoomCrop($width = null, $height = null, $gravity = Simplify_Thumb::CENTER)
   {
     $params = func_get_args();
     array_unshift($params, 'Simplify_Thumb_Plugin_ZoomCrop');
@@ -111,8 +165,10 @@ class Simplify_Thumb
   }
 
   /**
-   *
-   * @return Thumb
+   * Set jpg quality
+   * 
+   * @param int $quality jpg ouput quality (1 - 100)
+   * @return Simplify_Thumb
    */
   public function quality($quality)
   {
@@ -121,8 +177,10 @@ class Simplify_Thumb
   }
 
   /**
-   *
-   * @return Thumb
+   * Change image brightness level
+   * 
+   * @param int $level -255 = min brightness, 0 = no change, +255 = max brightness
+   * @return Simplify_Thumb
    */
   public function brightness($level)
   {
@@ -133,8 +191,10 @@ class Simplify_Thumb
   }
 
   /**
-   *
-   * @return Thumb
+   * Change image contrast level
+   * 
+   * @param int $level -100 = max contrast, 0 = no change, +100 = min contrast
+   * @return Simplify_Thumb
    */
   public function contrast($level)
   {
@@ -145,8 +205,10 @@ class Simplify_Thumb
   }
 
   /**
-   *
-   * @return Thumb
+   * Call plugin
+   * 
+   * @param string $plugin plugin class
+   * @return Simplify_Thumb
    */
   public function plugin($plugin)
   {
@@ -156,8 +218,9 @@ class Simplify_Thumb
   }
 
   /**
-   * Save the image.
-   *
+   * Save the image
+   * 
+   * @param string $file output filename
    * @return string
    */
   public function save($file = null)
@@ -165,86 +228,94 @@ class Simplify_Thumb
     if (empty($file)) {
       $file = $this->originalFile;
     }
-
-    if (! sy_path_is_absolute($file)) {
+    
+    if (!sy_path_is_absolute($file)) {
       $file = $this->baseDir . $this->filesPath . DIRECTORY_SEPARATOR . $file;
     }
-
+    
     $cacheFilename = $this->getCacheFilename();
-
-    if (file_exists($cacheFilename) && ! $this->ignoreCache) {
+    
+    if (file_exists($cacheFilename) && !$this->ignoreCache) {
       copy($cacheFilename, $file);
-    } else {
+    }
+    else {
       $this->process()->save($file);
     }
-
+    
     return $file;
   }
 
   /**
-   * Output the image to the browser.
-   *
-   * @return void
+   * Output the image to the browser
+   * 
+   * @param string $type image type
+   * @param int $cacheSeconds cache time in seconds
    */
   public function output($type = null, $cacheSeconds = 604800)
   {
-    if (file_exists($cacheFilename) && ! $this->ignoreCache) {
+    $cacheFilename = $this->getCacheFilename();
+    
+    if (file_exists($cacheFilename) && !$this->ignoreCache) {
       $this->outputFromCache($type, $cacheSeconds);
-    } else {
+    }
+    else {
       $this->process()->output($type, $cacheSeconds);
     }
   }
 
   /**
-   * Cache and output the image to browser.
-   *
-   * @return void
+   * Cache and output the image to browser
+   * 
+   * @param string $type image type
+   * @param int $cacheSeconds cache time in seconds
    */
   public function outputFromCache($type = null, $cacheSeconds = 604800)
   {
     if (empty($type)) {
       $type = $this->originalType;
     }
-
+    
     if ($cacheSeconds) {
       header("Cache-Control: private, max-age={$cacheSeconds}, pre-check={$cacheSeconds}");
       header("Expires: " . date(DATE_RFC822, strtotime("{$cacheSeconds} seconds")));
       header("Pragma: private");
-    } else {
+    }
+    else {
       header("Pragma: no-cache");
     }
-
+    
     header('Content-Type: ' . $this->getImageMimeType($type));
-
+    
     readfile($this->baseDir . $this->cache($type)->getCacheFilename());
-
+    
     exit();
   }
 
   /**
-   * Cache the image.
-   *
-   * @return Thumb
+   * Process and cache the image
+   * 
+   * @param string $type image type
+   * @return Simplify_Thumb
    */
   public function cache($type = null)
   {
     if (empty($type)) {
       $type = $this->originalType;
     }
-
+    
     $cacheFilename = $this->getCacheFilename($type);
-
+    
     $filename = $this->baseDir . $cacheFilename;
-
-    if (! file_exists($filename) || $this->ignoreCache) {
+    
+    if (!file_exists($filename) || $this->ignoreCache) {
       $this->process()->save($filename, $type);
     }
-
+    
     return $this;
   }
 
   /**
-   * Get image cache filename.
+   * Get image cache filename
    *
    * @return string
    */
@@ -253,21 +324,32 @@ class Simplify_Thumb
     if (empty($type)) {
       $type = $this->originalType;
     }
-
+    
     $filename = $this->cachePath . '/' . $this->getCachePrefix() . md5(serialize($this->operations)) . image_type_to_extension($type);
-
+    
     return $filename;
   }
 
+  /**
+   * Delete image cache
+   * 
+   * @return Simplify_Thumb
+   */
   public function cleanCached()
   {
     foreach (glob($this->baseDir . $this->cachePath . '/' . $this->getCachePrefix() . '*.*') as $file) {
       @unlink($file);
     }
-
+    
     return $this;
   }
 
+  /**
+   * Get mime type for image type
+   * 
+   * @param string $type image type
+   * @return string
+   */
   protected function getImageMimeType($type = null)
   {
     if (empty($type)) {
@@ -276,32 +358,37 @@ class Simplify_Thumb
     return image_type_to_mime_type($type);
   }
 
+  /**
+   * Get image cache prefix
+   * 
+   * @return string
+   */
   protected function getCachePrefix()
   {
     return 'thumbcache_' . md5($this->originalFile) . '_';
   }
 
   /**
-   * Process the image.
-   *
-   * @return ThumbProcessor
+   * Process the image
+   * 
+   * @return Simplify_Thumb_Processor
    */
   protected function process()
   {
     $file = $this->originalFile;
-
-    if (! sy_path_is_absolute($file)) {
+    
+    if (!sy_path_is_absolute($file)) {
       $file = $this->baseDir . $this->filesPath . DIRECTORY_SEPARATOR . $file;
     }
-
-    $f = new Simplify_Thumb_Processor;
-
+    
+    $f = new Simplify_Thumb_Processor();
+    
     $f->load($file);
-
+    
     foreach ($this->operations as $op) {
       call_user_func_array(array($f, $op[0]), $op[1]);
     }
-
+    
     return $f;
   }
 

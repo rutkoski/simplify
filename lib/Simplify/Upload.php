@@ -122,7 +122,7 @@ class Simplify_Upload
     if (empty($this->uploadPath)) {
       $this->uploadPath = s::config()->get('files_path');
     }
-
+    
     return $this->uploadPath;
   }
 
@@ -145,7 +145,7 @@ class Simplify_Upload
   {
     if (empty($this->uploadedPath))
       throw new Simplify_UploadException('No file has been uploaded');
-
+    
     return $this->getUploadPath() . $this->uploadedPath;
   }
 
@@ -158,11 +158,10 @@ class Simplify_Upload
   {
     /*if (! $this->uploaded())
       throw new UploadException('No file has been uploaded');*/
-
     if (empty($this->fileSize)) {
       $this->fileSize = $this->file['size'];
     }
-
+    
     return $this->fileSize;
   }
 
@@ -177,12 +176,8 @@ class Simplify_Upload
       if (isset($this->file['type'])) {
         $this->mimeType = $this->file['type'];
       }
-      else {
-        require_once ('PEAR/MIME/Type.php');
-        $this->mimeType = MIME_Type::autoDetect($this->file['tmp_name']);
-      }
     }
-
+    
     return $this->mimeType;
   }
 
@@ -200,7 +195,7 @@ class Simplify_Upload
     $this->mimeType = null;
     $this->fileSize = null;
     $this->uploadedPath = null;
-
+    
     $this->validateUpload($name, $index);
     $this->validateFile();
     $this->moveFile();
@@ -213,7 +208,7 @@ class Simplify_Upload
    */
   protected function uploaded()
   {
-    return empty($this->file) || ! empty($this->error);
+    return empty($this->file) || !empty($this->error);
   }
 
   /**
@@ -223,7 +218,7 @@ class Simplify_Upload
    */
   protected function moved()
   {
-    return $this->uploaded() && ! empty($this->uploadedPath);
+    return $this->uploaded() && !empty($this->uploadedPath);
   }
 
   /**
@@ -232,29 +227,23 @@ class Simplify_Upload
   protected function validateUpload($name, $index = null)
   {
     if (is_null($index)) {
-      if (! isset($_FILES[$name])) {
+      if (!isset($_FILES[$name])) {
         $this->error = sprintf(__('No such index: $_FILES[%s]'), $name);
         throw new Exception($this->error);
       }
-
+      
       $this->file = $_FILES[$name];
     }
-
+    
     else {
-      if (! isset($_FILES[$name]['name'][$index])) {
+      if (!isset($_FILES[$name]['name'][$index])) {
         $this->error = sprintf(__('No such index: $_FILES[%s][%s]'), $name, $index);
         throw new Exception('File not found');
       }
-
-      $this->file = array(
-        'name' => $_FILES[$name]['name'][$index],
-        'type' => $_FILES[$name]['type'][$index],
-        'tmp_name' => $_FILES[$name]['tmp_name'][$index],
-        'error' => $_FILES[$name]['error'][$index],
-        'size' => $_FILES[$name]['size'][$index]
-      );
+      
+      $this->file = array('name' => $_FILES[$name]['name'][$index], 'type' => $_FILES[$name]['type'][$index], 'tmp_name' => $_FILES[$name]['tmp_name'][$index], 'error' => $_FILES[$name]['error'][$index], 'size' => $_FILES[$name]['size'][$index]);
     }
-
+    
     $this->getPHPErrorMessage();
   }
 
@@ -265,40 +254,40 @@ class Simplify_Upload
   protected function moveFile()
   {
     $path = $this->getUploadPath();
-
-    if (! sy_path_is_absolute($path)) {
+    
+    if (!sy_path_is_absolute($path)) {
       $path = s::config()->get('www_dir') . $path;
     }
-
+    
     $filename = empty($this->filename) ? $this->file['name'] : $this->filename;
-
+    
     $subpath = '';
-
+    
     if ($this->useDateBasedPath) {
       $subpath = $this->findDateBasedPath($path);
     }
-
+    
     $subpath .= '/';
-
-    if (! is_writable($path . $subpath)) {
+    
+    if (!is_writable($path . $subpath)) {
       $this->error = __('Upload path does not exist or is not writable: <b>' . sy_fix_path($path . $subpath) . '</b>');
       throw new Simplify_UploadException($this->error);
     }
-
+    
     if ($this->hashFilename) {
       $filename = $this->genHashFilename($path . $subpath, '/' . $filename);
     }
     elseif ($this->replaceIfExists === false) {
       $filename = $this->findUniqueFilename($path . $subpath, '/' . $filename);
     }
-
-    if (! @move_uploaded_file($this->file['tmp_name'], $path . $subpath . $filename)) {
+    
+    if (!@move_uploaded_file($this->file['tmp_name'], $path . $subpath . $filename)) {
       $this->error = __('Could not move uploaded file');
       throw new Simplify_UploadException($this->error);
     }
-
+    
     chmod($path . $subpath . $filename, 0644);
-
+    
     $this->uploadedPath = $subpath . $filename;
   }
 
@@ -309,24 +298,24 @@ class Simplify_Upload
   {
     // validate extension
     $this->mimeType = $this->file['type'];
-
+    
     if ($this->extensions) {
       $type = implode('|', (array) $this->extensions);
-
-      if (! preg_match('/\.(' . $type . ')$/i', $this->file['name'])) {
+      
+      if (!preg_match('/\.(' . $type . ')$/i', $this->file['name'])) {
         $this->error = __('Invalid file type');
         throw new Simplify_Validation_ValidationException($this->error);
       }
     }
-
+    
     // validate mime type
     if ($this->fileMimeType) {
-      if (! preg_match('#' . $this->fileMimeType . '#i', $this->getMimeType())) {
+      if (!preg_match('#' . $this->fileMimeType . '#i', $this->getMimeType())) {
         $this->error = sprintf(__('Invalid mime type. Required: %s Found: %s', $type, $this->getMimeType()));
         throw new Simplify_Validation_ValidationException($this->error);
       }
     }
-
+    
     // validate file size
     if ($this->maxFileSize) {
       if ($this->getFileSize() > $this->maxFileSize) {
@@ -362,8 +351,8 @@ class Simplify_Upload
       default :
         $this->error = false;
     }
-
-    if (! empty($this->error)) {
+    
+    if (!empty($this->error)) {
       throw new Simplify_UploadException($this->error, $this->file['error']);
     }
   }
@@ -374,21 +363,21 @@ class Simplify_Upload
   protected function findUniqueFilename($base, $filename)
   {
     $suffixPrecision = $this->params->get('unique_filename_zeros', 4);
-
+    
     $info = pathinfo($base . $filename);
     $this->set('info', $info);
     $dir = $info['dirname'];
-    if (! isset($info['filename'])) {
+    if (!isset($info['filename'])) {
       $info['filename'] = substr($info['basename'], 0, strpos($info['basename'], '.' . $info['extension']));
     }
     $basename = strtolower($info['basename']);
-
+    
     $filename = $dir . '/' . $basename;
-
-    if (! @file_exists($filename)) {
+    
+    if (!@file_exists($filename)) {
       return $basename;
     }
-
+    
     if (isset($info['extension'])) {
       $name = strtolower($info['filename']);
       $ext = strtolower($info['extension']);
@@ -398,18 +387,18 @@ class Simplify_Upload
       $name = substr($basename, 0, $p);
       $ext = substr($basename, $p + 1);
     }
-
+    
     $suffix = 0;
     if (preg_match('/^(.*)_([0-9]{' . $suffixPrecision . '})$/', $name, $o)) {
       $name = $o[1];
-      $suffix = ( int ) ($o[2]);
+      $suffix = (int) ($o[2]);
     }
-
+    
     while (@file_exists($filename)) {
-      $suffix ++;
+      $suffix++;
       $filename = $dir . '/' . $name . '_' . sprintf('%0' . $suffixPrecision . 'u', $suffix) . '.' . $ext;
     }
-
+    
     return $name . '_' . sprintf('%0' . $suffixPrecision . 'u', $suffix) . '.' . $ext;
   }
 
@@ -421,16 +410,16 @@ class Simplify_Upload
     $Y = date('Y');
     $d = date('d');
     $m = date('m');
-
+    
     $path = "/$Y/$m/$d";
-
-    if (! @file_exists($base . $path)) {
-      if (! @mkdir($base . $path, 0644, true)) {
+    
+    if (!@file_exists($base . $path)) {
+      if (!@mkdir($base . $path, 0644, true)) {
         $this->error = __('Date based path could not be created.');
         throw new Simplify_UploadException($this->error);
       }
     }
-
+    
     return $path;
   }
 
@@ -440,14 +429,14 @@ class Simplify_Upload
   protected function genHashFilename($base, $filename)
   {
     $extension = pathinfo($base . $filename, PATHINFO_EXTENSION);
-
+    
     do {
       $path = sy_fix_path($base . $filename);
       $hash = md5($path . mktime());
       $path = sy_fix_path($base . '/' . $hash . '.' . $extension);
     }
     while (file_exists($path));
-
+    
     return $hash . '.' . $extension;
   }
 

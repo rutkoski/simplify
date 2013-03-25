@@ -1,10 +1,44 @@
 <?php
 
+/**
+ * SimplifyPHP Framework
+ *
+ * This file is part of SimplifyPHP Framework.
+ *
+ * SimplifyPHP Framework is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * SimplifyPHP Framework is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
+ */
+
+/**
+ * 
+ * Facade for cache
+ *
+ */
 class Simplify_Cache
 {
 
+  /**
+   * @var Simplify_CacheInterface[]
+   */
   protected static $handlers;
 
+  /**
+   * 
+   * @param unknown_type $id
+   * @return boolean
+   */
   public static function cached($id)
   {
     return self::getHandler()->cached($id);
@@ -15,6 +49,11 @@ class Simplify_Cache
     return self::getHandler()->delete($id);
   }
 
+  /**
+   * 
+   * @param string $id
+   * @return mixed
+   */
   public static function read($id)
   {
     return self::getHandler()->read($id);
@@ -27,17 +66,19 @@ class Simplify_Cache
 
   public static function write($id, $data = '', $ttl = null)
   {
-    return self::getHandler()->write($id, $data, $timeout);
+    return self::getHandler()->write($id, $data, $ttl);
   }
 
-  public static function setHandler($type, Cache_CacheInterface $handler)
+  public static function setHandler($type, Simplify_CacheInterface $handler)
   {
     self::$handler[$type] = $handler;
   }
 
   /**
-   *
-   * @return Cache_CacheInterface
+   * Get the cache implementation
+   * 
+   * @param string $class
+   * @return Simplify_CacheInterface
    */
   public static function getHandler($class = null)
   {

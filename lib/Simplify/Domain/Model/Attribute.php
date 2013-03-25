@@ -11,14 +11,14 @@
  * - table name is either index 'table' or 2
  *
  */
-class AttributeModel
+class Simplify_Domain_Model_Attribute
 {
 
   public $model;
 
   public function __construct($model = null)
   {
-    if ($model instanceof AttributeModel) {
+    if ($model instanceof Attribute) {
       $model = $model->model;
     }
 

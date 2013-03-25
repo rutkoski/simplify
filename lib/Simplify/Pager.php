@@ -1,4 +1,5 @@
 <?php
+
 /**
  * SimplifyPHP Framework
  *
@@ -21,9 +22,9 @@
  */
 
 /**
+ * 
  * Calculates paging information.
  *
- * @author Rodrigo Rutkoski Rodrigues, <rutkoski@gmail.com>
  */
 class Simplify_Pager
 {
@@ -77,17 +78,17 @@ class Simplify_Pager
    */
   public function __construct($count, $pageSize, $pageOrOffset, $isOffset = true)
   {
-    $count = (int)$count;
-    $pageSize = (int)$pageSize;
-    $pageOrOffset = (int)$pageOrOffset;
-
+    $count = (int) $count;
+    $pageSize = (int) $pageSize;
+    $pageOrOffset = (int) $pageOrOffset;
+    
     if ($pageSize <= 0)
       $pageSize = PHP_INT_MAX;
-
+    
     $this->count = is_array($count) ? count($count) : $count;
     $this->pageSize = $pageSize;
     $this->pages = ceil($count / $pageSize);
-
+    
     if ($isOffset) {
       if ($pageOrOffset < 0) {
         throw new Exception('Current offset must be equal to or greater than 0.');
@@ -95,7 +96,7 @@ class Simplify_Pager
       elseif ($pageOrOffset > 0 && $pageOrOffset > $count) {
         throw new Exception('Current offset must be lesser than the number of items.');
       }
-
+      
       $this->offset = $pageOrOffset;
       $this->page = $this->getPageFromOffset($pageOrOffset);
     }
@@ -106,11 +107,11 @@ class Simplify_Pager
       elseif ($pageOrOffset > $this->pages) {
         throw new Exception('Current page must be lesser than or equal to the number of pages.');
       }
-
+      
       $this->page = $pageOrOffset;
       $this->offset = $this->getOffsetFromPage($pageOrOffset);
     }
-
+    
     $this->lastOffset = $count == 0 ? 0 : (($this->pages - 1) * $this->pageSize);
   }
 
@@ -157,11 +158,11 @@ class Simplify_Pager
     $f = $this->getFirstPage();
     $c = $this->getCurrentPage();
     $l = $this->getLastPage();
-
+    
     $pages = array();
-    for ($i = max($f, $c - $p); $i < $c; $i++)
+    for($i = max($f, $c - $p); $i < $c; $i++)
       $pages[] = $i;
-    for ($i = $c; $i <= min($l, $c + $p); $i++)
+    for($i = $c; $i <= min($l, $c + $p); $i++)
       $pages[] = $i;
     return $pages;
   }
@@ -226,7 +227,7 @@ class Simplify_Pager
     if ($this->count == 0) {
       return $this->getFirstPage();
     }
-
+    
     return $this->isLastPage() ? $this->page : $this->page + 1;
   }
 
@@ -320,9 +321,9 @@ class Simplify_Pager
     if ($this->count == 0) {
       return 0;
     }
-
+    
     $nextOffset = $this->offset + $this->pageSize;
-
+    
     if ($nextOffset <= $this->getLastOffset()) {
       return $nextOffset;
     }
@@ -368,7 +369,9 @@ class Simplify_Pager
    */
   public function getAll()
   {
-    return array('count' => $this->count, 'isFirstPage' => $this->isFirstPage(), 'isLastPage' => $this->isLastPage(), 'firstPage' => $this->getFirstPage(), 'previousPage' => $this->getPreviousPage(), 'currentPage' => $this->getCurrentPage(), 'nextPage' => $this->getNextPage(), 'lastPage' => $this->getLastPage(), 'totalPages' => $this->getTotalPages(), 'isFirstOffset' => $this->isFirstOffset(), 'isLastOffset' => $this->isLastOffset(), 'firstOffset' => $this->getFirstOffset(), 'previousOffset' => $this->getPreviousOffset(), 'currentOffset' => $this->getCurrentOffset(), 'nextOffset' => $this->getNextOffset(), 'lastOffset' => $this->getLastOffset(), 'fromOffset' => $this->getFromOffset(), 'toOffset' => $this->getToOffset());
+    return array('count' => $this->count, 'isFirstPage' => $this->isFirstPage(), 'isLastPage' => $this->isLastPage(), 'firstPage' => $this->getFirstPage(), 'previousPage' => $this->getPreviousPage(), 'currentPage' => $this->getCurrentPage(), 'nextPage' => $this->getNextPage(), 
+        'lastPage' => $this->getLastPage(), 'totalPages' => $this->getTotalPages(), 'isFirstOffset' => $this->isFirstOffset(), 'isLastOffset' => $this->isLastOffset(), 'firstOffset' => $this->getFirstOffset(), 'previousOffset' => $this->getPreviousOffset(), 
+        'currentOffset' => $this->getCurrentOffset(), 'nextOffset' => $this->getNextOffset(), 'lastOffset' => $this->getLastOffset(), 'fromOffset' => $this->getFromOffset(), 'toOffset' => $this->getToOffset());
   }
 
   /**

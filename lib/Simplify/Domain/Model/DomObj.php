@@ -1,6 +1,6 @@
 <?php
 
-class DomObjModel
+class Simplify_Domain_Model_DomObj
 {
 
   public $model;
@@ -8,7 +8,7 @@ class DomObjModel
   public function __construct($model = null)
   {
     if (! empty($model)) {
-      if ($model instanceof DomObjModel) {
+      if ($model instanceof DomObj) {
         $model = $model->model;
       }
 

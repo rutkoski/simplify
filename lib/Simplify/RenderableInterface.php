@@ -22,30 +22,29 @@
  */
 
 /**
+ * 
  * Interface for renderable objects.
  *
- * @author Rodrigo Rutkoski Rodrigues, <rutkoski@gmail.com>
- * @package Simplify_Kernel_Core_Api
  */
 interface Simplify_RenderableInterface extends Simplify_DictionaryInterface
 {
 
   /**
-   * Get layout name or file.
+   * Get layout name
    *
    * @return string
    */
   public function getLayout();
 
   /**
-   * Get template name or file.
+   * Get template name
    *
    * @return string
    */
   public function getTemplate();
 
   /**
-   * Set layout name or file.
+   * Set layout name
    *
    * @param string $layout The layout.
    * @return void
@@ -53,7 +52,7 @@ interface Simplify_RenderableInterface extends Simplify_DictionaryInterface
   public function setLayout($layout);
 
   /**
-   * Set template name or file.
+   * Set template name
    *
    * @param string $template The template.
    * @return void

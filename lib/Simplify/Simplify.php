@@ -1,4 +1,5 @@
 <?php
+
 /**
  * SimplifyPHP Framework
  *
@@ -65,14 +66,14 @@ class s
   public static function app(Simplify_Controller_ApplicationController $app = null)
   {
     if (empty(self::$application)) {
-      if (! empty($app)) {
+      if (!empty($app)) {
         self::$application = $app;
       }
       else {
         self::$application = new Simplify_Controller_ApplicationController();
       }
     }
-
+    
     return self::$application;
   }
 
@@ -94,7 +95,7 @@ class s
     if (empty(self::$config)) {
       self::$config = new Simplify_Config();
     }
-
+    
     return self::$config;
   }
 
@@ -124,18 +125,18 @@ class s
   {
     if (empty(self::$router)) {
       $router = new Simplify_Router();
-
+      
       if (s::config()->has('routes')) {
         $routes = s::config()->get('routes');
-
+        
         foreach ($routes as $id => $route) {
           $router->connect(sy_get_param($route, 0), sy_get_param($route, 1), sy_get_param($route, 2));
         }
       }
-
+      
       self::$router = $router;
     }
-
+    
     return self::$router;
   }
 
@@ -148,7 +149,7 @@ class s
     if (empty(self::$response)) {
       self::$response = new Simplify_Response();
     }
-
+    
     return self::$response;
   }
 
@@ -172,7 +173,7 @@ class s
   {
     if (isset(self::$actions[$hook])) {
       $_args = array_slice(func_get_args(), 1);
-
+      
       foreach (self::$actions[$hook] as $action) {
         $args = array_merge($action[1], $_args);
         call_user_func_array($action[0], $args);

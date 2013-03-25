@@ -27,7 +27,7 @@
  * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
  * @package Kernel_Cache
  */
-class Simplify_Cache_File implements Simplify_Cache_Interface
+class Simplify_Cache_File implements Simplify_CacheInterface
 {
 
   /**
@@ -67,6 +67,10 @@ class Simplify_Cache_File implements Simplify_Cache_Interface
     $this->ttl = $ttl;
   }
 
+  /**
+   * (non-PHPdoc)
+   * @see Simplify_CacheInterface::cached()
+   */
   public function cached($id)
   {
     $file = $this->findFile($id, $this->ttl);
@@ -85,6 +89,10 @@ class Simplify_Cache_File implements Simplify_Cache_Interface
     return mktime() <= $ttl;
   }
 
+  /**
+   * (non-PHPdoc)
+   * @see Simplify_CacheInterface::delete()
+   */
   public function delete($id)
   {
     $file = $this->findFile($id);
@@ -94,9 +102,13 @@ class Simplify_Cache_File implements Simplify_Cache_Interface
     }
   }
 
+  /**
+   * (non-PHPdoc)
+   * @see Simplify_CacheInterface::flush()
+   */
   public function flush()
   {
-    if ($handle = opendir($this->path)) {
+    if (($handle = opendir($this->path)) !== false) {
       while (false !== ($file = readdir($handle))) {
         if ($file == "." || $file == "..")
           continue;
@@ -108,6 +120,10 @@ class Simplify_Cache_File implements Simplify_Cache_Interface
     }
   }
 
+  /**
+   * (non-PHPdoc)
+   * @see Simplify_CacheInterface::read()
+   */
   public function read($id)
   {
     $file = $this->findFile($id);
@@ -134,6 +150,10 @@ class Simplify_Cache_File implements Simplify_Cache_Interface
     return ($str == serialize(false) || $uns !== false) ? $uns : $str;
   }
 
+  /**
+   * (non-PHPdoc)
+   * @see Simplify_CacheInterface::write()
+   */
   public function write($id, $data = '', $ttl = null)
   {
     if (is_null($ttl))
@@ -165,9 +185,10 @@ class Simplify_Cache_File implements Simplify_Cache_Interface
   }
 
   /**
-   *
-   * @param $id
-   * @return string
+   * Find the cache filename
+   * 
+   * @param string $id cache name
+   * @return string cache filename
    */
   protected function findFile($id)
   {

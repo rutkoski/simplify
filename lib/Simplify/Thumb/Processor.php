@@ -1,12 +1,53 @@
 <?php
 
+/**
+ * SimplifyPHP Framework
+ *
+ * This file is part of SimplifyPHP Framework.
+ *
+ * SimplifyPHP Framework is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * SimplifyPHP Framework is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
+ */
+
+/**
+ *
+ * Image processor
+ *
+ */
 class Simplify_Thumb_Processor
 {
 
+  /**
+   * Default jpg quality
+   * 
+   * @var int
+   */
   public $quality = 99;
 
+  /**
+   * Image resource 
+   * 
+   * @var resource
+   */
   protected $image;
 
+  /**
+   * Call a plugin
+   * 
+   * @param string $name
+   */
   public function callPlugin($name)
   {
     $params = func_get_args();
@@ -20,15 +61,26 @@ class Simplify_Thumb_Processor
     call_user_func_array(array($plugin, 'process'), array_merge(array($this), $params));
   }
 
+  /**
+   * Set jpg quality
+   * 
+   * @param int $q
+   */
   public function quality($q)
   {
     $this->quality = $q;
   }
 
+  /**
+   * Load image file
+   * 
+   * @param string $file
+   * @throws Simplify_ThumbException
+   */
   public function load($file)
   {
     if (! file_exists($file) || ! is_file($file)) {
-      throw new ThumbException('File not found');
+      throw new Simplify_ThumbException('File not found');
     }
 
     $info = getimagesize($file);
@@ -58,8 +110,10 @@ class Simplify_Thumb_Processor
   }
 
   /**
-   *
-   * @return void
+   * Output image
+   * 
+   * @param string $type image type
+   * @param int $cacheSeconds cache time in seconds
    */
   public function output($type = null, $cacheSeconds = 604800)
   {
@@ -98,6 +152,12 @@ class Simplify_Thumb_Processor
     exit();
   }
 
+  /**
+   * Save file
+   * 
+   * @param string $file
+   * @param string $type
+   */
   public function save($file, $type = null)
   {
     $image = $this->image;
@@ -129,6 +189,12 @@ class Simplify_Thumb_Processor
     }
   }
 
+  /**
+   * Get mime type
+   * 
+   * @param string $type
+   * @return string
+   */
   public function getImageMimeType($type = null)
   {
     if (empty($type)) {

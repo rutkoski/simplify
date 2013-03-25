@@ -23,7 +23,7 @@
 
 /**
  *
- * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
+ * Form helper
  *
  */
 class Simplify_View_Helper_Form extends Simplify_View_Helper

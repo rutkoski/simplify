@@ -26,12 +26,13 @@
  *
  * @return Simplify_HtmlElement
  */
-function e($e = null, $attrs = array()) {
+function e($e = null, $attrs = array())
+{
   if ($e instanceof Simplify_HtmlElement) {
     $e->attr($attrs);
     return $e;
   }
-
+  
   return new Simplify_HtmlElement($e, $attrs);
 }
 
@@ -46,7 +47,7 @@ function sy_autoload_register($func)
   if (function_exists('__autoload')) {
     spl_autoload_register('__autoload');
   }
-
+  
   spl_autoload_register($func);
 }
 
@@ -64,25 +65,25 @@ function sy_truncate($string, $length = 80, $trail = '...', $break = -1, $breaks
   if (strlen(utf8_decode($string)) <= $length) {
     return $string;
   }
-
+  
   $string = utf8_decode($string);
   $string = strip_tags($string);
-
+  
   if ($break == -1) {
     while ($length > 0 && false === strpbrk(substr($string, $length, 1), $breakstr)) {
-      $length --;
+      $length--;
     }
   }
   elseif ($break == 1) {
     while ($length < strlen($string) && false === strpbrk(substr($string, $length, 1), $breakstr)) {
-      $length ++;
+      $length++;
     }
   }
-
+  
   $string = substr($string, 0, $length);
   $string .= $trail;
   $string = utf8_encode($string);
-
+  
   return $string;
 }
 
@@ -101,7 +102,7 @@ function sy_data_diff(array $a, array $b, $key, $fields = false)
   $upd = array();
   $rem = array();
   $kee = array();
-
+  
   $_a = $a;
   if ($fields) {
     $_a = array();
@@ -110,7 +111,7 @@ function sy_data_diff(array $a, array $b, $key, $fields = false)
     }
     $a = $_a;
   }
-
+  
   $_b = array();
   foreach ($b as $i) {
     if (isset($i[$key])) {
@@ -122,13 +123,13 @@ function sy_data_diff(array $a, array $b, $key, $fields = false)
     }
   }
   $b = $_b;
-
+  
   while (count($_a)) {
     $j = array_shift($_a);
-
+    
     if (isset($b[$j[$key]])) {
       $u = $b[$j[$key]];
-
+      
       if ($fields) {
         foreach ($u as $f => $v) {
           if ($f != $key && $v == $a[$u[$key]][$f]) {
@@ -136,7 +137,7 @@ function sy_data_diff(array $a, array $b, $key, $fields = false)
           }
         }
       }
-
+      
       $upd[] = $u;
       $kee[] = $u;
     }
@@ -144,7 +145,7 @@ function sy_data_diff(array $a, array $b, $key, $fields = false)
       $rem[] = $j;
     }
   }
-
+  
   return array('delete' => $rem, 'update' => $upd, 'create' => $add, 'keep' => $kee);
 }
 
@@ -153,14 +154,14 @@ function sy_random_string($length = 40, $chars = null)
   if (empty($chars)) {
     $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*';
   }
-
+  
   $c = strlen($chars) - 1;
-
+  
   $str = '';
   while (strlen($str) < $length) {
     $str .= substr($chars, rand(0, $c), 1);
   }
-
+  
   return $str;
 }
 
@@ -175,16 +176,16 @@ function sy_array_map(&$item, $key)
     $item = $item->getArrayCopy();
     array_walk_recursive($item, 'sy_array_map');
   }
-
+  
   elseif ($item instanceof Simplify_DictionaryInterface) {
     $item = $item->getAll();
     array_walk_recursive($item, 'sy_array_map');
   }
-
+  
   elseif ($item instanceof Simplify_URL) {
     $item = (array) $item;
   }
-
+  
   elseif ($item instanceof DateTime) {
     $item = $item->format('Y-m-d h:i:s');
   }
@@ -193,13 +194,13 @@ function sy_array_map(&$item, $key)
 function sy_array_to_options($data, $key, $value = null)
 {
   $options = array();
-
-  if (! empty($data)) {
+  
+  if (!empty($data)) {
     foreach ($data as $row) {
       $options[sy_get_param($row, $key)] = empty($value) ? $row : sy_get_param($row, $value);
     }
   }
-
+  
   return $options;
 }
 
@@ -223,7 +224,8 @@ function sy_strip_slashes_deep($value)
  */
 function sy_trim($value)
 {
-  if (! is_string($value) || empty($value)) return $value;
+  if (!is_string($value) || empty($value))
+    return $value;
   return trim($value);
 }
 
@@ -258,55 +260,57 @@ function _pre()
 /**
  * outputs an array/object as a preformated (HTML <pre></pre>) string.
  */
-if (! function_exists('pre')) {
+if (!function_exists('pre')) {
 
   function pre()
   {
     static $pre;
-
-    if (! $pre) {
+    
+    if (!$pre) {
       ?>
-      <span id="pre-debug">
-        <div id="pre-toolbar">
-          <a href="javascript:" onclick="document.getElementById('pre-debug').style.display = 'none';">fechar</a>
-        </div>
-        <div id="pre-content"></div>
-      </span>
+<span id="pre-debug">
+	<div id="pre-toolbar">
+		<a href="javascript:"
+			onclick="document.getElementById('pre-debug').style.display = 'none';">fechar</a>
+	</div>
+	<div id="pre-content"></div>
+</span>
 
-      <style>
-      #pre-debug {
-        display:inline-block;
-        position:absolute;
-        top:0;
-        left:0;
-        background: #c3c3c3;
-        border: 1px solid #333;
-        z-index: 9999;
-      }
-      #pre-content {
-        height:400px;
-        overflow: auto;
-      }
-      </style>
+<style>
+#pre-debug {
+	display: inline-block;
+	position: absolute;
+	top: 0;
+	left: 0;
+	background: #c3c3c3;
+	border: 1px solid #333;
+	z-index: 9999;
+}
 
-      <?php
+#pre-content {
+	height: 400px;
+	overflow: auto;
+}
+</style>
+
+<?php
       $pre = true;
     }
-
+    
     $args = func_get_args();
-
+    
     reset($args);
-
+    
     $s = '';
     while (count($args)) {
       $s .= print_r(array_shift($args), true) . "\n";
     }
-
+    
     $s = preg_replace('/ /ium', '&nbsp;', $s);
     $s = nl2br($s);
     $s = preg_replace('/\r?\n/ium', '', $s);
     $s = addslashes($s);
-
+    
     echo "<script>document.getElementById('pre-content').innerHTML += '$s';</script>";
   }
 }
@@ -321,19 +325,20 @@ function sy_get_param($source, $param, $default = null, $testEmpty = false)
     return $source->get($param, $default, $testEmpty);
   }
   elseif (is_array($source) || $source instanceof ArrayAccess) {
-    if ($testEmpty) return ! empty($source[$param]) ? $source[$param] : $default;
-
+    if ($testEmpty)
+      return !empty($source[$param]) ? $source[$param] : $default;
+    
     return isset($source[$param]) ? $source[$param] : $default;
   }
   elseif (is_object($source)) {
     if ($testEmpty) {
       $value = $source->$param;
-      return ! empty($value) ? $value : $default;
+      return !empty($value) ? $value : $default;
     }
-
+    
     return isset($source->$param) ? $source->$param : $default;
   }
-
+  
   return $default;
 }
 
@@ -358,7 +363,7 @@ function sy_get_data(&$source)
   elseif ($source instanceof Simplify_DictionaryInterface) {
     return $source->getAll();
   }
-
+  
   throw new Exception('Parameter $source must be either array or object');
 }
 
@@ -375,18 +380,40 @@ function sy_get_data(&$source)
 function sy_fix_url($url, $traillingSlash = false)
 {
   $url = preg_replace('#\\\+#', '/', $url);
-
-  if (! preg_match('|\.[^/]+$|', $url)) {
+  
+  if (!preg_match('|\.[^/]+$|', $url)) {
     if ($traillingSlash) {
-      if (! strrpos('/', $url) === 0) $url .= '/';
+      if (!strrpos('/', $url) === 0)
+        $url .= '/';
     }
     elseif (strrpos('/', $url) === 0) {
       $url = substr($url, 0, strlen($url) - 1);
     }
   }
-
+  
   $url = preg_replace('/(\/[^\/]+\/\.\.)/', '', $url);
+  
+  return $url;
+}
 
+function sy_absolute_url($url, $relative = null, $base = null)
+{
+  if (empty($base)) {
+    $base = s::config()->get('theme_url');
+  }
+  
+  if (empty($relative)) {
+    $relative = $base;
+  }
+  
+  if (strpos($url, '/') === 0) {
+    $url = sy_fix_url($base . $url);
+  } elseif (! sy_url_is_absolute($url)) {
+    $url = sy_fix_url($base . $relative . '/' . $url);
+  } else {
+    $url = sy_fix_url($url);
+  }
+  
   return $url;
 }
 
@@ -419,7 +446,7 @@ function sy_strip_http($url)
  */
 function sy_define_once($name, $value)
 {
-  if (! defined($name)) {
+  if (!defined($name)) {
     define($name, $value);
   }
 }
@@ -455,12 +482,12 @@ function sy_fix_path($path, $extension = null)
   $find = array('#(/|\\\)#', '#\\\#', '#/+$#', '#/+#', '#/+$#', '#/[^/]+/\.\.(/|$)#');
   $replace = array(DIRECTORY_SEPARATOR, '/', '/', '/', '', '/');
   $path = preg_replace($find, $replace, $path);
-
+  
   // add missing extension
-  if (! empty($extension) && ! preg_match('#\.' . $extension . '$#', $path)) {
+  if (!empty($extension) && !preg_match('#\.' . $extension . '$#', $path)) {
     $path .= '.' . $extension;
   }
-
+  
   return $path;
 }
 
@@ -469,16 +496,17 @@ function sy_fix_path($path, $extension = null)
  */
 function sy_fix_extension($path, $ext)
 {
-  if (! preg_match('/\.' . addslashes($ext) . '$/i', $path)) {
+  if (!preg_match('/\.' . addslashes($ext) . '$/i', $path)) {
     $path .= '.' . $ext;
   }
-
+  
   return $path;
 }
 
 function br2dt($date)
 {
-  if (empty($date)) return $date;
+  if (empty($date))
+    return $date;
   if (preg_match('/^(\d{2})[^\d](\d{2})[^\d](\d{4})(.*)$/', $date, $parts)) {
     $date = $parts[3] . '-' . $parts[2] . '-' . $parts[1] . $parts[4];
   }
@@ -492,45 +520,45 @@ function sy_slugify($string, $ignoreCase = false)
   $string = htmlentities($string, ENT_COMPAT, 'utf-8');
   $string = preg_replace("`&([a-z])(acute|uml|circ|grave|ring|cedil|slash|tilde|caron|lig|quot|rsquo);`i", "\\1", $string);
   $string = preg_replace(array("`[^a-z0-9/:_.]`i", "`[-]+`"), "-", $string);
-
-  if (! $ignoreCase) {
+  
+  if (!$ignoreCase) {
     $string = mb_strtolower($string, 'utf8');
   }
-
+  
   return trim($string, '-');
 }
 
 function sy_flat_to_hierarchical($flat, $pk = 'id', $parent = 'parent_id', $children = 'children')
 {
   $parents = array();
-
+  
   $data = array();
-
+  
   $i = 0;
   while ($i < count($flat)) {
     $row = $flat[$i++];
-
+    
     $node_id = $row[$pk];
     $parent_id = $row[$parent];
-
+    
     if (empty($parent_id)) {
       continue;
     }
-    elseif (! isset($parents[$parent_id])) {
+    elseif (!isset($parents[$parent_id])) {
       $data[$node_id] = $row;
       $parents[$node_id] = & $data[$node_id];
     }
     else {
-      if (! isset($parents[$parent_id][$children])) {
+      if (!isset($parents[$parent_id][$children])) {
         $parents[$parent_id][$children] = array();
       }
-
+      
       $parents[$parent_id][$children][$node_id] = $row;
-
+      
       $parents[$node_id] = & $parents[$parent_id][$children][$node_id];
     }
   }
-
+  
   return $data;
 }
 

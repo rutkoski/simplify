@@ -1,6 +1,6 @@
 <?php
 
-class EntityModel extends DomObjModel
+class Simplify_Domain_Model_Entity extends Simplify_Domain_Model_DomObj
 {
 
   protected $associations = array();

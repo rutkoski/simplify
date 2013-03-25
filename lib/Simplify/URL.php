@@ -1,4 +1,5 @@
 <?php
+
 /**
  * SimplifyPHP Framework
  *
@@ -21,6 +22,8 @@
  */
 
 /**
+ *
+ * URL builder
  *
  */
 class Simplify_URL
@@ -106,16 +109,16 @@ class Simplify_URL
     if ($url instanceof Simplify_URL) {
       return $url;
     }
-
+    
     if (is_string($url)) {
       return new self($url);
     }
-
+    
     if (is_array($url)) {
       return call_user_func_array(array('self', 'make'), $url);
     }
-
-    return new self;
+    
+    return new self();
   }
 
   /**
@@ -131,7 +134,7 @@ class Simplify_URL
 
   public function copy()
   {
-    $url = new self;
+    $url = new self();
     $url->keepOriginal = $this->keepOriginal;
     $url->route = $this->route;
     $url->params = $this->params;
@@ -147,11 +150,11 @@ class Simplify_URL
 
   public function remove(array $remove = null)
   {
-    if (! is_null($remove)) {
+    if (!is_null($remove)) {
       $this->remove = $remove;
       return $this;
     }
-
+    
     return $this->remove;
   }
 
@@ -173,65 +176,65 @@ class Simplify_URL
   public function build()
   {
     $route = $this->_route();
-
+    
     $url = $route;
-
+    
     if (strpos($url, 'javascript:') === 0) {
       return $url;
     }
-
-    if (! sy_url_is_absolute($url)) {
+    
+    if (!sy_url_is_absolute($url)) {
       if (empty($route)) {
         $route = s::request()->route();
       }
-
+      
       while (strpos($route, '//') === 0) {
         $route = str_replace('//', '/', $route);
       }
-
+      
       while (strpos($route, '/') === strlen($route) - 1) {
         $route = substr($route, 0, strlen($route) - 2);
       }
-
+      
       if (strpos($route, '/') !== 0) {
         $route = '/' . $route;
       }
-
+      
       $url = s::request()->url();
-
-      if (! s::request()->pretty()) {
+      
+      if (!s::request()->pretty()) {
         $url .= '/' . s::request()->self();
       }
-
+      
       $url .= $route;
-
+      
       $ext = $this->_format();
       if (empty($ext) && $ext !== false) {
         $ext = s::request()->extension();
       }
-
-      if (! empty($ext)) {
+      
+      if (!empty($ext)) {
         $url .= '.' . $ext;
       }
     }
-
+    
     $params = $this->_params();
-
+    
     if ($this->_keepOriginal()) {
       $keep = s::request()->get()->getAll();
-
+      
       $remove = $this->_remove();
-      if (! empty($remove)) {
+      if (!empty($remove)) {
         $keep = array_diff_key($keep, $remove);
       }
-
+      
       $params = array_merge($keep, $params);
     }
-
-    if (! empty($params)) {
+    
+    if (!empty($params)) {
       $url .= '?' . http_build_query($params, null, '&');
     }
-
+    
     return $url;
   }
 

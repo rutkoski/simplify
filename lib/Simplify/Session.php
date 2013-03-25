@@ -1,4 +1,5 @@
 <?php
+
 /**
  * SimplifyPHP Framework
  *
@@ -21,24 +22,24 @@
  */
 
 /**
- * Session data wrapper.
+ * 
+ * Dictionary view of session data
  *
- * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
  */
 class Simplify_Session implements Simplify_DictionaryInterface
 {
 
   /**
-   * Singleton instance of Session.
+   * Singleton instance of Simplify_Session
    *
-   * @var Session
+   * @var Simplify_Session
    */
   private static $instance;
 
   /**
-   * Get the instance of Session.
+   * Get the singletoin instance of Simplify_Session
    *
-   * @return Session
+   * @return Simplify_Session
    */
   public static function getInstance()
   {
@@ -47,13 +48,18 @@ class Simplify_Session implements Simplify_DictionaryInterface
     return self::$instance;
   }
 
+  /**
+   * Get the session id
+   * 
+   * @return string
+   */
   public static function id()
   {
     return session_id();
   }
 
   /**
-   * Constructor.
+   * Constructor
    *
    * @return void
    */
@@ -63,9 +69,9 @@ class Simplify_Session implements Simplify_DictionaryInterface
   }
 
   /**
-   * Start a session.
+   * Start a session
    *
-   * @param string $id Session id.
+   * @param string $id session id
    * @return Session
    */
   public function start($id = null)
@@ -73,27 +79,27 @@ class Simplify_Session implements Simplify_DictionaryInterface
     if (!empty($id)) {
       session_id($id);
     }
-
+    
     session_start();
-
+    
     return $this;
   }
 
   /**
-   * Destroy the current session.
+   * Destroy current session
    *
    * @return Session
    */
   public function destroy()
   {
     $this->reset();
-
+    
     if (isset($_COOKIE[session_name()])) {
       setcookie(session_name(), '', time() - 42000, '/');
     }
-
+    
     session_destroy();
-
+    
     return $this;
   }
 
@@ -105,7 +111,7 @@ class Simplify_Session implements Simplify_DictionaryInterface
   public function flash($name, $value = null)
   {
     $data = $this->get('__flash__', array());
-
+    
     if (func_num_args() === 1) {
       $value = sy_get_param($data, $name);
       unset($data[$name]);
@@ -113,63 +119,67 @@ class Simplify_Session implements Simplify_DictionaryInterface
     else {
       $data[$name] = $value;
     }
-
+    
     $this->set('__flash__', $data);
-
+    
     return $value;
   }
 
   /**
-   *
+   * (non-PHPdoc)
+   * @see Simplify_DictionaryInterface::copyAll()
    */
   public function copyAll($data, $flags = 0)
   {
     if (empty($data))
       return;
-
+    
     if ($data instanceof Simplify_DictionaryInterface) {
       $data = $data->getAll();
     }
-
+    
     foreach ($data as $name => $value) {
       if ((Simplify_Dictionary::FILTER_NULL & $flags) == $flags && is_null($value))
         continue;
-
+      
       if ((Simplify_Dictionary::FILTER_EMPTY & $flags) == $flags && empty($value))
         continue;
-
+      
       $this->set($name, $value);
     }
-
+    
     return $this;
   }
 
   /**
-   *
+   * (non-PHPdoc)
+   * @see Simplify_DictionaryInterface::del()
    */
   public function del($name)
   {
     if (isset($_SESSION[$name])) {
       unset($_SESSION[$name]);
     }
-
+    
     return $this;
   }
 
   /**
-   *
+   * (non-PHPdoc)
+   * @see Simplify_DictionaryInterface::get()
    */
   public function get($name, $default = null, $flags = 0)
   {
     if ($this->has($name, $flags)) {
       return $_SESSION[$name];
     }
-
+    
     return $default;
   }
 
   /**
-   *
+   * (non-PHPdoc)
+   * @see Simplify_DictionaryInterface::getAll()
    */
   public function getAll($flags = 0)
   {
@@ -177,7 +187,8 @@ class Simplify_Session implements Simplify_DictionaryInterface
   }
 
   /**
-   *
+   * (non-PHPdoc)
+   * @see Simplify_DictionaryInterface::getNames()
    */
   public function getNames()
   {
@@ -185,27 +196,29 @@ class Simplify_Session implements Simplify_DictionaryInterface
   }
 
   /**
-   *
+   * (non-PHPdoc)
+   * @see Simplify_DictionaryInterface::has()
    */
   public function has($name, $flags = 0)
   {
     if (!isset($_SESSION[$name])) {
       return false;
     }
-
+    
     if ((Simplify_Dictionary::FILTER_NULL & $flags) == $flags && is_null($_SESSION[$name])) {
       return false;
     }
-
+    
     if ((Simplify_Dictionary::FILTER_EMPTY & $flags) == $flags && empty($_SESSION[$name])) {
       return false;
     }
-
+    
     return true;
   }
 
   /**
-   *
+   * (non-PHPdoc)
+   * @see Simplify_DictionaryInterface::reset()
    */
   public function reset($data = null)
   {
@@ -214,7 +227,8 @@ class Simplify_Session implements Simplify_DictionaryInterface
   }
 
   /**
-   *
+   * (non-PHPdoc)
+   * @see Simplify_DictionaryInterface::set()
    */
   public function set($name, $value)
   {
