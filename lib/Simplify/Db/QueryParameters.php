@@ -15,5 +15,6 @@ class Simplify_Db_QueryParameters
   const ORDER_BY = 'orderBy';
   const LIMIT = 'limit';
   const OFFSET = 'offset';
+  const DATA = 'data';
 
 }

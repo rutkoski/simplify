@@ -22,9 +22,9 @@
  */
 
 /**
- * Base class for Simplify_Db_QueryObjectInterface implementations.
+ * 
+ * Base class for Simplify_Db_QueryObjectInterface implementations
  *
- * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
  */
 abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterface
 {
@@ -102,13 +102,13 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
     if ($this->alias !== $alias) {
       $this->__sql = null;
     }
-
+    
     if ($alias === true) {
       return $this->alias;
     }
-
+    
     $this->alias = is_string($alias) ? $alias : null;
-
+    
     return $this;
   }
 
@@ -119,10 +119,10 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
   public function insert($table = null, $data = null)
   {
     $this->query = Simplify_Db_QueryObject::INSERT;
-
+    
     $this->from($table);
     $this->data($data);
-
+    
     return $this;
   }
 
@@ -133,11 +133,11 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
   public function update($table = null, $data = null, $where = null)
   {
     $this->query = Simplify_Db_QueryObject::UPDATE;
-
+    
     $this->from($table);
     $this->data($data);
     $this->where($where);
-
+    
     return $this;
   }
 
@@ -148,10 +148,10 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
   public function delete($table = null, $where = null)
   {
     $this->query = Simplify_Db_QueryObject::DELETE;
-
+    
     $this->from($table);
     $this->where($where);
-
+    
     return $this;
   }
 
@@ -168,11 +168,11 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
       $this->data = null;
     }
     else {
-      $this->data = $data;
-
+      $this->data = array_merge((array) $this->data, (array) $data);
+      
       $this->__sql = null;
     }
-
+    
     return $this;
   }
 
@@ -188,21 +188,21 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
     elseif ($fields === false) {
       $this->fields = array();
     }
-    elseif (! empty($fields)) {
+    elseif (!empty($fields)) {
       $this->query = Simplify_Db_QueryObject::SELECT;
-
+      
       $fields = (array) $fields;
-
+      
       if ($remove) {
         $this->fields = array_diff($this->fields, $fields);
       }
       else {
         $this->fields = array_unique(array_merge($this->fields, $fields));
       }
-
+      
       $this->__sql = null;
     }
-
+    
     return $this;
   }
 
@@ -218,21 +218,21 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
     elseif ($table === false) {
       $this->table = array();
     }
-    elseif (! empty($table)) {
-      if (! is_array($table)) {
+    elseif (!empty($table)) {
+      if (!is_array($table)) {
         $table = array($table);
       }
-
+      
       if ($remove) {
         $this->table = array_diff($this->table, $table);
       }
       else {
         $this->table = array_unique(array_merge($this->table, $table));
       }
-
+      
       $this->__sql = null;
     }
-
+    
     return $this;
   }
 
@@ -253,13 +253,13 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
         $this->join($_join, $type, $remove);
       }
     }
-    elseif (! empty($join)) {
+    elseif (!empty($join)) {
       if (empty($type)) {
         $type = Simplify_Db_QueryObject::JOIN_INNER;
       }
-
+      
       $join = array($type, $join);
-
+      
       if ($remove) {
         if (($i = array_search($join, $this->joins)) !== false) {
           unset($this->joins[$i]);
@@ -268,10 +268,10 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
       else {
         $this->joins[] = $join;
       }
-
+      
       $this->__sql = null;
     }
-
+    
     return $this;
   }
 
@@ -314,19 +314,19 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
     elseif ($field === false) {
       $this->groupBy = array();
     }
-    elseif (! empty($field)) {
+    elseif (!empty($field)) {
       $field = (array) $field;
-
+      
       if ($remove) {
         $this->groupBy = array_diff($this->groupBy, $field);
       }
       else {
         $this->groupBy = array_unique(array_merge($this->groupBy, $field));
       }
-
+      
       $this->__sql = null;
     }
-
+    
     return $this;
   }
 
@@ -342,19 +342,19 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
     elseif ($condition === false) {
       $this->having = array();
     }
-    elseif (! empty($condition)) {
+    elseif (!empty($condition)) {
       $condition = (array) $condition;
-
+      
       if ($remove) {
         $this->having = array_diff($this->having, $condition);
       }
       else {
         $this->having = array_unique(array_merge($this->having, $condition));
       }
-
+      
       $this->__sql = null;
     }
-
+    
     return $this;
   }
 
@@ -370,19 +370,19 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
     elseif ($condition === false) {
       $this->where = array();
     }
-    elseif (! empty($condition)) {
+    elseif (!empty($condition)) {
       $condition = (array) $condition;
-
+      
       if ($remove) {
         $this->where = array_diff($this->where, $condition);
       }
       else {
         $this->where = array_unique(array_merge($this->where, $condition));
       }
-
+      
       $this->__sql = null;
     }
-
+    
     return $this;
   }
 
@@ -398,7 +398,7 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
     elseif ($field === false) {
       $this->orderBy = array();
     }
-    elseif (! empty($field)) {
+    elseif (!empty($field)) {
       if ($remove) {
         if (isset($this->orderBy[$field])) {
           unset($this->orderBy[$field]);
@@ -407,10 +407,10 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
       else {
         $this->orderBy[$field] = $direction;
       }
-
+      
       $this->__sql = null;
     }
-
+    
     return $this;
   }
 
@@ -428,10 +428,10 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
     }
     else {
       $this->limit = intval($limit);
-
+      
       $this->__sql = null;
     }
-
+    
     return $this;
   }
 
@@ -449,10 +449,10 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
     }
     else {
       $this->offset = intval($offset);
-
+      
       $this->__sql = null;
     }
-
+    
     return $this;
   }
 
@@ -470,10 +470,10 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
     }
     else {
       $this->sql = $sql;
-
+      
       $this->__sql = null;
     }
-
+    
     return $this;
   }
 
@@ -489,7 +489,7 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
 
   public function setParams($params = null)
   {
-    if (! empty($params)) {
+    if (!empty($params)) {
       if (isset($params[Simplify_Db_QueryParameters::SQL])) {
         $this->sql($params[Simplify_Db_QueryParameters::SQL]);
       }
@@ -497,53 +497,57 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
         if (isset($params[Simplify_Db_QueryParameters::SELECT])) {
           call_user_func(array($this, 'select'), $params[Simplify_Db_QueryParameters::SELECT]);
         }
-
+        
         if (isset($params[Simplify_Db_QueryParameters::FROM])) {
           call_user_func(array($this, 'from'), $params[Simplify_Db_QueryParameters::FROM]);
         }
-
+        
         if (isset($params[Simplify_Db_QueryParameters::JOIN])) {
           foreach ($params[Simplify_Db_QueryParameters::JOIN] as $join) {
             call_user_func_array(array($this, 'join'), (array) $join);
           }
         }
-
+        
         if (isset($params[Simplify_Db_QueryParameters::INNER_JOIN])) {
           foreach ((array) $params[Simplify_Db_QueryParameters::INNER_JOIN] as $join) {
             call_user_func_array(array($this, 'innerJoin'), (array) $join);
           }
         }
-
+        
         if (isset($params[Simplify_Db_QueryParameters::GROUP_BY])) {
           call_user_func(array($this, 'groupBy'), $params[Simplify_Db_QueryParameters::GROUP_BY]);
         }
-
+        
         if (isset($params[Simplify_Db_QueryParameters::HAVING])) {
           call_user_func(array($this, 'having'), $params[Simplify_Db_QueryParameters::HAVING]);
         }
-
+        
         if (isset($params[Simplify_Db_QueryParameters::WHERE])) {
           foreach ((array) $params[Simplify_Db_QueryParameters::WHERE] as $where) {
             call_user_func(array($this, 'where'), $where);
           }
         }
-
+        
         if (isset($params[Simplify_Db_QueryParameters::ORDER_BY])) {
           foreach ((array) $params[Simplify_Db_QueryParameters::ORDER_BY] as $orderBy) {
             call_user_func_array(array($this, 'orderBy'), (array) $orderBy);
           }
         }
-
+        
         if (isset($params[Simplify_Db_QueryParameters::LIMIT])) {
           $this->limit($params[Simplify_Db_QueryParameters::LIMIT]);
         }
-
+        
         if (isset($params[Simplify_Db_QueryParameters::OFFSET])) {
           $this->offset($params[Simplify_Db_QueryParameters::OFFSET]);
         }
+
+        if (isset($params[Simplify_Db_QueryParameters::DATA])) {
+          call_user_func(array($this, 'data'), $params[Simplify_Db_QueryParameters::DATA]);
+        }
       }
     }
-
+    
     return $this;
   }
 
@@ -558,19 +562,21 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
   {
     $fields = array();
     $values = array();
-
+    
     foreach ($data as $k => $v) {
       $fields[] = "`$k`";
-
+      
       if ($wildcard === false) {
         $values[] = s::db()->quote($v);
-      } elseif (is_string($wildcard)) {
+      }
+      elseif (is_string($wildcard)) {
         $values[] = $wildcard;
-      } else {
+      }
+      else {
         $values[] = ':' . $k;
       }
     }
-
+    
     return ' (' . implode(', ', $fields) . ') VALUES (' . implode(', ', $values) . ') ';
   }
 
@@ -584,18 +590,20 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
   public static function buildUpdate($data, $wildcard = null)
   {
     $fields = array();
-
+    
     foreach ($data as $k => $v) {
       if ($wildcard === false) {
         $v = s::db()->quote($v);
         $fields[] = "`$k` = $v";
-      } elseif (is_string($wildcard)) {
+      }
+      elseif (is_string($wildcard)) {
         $fields[] = "`$k` = $wildcard";
-      } else {
+      }
+      else {
         $fields[] = "`$k` = :$k";
       }
     }
-
+    
     return ' ' . implode(', ', $fields) . ' ';
   }
 
@@ -604,23 +612,24 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
     if (empty($values)) {
       return ' TRUE ';
     }
-
+    
     $values = (array) $values;
-
+    
     foreach ($values as &$value) {
       $value = s::db()->quote($value);
     }
-
+    
     $s = "`{$field}`";
-
+    
     $value = implode(', ', $values);
-
+    
     if (count($values) > 1) {
       $s .= ($not ? " NOT" : '') . " IN ({$value})";
-    } else {
+    }
+    else {
       $s .= ($not ? " !" : ' ') . "= {$value}";
     }
-
+    
     return $s;
   }
 

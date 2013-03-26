@@ -189,7 +189,7 @@ interface Simplify_Db_QueryObjectInterface
    * Build, prepare, execute and return the result for the query.
    *
    * @param string[mixed] $data the data for the query
-   * @return QueryResultInterface
+   * @return Simplify_Db_QueryResultInterface
    */
   public function execute($data = null);
 
@@ -197,8 +197,15 @@ interface Simplify_Db_QueryObjectInterface
    * Build, execute and return the result for the query. Ignores prepared
    * statements.
    *
-   * @return QueryResultInterface
+   * @return Simplify_Db_QueryResultInterface
    */
   public function executeRaw();
 
+  /**
+   * 
+   * @param mixed $params
+   * @return Simplify_Db_QueryObjectInterface
+   */
+  public function setParams($params = null);
+  
 }
