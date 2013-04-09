@@ -23,7 +23,7 @@
  */
 
 /**
- * 
+ *
  * Required value
  *
  */
@@ -34,7 +34,7 @@ class Simplify_Validation_Required extends Simplify_Validation_AbstractValidatio
    * (non-PHPdoc)
    * @see Simplify_ValidationInterface::validate()
    */
-  protected function validate($value)
+  public function validate($value)
   {
     if (empty($value)) {
       $this->fail();

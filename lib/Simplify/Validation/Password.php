@@ -23,7 +23,7 @@
  */
 
 /**
- * 
+ *
  * Password validation
  *
  */
@@ -32,7 +32,7 @@ class Simplify_Validation_Password extends Simplify_Validation_AbstractValidatio
 
   /**
    * True if the record exists
-   * 
+   *
    * @var boolean
    */
   public $exists;
@@ -53,7 +53,7 @@ class Simplify_Validation_Password extends Simplify_Validation_AbstractValidatio
 
   /**
    * Constructor
-   * 
+   *
    * @param string $passwordDontMatchMessage
    * @param string $emptyPasswordMessage
    * @param boolean $exists
@@ -63,7 +63,7 @@ class Simplify_Validation_Password extends Simplify_Validation_AbstractValidatio
   public function __construct($passwordDontMatchMessage, $emptyPasswordMessage = null, $exists = null, $confirm = null, $empty = null)
   {
     parent::__construct(array('confirm' => $passwordDontMatchMessage, 'empty' => $emptyPasswordMessage));
-    
+
     $this->exists = $exists;
     $this->confirm = $confirm;
     $this->empty = $empty;

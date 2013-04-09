@@ -23,7 +23,7 @@
  */
 
 /**
- * 
+ *
  * Validate email
  *
  */
@@ -38,14 +38,14 @@ class Simplify_Validation_Email extends Simplify_Validation_AbstractValidation
 
   /**
    * Constructor
-   * 
+   *
    * @param string $message
    * @param boolean $required
    */
   public function __construct($message, $required = true)
   {
     parent::__construct($message);
-    
+
     $this->required = $required;
   }
 
@@ -55,11 +55,13 @@ class Simplify_Validation_Email extends Simplify_Validation_AbstractValidation
    */
   public function validate($value)
   {
-    if ($this->required && empty($value))
+    if (!$this->required && empty($value)) {
+      return;
+    }
+
+    if (!preg_match('/^[a-z0-9][a-z0-9_\.-]{0,}[a-z0-9]@[a-z0-9][a-z0-9_\.-]{0,}[a-z0-9][\.][a-z0-9]{2,4}$/i', $value)) {
       $this->fail();
-    
-    if (!preg_match('/^[a-z0-9][a-z0-9_\.-]{0,}[a-z0-9]@[a-z0-9][a-z0-9_\.-]{0,}[a-z0-9][\.][a-z0-9]{2,4}$/i', $value))
-      $this->fail();
+    }
   }
 
 }

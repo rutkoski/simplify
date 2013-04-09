@@ -64,13 +64,13 @@ class Simplify_Validation_DataValidation
     if (!($rules instanceof Simplify_Validation_DataValidation)) {
       $rules = new self($rules);
     }
-    
+
     return $rules;
   }
 
   /**
    * Get validation errors
-   * 
+   *
    * @return string[]
    */
   public function getErrors()
@@ -80,22 +80,22 @@ class Simplify_Validation_DataValidation
 
   /**
    * Set a validation rule for a given key in a data set
-   * 
+   *
    * @param string $name
-   * @param Simplify_Validation_ValidationInterface $rule validation rule
+   * @param Simplify_ValidationInterface $rule validation rule
    */
-  public function setRule($name, Simplify_Validation_ValidationInterface $rule)
+  public function setRule($name, Simplify_ValidationInterface $rule)
   {
     if (!isset($this->rules[$name])) {
       $this->rules[$name] = array();
     }
-    
+
     $this->rules[$name][] = $rule;
   }
 
   /**
    * Validates all or specific key in data set
-   * 
+   *
    * @param mixed[] $data data set
    * @param string $name key in data set
    * @throws Simplify_ValidationException
@@ -103,7 +103,7 @@ class Simplify_Validation_DataValidation
   public function validate(&$data, $name = null)
   {
     $errors = array();
-    
+
     if (empty($name)) {
       foreach ($this->rules as $name => $rules) {
         try {
@@ -121,20 +121,20 @@ class Simplify_Validation_DataValidation
             $rule->validate(sy_get_param($data, $name));
           }
           catch (Simplify_ValidationException $e) {
-            $errors[$name] = $rule->getError();
+            $errors[$name] = $e->getErrors();
           }
         }
       }
     }
-    
+
     $this->errors = $errors;
-    
+
     if (!empty($errors))
       throw new Simplify_ValidationException($errors);
   }
 
   /**
-   * 
+   *
    * @param mixed[] $rules
    */
   protected function parse($rules)
@@ -159,7 +159,7 @@ class Simplify_Validation_DataValidation
 
   /**
    * Factory validation rule
-   * 
+   *
    * @param string $rule rule class
    * @param string $message
    * @param mixed[string] $params
@@ -169,11 +169,11 @@ class Simplify_Validation_DataValidation
   protected function factory($rule, $message, array $params = null)
   {
     $Rule = new $rule($message);
-    
+
     foreach ((array) $params as $param => $value) {
       $Rule->$param = $value;
     }
-    
+
     return $Rule;
   }
 

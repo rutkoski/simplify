@@ -23,7 +23,7 @@
  */
 
 /**
- * 
+ *
  * Validate string length
  *
  */
@@ -45,7 +45,7 @@ class Simplify_Validation_Length extends Simplify_Validation_AbstractValidation
   public $max;
 
   /**
-   * 
+   *
    * @param string $message
    * @param int|boolean $min minimun string length or false for no limit
    * @param int|boolean $max maximun string length or false for no limit
@@ -53,7 +53,7 @@ class Simplify_Validation_Length extends Simplify_Validation_AbstractValidation
   public function __construct($message, $min = false, $max = false)
   {
     parent::__construct($message);
-    
+
     $this->min = $min;
     $this->max = $max;
   }
@@ -62,9 +62,11 @@ class Simplify_Validation_Length extends Simplify_Validation_AbstractValidation
    * (non-PHPdoc)
    * @see Simplify_ValidationInterface::validate()
    */
-  protected function validate($value)
+  public function validate($value)
   {
-    return ($this->min === false || strlen($value) >= $this->min) && ($this->max === false || strlen($value) <= $this->max);
+    if (($this->min !== false && strlen($value) < $this->min) || ($this->max !== false && strlen($value) > $this->max)) {
+      $this->fail();
+    }
   }
 
 }

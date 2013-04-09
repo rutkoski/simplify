@@ -22,7 +22,7 @@
  */
 
 /**
- * 
+ *
  * Use a callback to validate data
  *
  */
@@ -58,13 +58,16 @@ class Simplify_Validation_Callback extends Simplify_Validation_AbstractValidatio
    * @param array $extraParams extra parameters for callback
    * @param integer $valueParamPos the position the callback requires the value parameter to be at
    */
-  public function __construct($message, $callback = null, $extraParams = array(), $valueParamPos = 0)
+  public function __construct($callback = null, $valueParamPos = 0)
   {
-    parent::__construct($message);
+    parent::__construct(null);
 
     $this->callback = $callback;
-    $this->extraParams = $extraParams;
     $this->valueParamPos = $valueParamPos;
+
+    $extraParams = func_get_args();
+    unset($extraParams[0], $extraParams[1]);
+    $this->extraParams = $extraParams;
   }
 
   /**
@@ -74,7 +77,7 @@ class Simplify_Validation_Callback extends Simplify_Validation_AbstractValidatio
   public function validate($value)
   {
     $args = $this->extraParams;
-    array_splice($args, $this->valueParamPos, 0, $value);
+    array_splice($args, $this->valueParamPos, 0, array($value));
     call_user_func_array($this->callback, $args);
   }
 

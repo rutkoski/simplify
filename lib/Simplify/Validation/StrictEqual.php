@@ -19,28 +19,45 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
+ * @copyright Copyright 2008 Rodrigo Rutkoski Rodrigues
  */
 
 /**
  *
- * Default exception for validation errors.
+ * Required value
  *
  */
-class Simplify_ValidationException extends Exception
+class Simplify_Validation_StrictEqual extends Simplify_Validation_AbstractValidation
 {
 
-  protected $errors;
+  /**
+   *
+   * @var mixed
+   */
+  public $value;
 
-  public function getErrors()
+  /**
+   * Constructor
+   *
+   * @param string $message validation fail message
+   * @param mixed $value
+   */
+  function __construct($message = '', $value = null)
   {
-    return $this->errors;
+    parent::__construct($message);
+
+    $this->value = $value;
   }
 
-  public function __construct($errors = null, $code = 0)
+  /**
+   * (non-PHPdoc)
+   * @see Simplify_ValidationInterface::validate()
+   */
+  public function validate($value)
   {
-    $this->errors = $errors;
-
-    parent::__construct('Validation exception', $code);
+    if ($value === $this->value) {
+      $this->fail();
+    }
   }
 
 }
