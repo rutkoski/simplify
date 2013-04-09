@@ -24,14 +24,14 @@
 /**
  *
  * Handles request information and data
- * 
+ *
  */
 class Simplify_Request
 {
 
   /**
    * Constant value for get request method
-   * 
+   *
    * @var string
    */
   const GET = 'GET';
@@ -66,7 +66,7 @@ class Simplify_Request
 
   /**
    * Request extension
-   * 
+   *
    * @var string
    */
   protected $extension;
@@ -114,7 +114,7 @@ class Simplify_Request
 
   /**
    * Private constructor.
-   * 
+   *
    * @return void
    */
   private function __construct()
@@ -130,20 +130,20 @@ class Simplify_Request
   protected function parse()
   {
     $dirname = dirname($_SERVER['SCRIPT_NAME']);
-    
+
     $regex = '#' . $dirname . '(?:(' . quotemeta($this->self()) . '))?(.*?)(?:\.([^\?]+))?(?:\?.*)?/*$#';
-    
+
     if (!preg_match($regex, $this->uri(), $o)) {
       throw new Exception('Could not parse url');
     }
-    
+
     $this->pretty = empty($o[1]);
     $this->route = empty($o[2]) ? '/' : $o[2];
     $this->extension = sy_get_param($o, 3);
   }
 
   /**
-   * 
+   *
    * @return boolean
    */
   public function pretty()
@@ -153,7 +153,7 @@ class Simplify_Request
 
   /**
    * Get the request method (get, post, put, delete...) or test if it is equal to $method
-   * 
+   *
    * @param string $method the request method to test for
    * @return boolean|string
    */
@@ -162,7 +162,7 @@ class Simplify_Request
     if (!is_null($method)) {
       return $_SERVER['REQUEST_METHOD'] == strtoupper($method);
     }
-    
+
     return $_SERVER['REQUEST_METHOD'];
   }
 
@@ -188,7 +188,7 @@ class Simplify_Request
 
   /**
    * Test if it is an xml request
-   * 
+   *
    * @return boolean
    */
   public function xml()
@@ -198,7 +198,7 @@ class Simplify_Request
 
   /**
    * Get the post data or a post var
-   * 
+   *
    * @param string $name
    * @param mixed $default
    * @param int $flags
@@ -209,11 +209,11 @@ class Simplify_Request
     if (!$this->post) {
       $this->post = new Simplify_Data_View(sy_strip_slashes_deep($_POST));
     }
-    
+
     if (!is_null($name)) {
       return $this->post->get($name, $default, $flags);
     }
-    
+
     return $this->post;
   }
 
@@ -230,17 +230,31 @@ class Simplify_Request
     if (!$this->get) {
       $this->get = new Simplify_Data_View(sy_strip_slashes_deep($_GET));
     }
-    
+
     if (!is_null($name)) {
       return $this->get->get($name, $default, $flags);
     }
-    
+
     return $this->get;
   }
 
   /**
+   * Get data from $_FILES
+   *
+   * @param string $name form field name
+   * @return array
+   */
+  public function files($name = null)
+  {
+    if (! empty($name)) {
+      return $_FILES[$name];
+    }
+    return $_FILES;
+  }
+
+  /**
    * Get the request route
-   * 
+   *
    * @return string
    */
   public function route()
@@ -276,14 +290,14 @@ class Simplify_Request
         $_SERVER['REQUEST_URI'] = $_SERVER['SCRIPT_NAME'];
       }
     }
-    
+
     if (isset($_SERVER['REQUEST_URI'])) {
       $uri = $_SERVER['REQUEST_URI'];
     }
     else {
       $uri = $_SERVER['ORIG_PATH_INFO'];
     }
-    
+
     return $uri;
   }
 
@@ -299,7 +313,7 @@ class Simplify_Request
 
   /**
    * Get the full url
-   * 
+   *
    * @return string
    */
   public function url()
@@ -331,7 +345,7 @@ class Simplify_Request
   }
 
   /**
-   * Get the ip address of the request client 
+   * Get the ip address of the request client
    *
    * @return string
    */
@@ -346,7 +360,7 @@ class Simplify_Request
     else {
       $ip = $_SERVER['REMOTE_ADDR'];
     }
-    
+
     return $ip;
   }
 
