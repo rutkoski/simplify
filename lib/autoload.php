@@ -2,6 +2,8 @@
 
 define('SY_DIR', __dir__);
 
+require_once('functions.php');
+
 require_once ('Simplify' . DIRECTORY_SEPARATOR . 'Simplify.php');
 require_once ('Simplify' . DIRECTORY_SEPARATOR . 'Autoload.php');
 
