@@ -50,16 +50,12 @@ class s
   protected static $router;
 
   /**
-   * @var array
+   * @var Simplify_Localization
    */
-  protected static $handlers;
+  protected static $l10n;
 
   /**
-   * @var array
-   */
-  protected static $actions;
-
-  /**
+   * Get the application controller object
    *
    * @return Simplify_Controller_ApplicationController
    */
@@ -73,11 +69,12 @@ class s
         self::$application = new Simplify_Controller_ApplicationController();
       }
     }
-    
+
     return self::$application;
   }
 
   /**
+   * Get the dbal object
    *
    * @return Simplify_Db_Database
    */
@@ -87,6 +84,7 @@ class s
   }
 
   /**
+   * Get the config object
    *
    * @return Simplify_Config
    */
@@ -95,11 +93,12 @@ class s
     if (empty(self::$config)) {
       self::$config = new Simplify_Config();
     }
-    
+
     return self::$config;
   }
 
   /**
+   * Get the request object
    *
    * @return Simplify_Request
    */
@@ -109,6 +108,7 @@ class s
   }
 
   /**
+   * Get the session object
    *
    * @return Simplify_Session
    */
@@ -118,6 +118,7 @@ class s
   }
 
   /**
+   * Get the router object
    *
    * @return Simplify_Router
    */
@@ -125,22 +126,23 @@ class s
   {
     if (empty(self::$router)) {
       $router = new Simplify_Router();
-      
+
       if (s::config()->has('routes')) {
         $routes = s::config()->get('routes');
-        
+
         foreach ($routes as $id => $route) {
           $router->connect(sy_get_param($route, 0), sy_get_param($route, 1), sy_get_param($route, 2));
         }
       }
-      
+
       self::$router = $router;
     }
-    
+
     return self::$router;
   }
 
   /**
+   * Get the response
    *
    * @return Simplify_Response
    */
@@ -149,36 +151,27 @@ class s
     if (empty(self::$response)) {
       self::$response = new Simplify_Response();
     }
-    
+
     return self::$response;
   }
 
   /**
+   * Get the localization object
    *
-   * @param string $hook hook name
-   * @param function $callback valid php callback
-   * @param ... extra parameters
+   * @return Simplify_Localization
    */
-  public static function addAction($hook, $callback)
+  public static function l10n(Simplify_Localization $l10n = null)
   {
-    $args = array_slice(func_get_args(), 2);
-    self::$actions[$hook][] = array($callback, $args);
-  }
-
-  /**
-   *
-   * @param string $hook hook name
-   */
-  public static function callAction($hook)
-  {
-    if (isset(self::$actions[$hook])) {
-      $_args = array_slice(func_get_args(), 1);
-      
-      foreach (self::$actions[$hook] as $action) {
-        $args = array_merge($action[1], $_args);
-        call_user_func_array($action[0], $args);
+    if (empty(self::$l10n)) {
+      if (!empty($l10n)) {
+        self::$l10n = $l10n;
+      }
+      else {
+        self::$l10n = new Simplify_Localization_Array();
       }
     }
+
+    return self::$l10n;
   }
 
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * SimplifyPHP Framework
  *
@@ -23,42 +24,68 @@
 
 /**
  *
- */
-if (! function_exists('__')) {
-  function __($msgid) {
-    return $msgid;
-    //return s::getL10n()->gettext($msgid);
-  }
-}
-
-/**
+ * Localization shortcut functions
  *
  */
-if (! function_exists('_n')) {
-  function _n($single, $plural, $number) {
-    return $number <= 1 ? $single : $plural;
-    //return s::getL10n()->ngettext($single, $plural, $number);
+
+if (!function_exists('__')) {
+
+  /**
+   * Get the localized version of $msgid
+   *
+   * @param string $msgid
+   * @return string
+   */
+  function __($msgid)
+  {
+    return s::l10n()->gettext($msgid);
   }
 }
 
-/**
- *
- */
-if (! function_exists('_d')) {
-  function _d($domain, $msgid) {
-    return $msgid;
-    //return s::getL10n()->dgettext($domain, $msgid);
+if (!function_exists('_n')) {
+
+  /**
+   * Get the localized version of $single or $plural, depending on $number
+   *
+   * @param string $single
+   * @param string $plural
+   * @param int $number
+   * @return string
+   */
+  function _n($single, $plural, $number)
+  {
+    return s::l10n()->ngettext($single, $plural, $number);
   }
 }
 
-/**
- *
- */
-if (! function_exists('_dn')) {
-  function _dn($domain, $single, $plural, $number) {
-    return $number <= 1 ? $single : $plural;
-    //return s::getL10n()->dngettext($domain, $single, $plural, $number);
+if (!function_exists('_d')) {
+
+  /**
+   * Get the localized version of $msgid in a specific $domain
+   *
+   * @param string $domain
+   * @param string $msgid
+   * @return string
+   */
+  function _d($domain, $msgid)
+  {
+    return s::l10n()->dgettext($domain, $msgid);
   }
 }
 
-?>
+if (!function_exists('_dn')) {
+
+  /**
+   * Get the localized version of $single or $plural, depending on $number, in a specific $domain
+   *
+   * @param string $domain
+   * @param string $single
+   * @param string $plural
+   * @param int $number
+   * @return string
+   */
+  function _dn($domain, $single, $plural, $number)
+  {
+    return s::l10n()->dngettext($domain, $single, $plural, $number);
+  }
+}
