@@ -1,4 +1,5 @@
 <?php
+
 /**
  * SimplifyPHP Framework
  *
@@ -21,7 +22,8 @@
  */
 
 /**
- * Object-oriented interface for building SQL queries.
+ *
+ * Object-oriented interface for building SQL queries
  *
  * Implementation guidelines:
  * - methods that set parameters must return $this
@@ -33,7 +35,6 @@
  * the current setting for that parameter
  * - must accept Simplify_Db_QueryObjectInterface objects as parameters
  *
- * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
  */
 interface Simplify_Db_QueryObjectInterface
 {
@@ -202,10 +203,10 @@ interface Simplify_Db_QueryObjectInterface
   public function executeRaw();
 
   /**
-   * 
+   *
    * @param mixed $params
    * @return Simplify_Db_QueryObjectInterface
    */
   public function setParams($params = null);
-  
+
 }

@@ -23,10 +23,9 @@
  */
 
 /**
- * Callback filter.
  *
- * @author Rodrigo Rutkoski Rodrigues, <rutkoski@gmail.com>
- * @package Simplify_Kernel_Data_Filter
+ * Callback filter
+ *
  */
 class Simplify_Filter_Trim implements Simplify_FilterInterface
 {
@@ -40,7 +39,7 @@ class Simplify_Filter_Trim implements Simplify_FilterInterface
     if (is_string($value)) {
       $value = trim($value);
     }
-    
+
     return $value;
   }
 

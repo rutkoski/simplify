@@ -22,9 +22,9 @@
  */
 
 /**
- * Base class and factory for DBAL implementations.
  *
- * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
+ * Base class and factory for DBAL implementations
+ *
  */
 abstract class Simplify_Db_Database implements Simplify_Db_DatabaseInterface
 {
@@ -43,20 +43,20 @@ abstract class Simplify_Db_Database implements Simplify_Db_DatabaseInterface
   private static $instances = array();
 
   /**
-   * Parameters.
+   * Parameters
    *
    * @var array
    */
   protected $params;
-  
+
   /**
-   * 
+   *
    * @var mixed[]
    */
   protected static $log = array();
 
   /**
-   * Constructor.
+   * Constructor
    *
    * @param array $params parameters
    * @return void
@@ -68,7 +68,7 @@ abstract class Simplify_Db_Database implements Simplify_Db_DatabaseInterface
 
   /**
    * (non-PHPdoc)
-   * @see IDataAccessObject::query()
+   * @see Simplify_Db_DatabaseInterface::query()
    */
   public function query($sql = null)
   {
@@ -81,7 +81,7 @@ abstract class Simplify_Db_Database implements Simplify_Db_DatabaseInterface
 
   /**
    * (non-PHPdoc)
-   * @see IDataAccessObject::insert()
+   * @see Simplify_Db_DatabaseInterface::insert()
    */
   public function insert($table = null, $data = null)
   {
@@ -90,7 +90,7 @@ abstract class Simplify_Db_Database implements Simplify_Db_DatabaseInterface
 
   /**
    * (non-PHPdoc)
-   * @see IDataAccessObject::update()
+   * @see Simplify_Db_DatabaseInterface::update()
    */
   public function update($table = null, $data = null, $where = null)
   {
@@ -99,7 +99,7 @@ abstract class Simplify_Db_Database implements Simplify_Db_DatabaseInterface
 
   /**
    * (non-PHPdoc)
-   * @see IDataAccessObject::delete()
+   * @see Simplify_Db_DatabaseInterface::delete()
    */
   public function delete($table = null, $where = null)
   {
@@ -112,7 +112,7 @@ abstract class Simplify_Db_Database implements Simplify_Db_DatabaseInterface
    * @param string $id configuration profile
    * @param string $engine DBAL engine
    * @param mixed $params extra parameters
-   * @return IDataAccessObject
+   * @return Simplify_Db_DatabaseInterface
    */
   public static function getInstance($id = 'default', $engine = null, $params = null)
   {
@@ -148,7 +148,7 @@ abstract class Simplify_Db_Database implements Simplify_Db_DatabaseInterface
   }
 
   /**
-   * Get/set log information.
+   * Get/set log information
    *
    * @param array|null $data log data
    * @return array
@@ -164,10 +164,13 @@ abstract class Simplify_Db_Database implements Simplify_Db_DatabaseInterface
 
   /**
    * (non-PHPdoc)
-   * @see IDataAccessObject::quote()
+   * @see Simplify_Db_DatabaseInterface::quote()
    */
   public function quote($value, $type = null)
   {
+    if (! is_numeric($value)) {
+      return "`{$value}`";
+    }
     return $value;
   }
 

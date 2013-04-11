@@ -22,7 +22,7 @@
  */
 
 /**
- * 
+ *
  * Base class for Simplify_Db_QueryObjectInterface implementations
  *
  */
@@ -79,14 +79,14 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
 
   /**
    *
-   * @var IDataAccessObject
+   * @var Simplify_Db_Database
    */
   protected $dao;
 
   /**
+   * Construct a new query object
    *
-   * @param IDataAccessObject $dao
-   * @return void
+   * @param Simplify_Db_Database $dao the database object
    */
   public function __construct($dao)
   {
@@ -102,13 +102,13 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
     if ($this->alias !== $alias) {
       $this->__sql = null;
     }
-    
+
     if ($alias === true) {
       return $this->alias;
     }
-    
+
     $this->alias = is_string($alias) ? $alias : null;
-    
+
     return $this;
   }
 
@@ -119,10 +119,10 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
   public function insert($table = null, $data = null)
   {
     $this->query = Simplify_Db_QueryObject::INSERT;
-    
+
     $this->from($table);
     $this->data($data);
-    
+
     return $this;
   }
 
@@ -133,11 +133,11 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
   public function update($table = null, $data = null, $where = null)
   {
     $this->query = Simplify_Db_QueryObject::UPDATE;
-    
+
     $this->from($table);
     $this->data($data);
     $this->where($where);
-    
+
     return $this;
   }
 
@@ -148,10 +148,10 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
   public function delete($table = null, $where = null)
   {
     $this->query = Simplify_Db_QueryObject::DELETE;
-    
+
     $this->from($table);
     $this->where($where);
-    
+
     return $this;
   }
 
@@ -169,10 +169,10 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
     }
     else {
       $this->data = array_merge((array) $this->data, (array) $data);
-      
+
       $this->__sql = null;
     }
-    
+
     return $this;
   }
 
@@ -190,19 +190,19 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
     }
     elseif (!empty($fields)) {
       $this->query = Simplify_Db_QueryObject::SELECT;
-      
+
       $fields = (array) $fields;
-      
+
       if ($remove) {
         $this->fields = array_diff($this->fields, $fields);
       }
       else {
         $this->fields = array_unique(array_merge($this->fields, $fields));
       }
-      
+
       $this->__sql = null;
     }
-    
+
     return $this;
   }
 
@@ -222,17 +222,17 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
       if (!is_array($table)) {
         $table = array($table);
       }
-      
+
       if ($remove) {
         $this->table = array_diff($this->table, $table);
       }
       else {
         $this->table = array_unique(array_merge($this->table, $table));
       }
-      
+
       $this->__sql = null;
     }
-    
+
     return $this;
   }
 
@@ -257,9 +257,9 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
       if (empty($type)) {
         $type = Simplify_Db_QueryObject::JOIN_INNER;
       }
-      
+
       $join = array($type, $join);
-      
+
       if ($remove) {
         if (($i = array_search($join, $this->joins)) !== false) {
           unset($this->joins[$i]);
@@ -268,10 +268,10 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
       else {
         $this->joins[] = $join;
       }
-      
+
       $this->__sql = null;
     }
-    
+
     return $this;
   }
 
@@ -316,17 +316,17 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
     }
     elseif (!empty($field)) {
       $field = (array) $field;
-      
+
       if ($remove) {
         $this->groupBy = array_diff($this->groupBy, $field);
       }
       else {
         $this->groupBy = array_unique(array_merge($this->groupBy, $field));
       }
-      
+
       $this->__sql = null;
     }
-    
+
     return $this;
   }
 
@@ -344,17 +344,17 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
     }
     elseif (!empty($condition)) {
       $condition = (array) $condition;
-      
+
       if ($remove) {
         $this->having = array_diff($this->having, $condition);
       }
       else {
         $this->having = array_unique(array_merge($this->having, $condition));
       }
-      
+
       $this->__sql = null;
     }
-    
+
     return $this;
   }
 
@@ -372,17 +372,17 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
     }
     elseif (!empty($condition)) {
       $condition = (array) $condition;
-      
+
       if ($remove) {
         $this->where = array_diff($this->where, $condition);
       }
       else {
         $this->where = array_unique(array_merge($this->where, $condition));
       }
-      
+
       $this->__sql = null;
     }
-    
+
     return $this;
   }
 
@@ -407,10 +407,10 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
       else {
         $this->orderBy[$field] = $direction;
       }
-      
+
       $this->__sql = null;
     }
-    
+
     return $this;
   }
 
@@ -428,10 +428,10 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
     }
     else {
       $this->limit = intval($limit);
-      
+
       $this->__sql = null;
     }
-    
+
     return $this;
   }
 
@@ -449,10 +449,10 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
     }
     else {
       $this->offset = intval($offset);
-      
+
       $this->__sql = null;
     }
-    
+
     return $this;
   }
 
@@ -470,23 +470,36 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
     }
     else {
       $this->sql = $sql;
-      
+
       $this->__sql = null;
     }
-    
+
     return $this;
   }
 
+  /**
+   * (non-PHPdoc)
+   * @see Simplify_Db_QueryObjectInterface::buildQuery()
+   */
   public function buildQuery()
   {
     //
   }
 
+  /**
+   * Automagically converts the query object to string
+   *
+   * @return string
+   */
   public function __toString()
   {
     return $this->buildQuery();
   }
 
+  /**
+   * (non-PHPdoc)
+   * @see Simplify_Db_QueryObjectInterface::setParams()
+   */
   public function setParams($params = null)
   {
     if (!empty($params)) {
@@ -497,47 +510,47 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
         if (isset($params[Simplify_Db_QueryParameters::SELECT])) {
           call_user_func(array($this, 'select'), $params[Simplify_Db_QueryParameters::SELECT]);
         }
-        
+
         if (isset($params[Simplify_Db_QueryParameters::FROM])) {
           call_user_func(array($this, 'from'), $params[Simplify_Db_QueryParameters::FROM]);
         }
-        
+
         if (isset($params[Simplify_Db_QueryParameters::JOIN])) {
           foreach ($params[Simplify_Db_QueryParameters::JOIN] as $join) {
             call_user_func_array(array($this, 'join'), (array) $join);
           }
         }
-        
+
         if (isset($params[Simplify_Db_QueryParameters::INNER_JOIN])) {
           foreach ((array) $params[Simplify_Db_QueryParameters::INNER_JOIN] as $join) {
             call_user_func_array(array($this, 'innerJoin'), (array) $join);
           }
         }
-        
+
         if (isset($params[Simplify_Db_QueryParameters::GROUP_BY])) {
           call_user_func(array($this, 'groupBy'), $params[Simplify_Db_QueryParameters::GROUP_BY]);
         }
-        
+
         if (isset($params[Simplify_Db_QueryParameters::HAVING])) {
           call_user_func(array($this, 'having'), $params[Simplify_Db_QueryParameters::HAVING]);
         }
-        
+
         if (isset($params[Simplify_Db_QueryParameters::WHERE])) {
           foreach ((array) $params[Simplify_Db_QueryParameters::WHERE] as $where) {
             call_user_func(array($this, 'where'), $where);
           }
         }
-        
+
         if (isset($params[Simplify_Db_QueryParameters::ORDER_BY])) {
           foreach ((array) $params[Simplify_Db_QueryParameters::ORDER_BY] as $orderBy) {
             call_user_func_array(array($this, 'orderBy'), (array) $orderBy);
           }
         }
-        
+
         if (isset($params[Simplify_Db_QueryParameters::LIMIT])) {
           $this->limit($params[Simplify_Db_QueryParameters::LIMIT]);
         }
-        
+
         if (isset($params[Simplify_Db_QueryParameters::OFFSET])) {
           $this->offset($params[Simplify_Db_QueryParameters::OFFSET]);
         }
@@ -547,12 +560,12 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
         }
       }
     }
-    
+
     return $this;
   }
 
   /**
-   * Build an insert's fields/values part of the query.
+   * Build an INSERT's fields/values part of the query
    *
    * @param array $data associative array of field/value pairs
    * @param string|bool|null $wildcard wildcard used for substitution in prepared statements
@@ -562,10 +575,10 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
   {
     $fields = array();
     $values = array();
-    
+
     foreach ($data as $k => $v) {
       $fields[] = "`$k`";
-      
+
       if ($wildcard === false) {
         $values[] = s::db()->quote($v);
       }
@@ -576,12 +589,12 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
         $values[] = ':' . $k;
       }
     }
-    
+
     return ' (' . implode(', ', $fields) . ') VALUES (' . implode(', ', $values) . ') ';
   }
 
   /**
-   * Build an update's fields/values part of the query.
+   * Build an UPDATE's fields/values part of the query.
    *
    * @param array $data associative array of field/value pairs
    * @param string|bool|null $wildcard wildcard used for substitution in prepared statements
@@ -590,7 +603,7 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
   public static function buildUpdate($data, $wildcard = null)
   {
     $fields = array();
-    
+
     foreach ($data as $k => $v) {
       if ($wildcard === false) {
         $v = s::db()->quote($v);
@@ -603,37 +616,46 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
         $fields[] = "`$k` = :$k";
       }
     }
-    
+
     return ' ' . implode(', ', $fields) . ' ';
   }
 
+  /**
+   * Build an equality expression for a single $values or an IN expression for multiple $values
+   *
+   * @param string $field the field
+   * @param mixed $values single or multiple values for the expression
+   * @param boolean $not if TRUE, use != or NOT IN instead of = and IN
+   * @return string
+   */
   public static function buildIn($field, $values, $not = false)
   {
     if (empty($values)) {
       return ' TRUE ';
     }
-    
+
     $values = (array) $values;
-    
+
     foreach ($values as &$value) {
       $value = s::db()->quote($value);
     }
-    
+
     $s = "`{$field}`";
-    
+
     $value = implode(', ', $values);
-    
+
     if (count($values) > 1) {
       $s .= ($not ? " NOT" : '') . " IN ({$value})";
     }
     else {
       $s .= ($not ? " !" : ' ') . "= {$value}";
     }
-    
+
     return $s;
   }
 
   /**
+   * Test the bit mask for a given query type
    *
    * @return boolean
    */

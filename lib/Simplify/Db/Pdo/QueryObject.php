@@ -1,5 +1,31 @@
 <?php
 
+/**
+ * SimplifyPHP Framework
+ *
+ * This file is part of SimplifyPHP Framework.
+ *
+ * SimplifyPHP Framework is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * SimplifyPHP Framework is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
+ */
+
+/**
+ *
+ * PDO Query Object
+ *
+ */
 class Simplify_Db_Pdo_QueryObject extends Simplify_Db_QueryObject
 {
 
@@ -17,7 +43,7 @@ class Simplify_Db_Pdo_QueryObject extends Simplify_Db_QueryObject
 
   /**
    *
-   * @var IQueryResult
+   * @var Simplify_Db_QueryResult
    */
   public $lastResult;
 
@@ -32,7 +58,7 @@ class Simplify_Db_Pdo_QueryObject extends Simplify_Db_QueryObject
 
   /**
    * (non-PHPdoc)
-   * @see simplify/kernel/dao/QueryObjectInterface#execute($data)
+   * @see Simplify_Db_QueryObjectInterface::execute()
    */
   public function execute($data = null)
   {
@@ -44,7 +70,7 @@ class Simplify_Db_Pdo_QueryObject extends Simplify_Db_QueryObject
       $this->lastQuery = $query;
     }
 
-    if (! is_null($data) && ! is_array($data) && func_num_args() > 1) {
+    if (!is_null($data) && !is_array($data) && func_num_args() > 1) {
       $data = func_get_args();
     }
 
@@ -55,7 +81,7 @@ class Simplify_Db_Pdo_QueryObject extends Simplify_Db_QueryObject
 
   /**
    * (non-PHPdoc)
-   * @see simplify/kernel/dao/api/QueryObjectInterface#executeRaw()
+   * @see Simplify_Db_QueryObjectInterface::executeRaw()
    */
   public function executeRaw()
   {
@@ -70,11 +96,11 @@ class Simplify_Db_Pdo_QueryObject extends Simplify_Db_QueryObject
 
   /**
    * (non-PHPdoc)
-   * @see simplify/kernel/dao/QueryObject#buildQuery()
+   * @see Simplify_Db_QueryObject::buildQuery()
    */
   public function buildQuery()
   {
-    if (! $this->__sql) {
+    if (!$this->__sql) {
       $sql = $this->sql;
 
       if (empty($sql)) {
@@ -118,7 +144,8 @@ class Simplify_Db_Pdo_QueryObject extends Simplify_Db_QueryObject
          */
         if (empty($this->table)) {
           throw new Exception('No table set for query');
-        } else {
+        }
+        else {
           $tables = $this->table;
 
           foreach ($tables as &$table) {
@@ -132,10 +159,10 @@ class Simplify_Db_Pdo_QueryObject extends Simplify_Db_QueryObject
 
         $sql .= "$table ";
 
-        if ($this->accept(Simplify_Db_QueryObject::UPDATE) && ! empty($this->data)) {
+        if ($this->accept(Simplify_Db_QueryObject::UPDATE) && !empty($this->data)) {
           $sql .= 'SET ' . Simplify_Db_QueryObject::buildUpdate($this->data) . ' ';
         }
-        elseif ($this->accept(Simplify_Db_QueryObject::INSERT) && ! empty($this->data)) {
+        elseif ($this->accept(Simplify_Db_QueryObject::INSERT) && !empty($this->data)) {
           $sql .= Simplify_Db_QueryObject::buildInsert($this->data) . ' ';
         }
 
@@ -145,7 +172,7 @@ class Simplify_Db_Pdo_QueryObject extends Simplify_Db_QueryObject
            * joins
            *
            */
-          if (! empty($this->joins)) {
+          if (!empty($this->joins)) {
             $joins = $this->joins;
 
             foreach ($joins as &$join) {
@@ -166,7 +193,7 @@ class Simplify_Db_Pdo_QueryObject extends Simplify_Db_QueryObject
            * where
            *
            */
-          if (! empty($this->where)) {
+          if (!empty($this->where)) {
             $where = $this->where;
 
             foreach ($where as &$_where) {
@@ -187,12 +214,12 @@ class Simplify_Db_Pdo_QueryObject extends Simplify_Db_QueryObject
            * group by and having
            *
            */
-          if (! empty($this->groupBy)) {
+          if (!empty($this->groupBy)) {
             $groupBy = implode(', ', $this->groupBy);
 
             $sql .= "GROUP BY $groupBy ";
 
-            if (! empty($this->having)) {
+            if (!empty($this->having)) {
               $having = $this->having;
 
               foreach ($having as &$_having) {
@@ -214,7 +241,7 @@ class Simplify_Db_Pdo_QueryObject extends Simplify_Db_QueryObject
            * order by
            *
            */
-          if (! empty($this->orderBy)) {
+          if (!empty($this->orderBy)) {
             $orderBy = $this->orderBy;
 
             $order = array();
@@ -229,11 +256,11 @@ class Simplify_Db_Pdo_QueryObject extends Simplify_Db_QueryObject
           }
         }
 
-        if (! is_null($this->limit)) {
+        if (!is_null($this->limit)) {
           $sql .= "LIMIT {$this->limit} ";
         }
 
-        if (! is_null($this->offset)) {
+        if (!is_null($this->offset)) {
           $sql .= "OFFSET {$this->offset} ";
         }
 

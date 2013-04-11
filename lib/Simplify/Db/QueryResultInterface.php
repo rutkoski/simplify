@@ -23,55 +23,70 @@
 
 /**
  * Interface that represents the result of a SQL query
- * 
+ *
  * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
  */
 interface Simplify_Db_QueryResultInterface
 {
 
   /**
+   * Get the query associated with this result
+   *
+   * @return string
+   */
+  public function query();
+
+  /**
+   * Free memory associated with this query result
    *
    * @return void
    */
   public function free();
 
   /**
+   * Number of rows in the query result in a SELECT or number of affected rows in a INSERT, UPDATE or DELETE
    *
    * @return integer
    */
   public function numRows();
 
   /**
+   * Number of columns in the query result
    *
    * @return integer
    */
   public function numCols();
 
   /**
+   * Column names in the query result
    *
    * @return array
    */
   public function columnNames();
 
   /**
+   * Fetch the first column of the first row in the query result
    *
    * @return mixed
    */
   public function fetchOne();
 
   /**
+   * Fetch the {$n}th row in the query result
    *
    * @return array
    */
   public function fetchRow($n = null);
 
   /**
+   * Fetch the {$n}th column in the query result
    *
    * @return array
    */
   public function fetchCol($n = null);
 
   /**
+   * Fetch the whole result set of the query result
    *
    * @return array
    */

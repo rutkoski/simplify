@@ -1,5 +1,31 @@
 <?php
 
+/**
+ * SimplifyPHP Framework
+ *
+ * This file is part of SimplifyPHP Framework.
+ *
+ * SimplifyPHP Framework is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * SimplifyPHP Framework is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
+ */
+
+/**
+ *
+ * PDO Database
+ *
+ */
 class Simplify_Db_Pdo_Database extends Simplify_Db_Database
 {
 
@@ -22,7 +48,7 @@ class Simplify_Db_Pdo_Database extends Simplify_Db_Database
   protected $options;
 
   /**
-   * Constructor.
+   * Constructor
    *
    * @param array $params
    * @return void
@@ -31,21 +57,17 @@ class Simplify_Db_Pdo_Database extends Simplify_Db_Database
   {
     parent::__construct($params);
 
-    $this->dsn = array(
-      'driver' => sy_get_param($this->params, 'type', 'mysql'), 'username' => sy_get_param($this->params, 'username'),
-      'password' => sy_get_param($this->params, 'password'), 'host' => sy_get_param($this->params, 'host', 'localhost'),
-      'database' => sy_get_param($this->params, 'name'), 'charset' => sy_get_param($this->params, 'charset', 'utf8')
-    );
+    $this->dsn = array('driver' => sy_get_param($this->params, 'type', 'mysql'),
+      'username' => sy_get_param($this->params, 'username'), 'password' => sy_get_param($this->params, 'password'),
+      'host' => sy_get_param($this->params, 'host', 'localhost'), 'database' => sy_get_param($this->params, 'name'),
+      'charset' => sy_get_param($this->params, 'charset', 'utf8'));
 
-    $this->options = array(
-      PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
-      PDO::ATTR_PERSISTENT => true
-    );
+    $this->options = array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8', PDO::ATTR_PERSISTENT => true);
   }
 
   /**
    * (non-PHPdoc)
-   * @see simplify/kernel/dao/api/IDataAccessObject#lastInsertId()
+   * @see Simplify_Db_DatabaseInterface::lastInsertId()
    */
   public function lastInsertId()
   {
@@ -54,7 +76,7 @@ class Simplify_Db_Pdo_Database extends Simplify_Db_Database
 
   /**
    * (non-PHPdoc)
-   * @see simplify/kernel/dao/DAO#beginTransaction()
+   * @see Simplify_Db_DatabaseInterface::beginTransaction()
    */
   public function beginTransaction()
   {
@@ -63,7 +85,7 @@ class Simplify_Db_Pdo_Database extends Simplify_Db_Database
 
   /**
    * (non-PHPdoc)
-   * @see simplify/kernel/dao/DAO#commit()
+   * @see Simplify_Db_DatabaseInterface::commit()
    */
   public function commit()
   {
@@ -72,7 +94,7 @@ class Simplify_Db_Pdo_Database extends Simplify_Db_Database
 
   /**
    * (non-PHPdoc)
-   * @see simplify/kernel/dao/DAO#rollback()
+   * @see Simplify_Db_DatabaseInterface::rollback()
    */
   public function rollback()
   {
@@ -90,15 +112,17 @@ class Simplify_Db_Pdo_Database extends Simplify_Db_Database
 
   /**
    * (non-PHPdoc)
-   * @see simplify/kernel/dao/DAO#connect()
+   * @see Simplify_Db_DatabaseInterface::connect()
    */
   public function connect()
   {
     if (empty($this->db)) {
-      $dsn = $this->dsn['driver'] . ':host=' . $this->dsn['host'] . ';dbname=' . $this->dsn['database'] . ';charset=' . $this->dsn['charset'];
+      $dsn = $this->dsn['driver'] . ':host=' . $this->dsn['host'] . ';dbname=' . $this->dsn['database'] . ';charset=' .
+         $this->dsn['charset'];
 
       try {
-        $this->db = new PDO($dsn, sy_get_param($this->dsn, 'username'), sy_get_param($this->dsn, 'password'), $this->options);
+        $this->db = new PDO($dsn, sy_get_param($this->dsn, 'username'), sy_get_param($this->dsn, 'password'),
+          $this->options);
       }
       catch (PDOException $e) {
         throw new Simplify_Db_DatabaseException('Database connection failed with message: ' . $e->getMessage());
@@ -110,7 +134,7 @@ class Simplify_Db_Pdo_Database extends Simplify_Db_Database
 
   /**
    * (non-PHPdoc)
-   * @see simplify/kernel/dao/DAO#disconnect()
+   * @see Simplify_Db_DatabaseInterface::disconnect()
    */
   public function disconnect()
   {
@@ -123,16 +147,7 @@ class Simplify_Db_Pdo_Database extends Simplify_Db_Database
 
   /**
    * (non-PHPdoc)
-   * @see simplify/kernel/dao/DAO#quote($value, $type)
-   */
-  /*public function quote($value, $type = null)
-  {
-    return $this->db()->quote($value, $type);
-  }*/
-
-  /**
-   * (non-PHPdoc)
-   * @see simplify/kernel/dao/DAO#factoryQueryObject()
+   * @see Simplify_Db_DatabaseInterface::factoryQueryObject()
    */
   public function factoryQueryObject()
   {
@@ -150,7 +165,7 @@ class Simplify_Db_Pdo_Database extends Simplify_Db_Database
   {
     $error = $res->errorInfo();
 
-    if (! empty($error[2])) {
+    if (!empty($error[2])) {
       $args = func_get_args();
       unset($args[0]);
 

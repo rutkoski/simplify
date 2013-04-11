@@ -65,7 +65,7 @@ class Simplify_Filter_DataFilter
 
   /**
    * Apply filters to data set or a given key in data set
-   * 
+   *
    * @param mixed $data data set
    * @param string $name key in data set
    */
@@ -92,12 +92,12 @@ class Simplify_Filter_DataFilter
   }
 
   /**
-   * 
+   *
    * @param string $name
    * @param Simplify_FilterInterface $filter
    * @return Simplify_Filter_DataFilter
    */
-  public function setFilter($name, FilterInterface $filter)
+  public function setFilter($name, Simplify_FilterInterface $filter)
   {
     if (! isset($this->filters[$name])) {
       $this->filters[$name] = array();

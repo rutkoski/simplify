@@ -22,7 +22,7 @@
  */
 
 /**
- * 
+ *
  * Abstract view
  *
  */
@@ -44,19 +44,14 @@ abstract class Simplify_View extends Simplify_Dictionary implements Simplify_Vie
   protected $layout = false;
 
   /**
-   * @var array
-   */
-  protected $__helpers = array();
-
-  /**
    *
-   * @var IRenderable
+   * @var Simplify_RenderableInterface
    */
   protected $object;
 
   /**
    * Instantiate a view
-   * 
+   *
    * @param string $class
    * @param Simplify_RenderableInterface $object
    * @return Simplify_ViewInterface
@@ -66,13 +61,13 @@ abstract class Simplify_View extends Simplify_Dictionary implements Simplify_Vie
     if (empty($class)) {
       $class = Simplify_View::PHP;
     }
-    
+
     return new $class($object);
   }
 
   /**
    * Constructor
-   * 
+   *
    * @param Simplify_RenderableInterface $object
    */
   public function __construct(Simplify_RenderableInterface $object = null)
@@ -89,27 +84,27 @@ abstract class Simplify_View extends Simplify_Dictionary implements Simplify_Vie
     if ($this->layout === false) {
       return false;
     }
-    
+
     elseif (empty($this->layout)) {
       $layout = s::config()->get('templates_dir') . '/layouts/layout.php';
-      
+
       if (!file_exists($layout)) {
         throw new Exception("Default layout file not found: <b>{$layout}</b>");
       }
     }
-    
+
     elseif (sy_path_is_absolute($this->layout)) {
       $layout = $this->layout;
     }
-    
+
     else {
       $layout = s::config()->get('templates_dir') . '/layouts/' . $this->layout . '.php';
     }
-    
+
     if (!file_exists($layout)) {
       throw new Exception("Layout file not found: <b>{$layout}</b>");
     }
-    
+
     return $layout;
   }
 
@@ -120,27 +115,27 @@ abstract class Simplify_View extends Simplify_Dictionary implements Simplify_Vie
   public function getTemplate()
   {
     global $config;
-    
+
     if ($this->template === false) {
       return false;
     }
-    
+
     if (empty($this->template)) {
       throw new Exception('Template file not set');
     }
-    
+
     elseif (sy_path_is_absolute($this->template)) {
       $template = $this->template;
     }
-    
+
     else {
       $template = $config['templates_dir'] . '/' . $this->template . '.php';
     }
-    
+
     if (!file_exists($template)) {
       throw new Exception("Template file not found: <b>{$template}</b>");
     }
-    
+
     return $template;
   }
 
@@ -170,7 +165,7 @@ abstract class Simplify_View extends Simplify_Dictionary implements Simplify_Vie
     catch (Exception $e) {
       $output = $e->getMessage();
     }
-    
+
     return $output;
   }
 
@@ -192,7 +187,7 @@ abstract class Simplify_View extends Simplify_Dictionary implements Simplify_Vie
     if (isset($this->object->data[$name])) {
       unset($this->object->data[$name]);
     }
-    
+
     return $this;
   }
 

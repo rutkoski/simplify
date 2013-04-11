@@ -23,6 +23,7 @@
  */
 
 /**
+ *
  * File Upload Component
  *
  * @example
@@ -41,74 +42,106 @@
  *
  *    echo $upload->getUploadedPath();
  *
- * @author Rodrigo Rutkoski Rodrigues, <rutkoski@gmail.com>
- * @package simplify_components
  */
 class Simplify_Upload
 {
 
   /**
+   * The $_FILE array of the one provided
    *
+   * @var array
    */
   protected $file;
 
   /**
+   * Error message
    *
+   * @var string
    */
   protected $error;
 
   /**
+   * Relative path to the uploaded file, after processing
    *
+   * @var string
    */
   protected $uploadedPath;
 
   /**
+   * Uploaded file mime type
    *
+   * @var string
    */
   protected $mimeType;
 
   /**
+   * Uploaded file size (in bytes)
    *
+   * @var int
    */
   protected $fileSize;
 
   /**
+   * Filename for uploaded file
    *
+   * @var string
    */
   public $filename = null;
 
   /**
+   * Upload file to a data based folder structure
    *
+   * @var boolean
    */
   public $useDateBasedPath = false;
 
   /**
+   * Generate a random filename for the uploaded file
    *
+   * @var boolean
    */
   public $hashFilename = false;
 
   /**
+   * Replace. If exists.
    *
+   * @var boolean
    */
   public $replaceIfExists = false;
 
   /**
+   * Path for saving uploads, absolute or relative to the files folder
    *
+   * @var string
    */
   public $uploadPath = null;
 
   /**
+   * Valid extensions for validation
+   * May contain regex instructions
    *
+   * Example:
+   *   array('jpe?g', 'gif')
+   *
+   * @var string[]|string
    */
   public $extensions;
 
   /**
+   * File mime type for validation
+   * May contain regex instructions
    *
+   * Example:
+   *   'image\/(jpeg|gif)'
+   *
+   * @var string
    */
   public $fileMimeType;
 
   /**
+   * Max file size (in bytes) for validation
    *
+   * @var int
    */
   public $maxFileSize;
 

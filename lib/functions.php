@@ -321,7 +321,7 @@ if (!function_exists('pre')) {
  */
 function sy_get_param($source, $param, $default = null, $testEmpty = false)
 {
-  if ($source instanceof ISimplify_Dictionary) {
+  if ($source instanceof Simplify_DictionaryInterface) {
     return $source->get($param, $default, $testEmpty);
   }
   elseif (is_array($source) || $source instanceof ArrayAccess) {
@@ -515,7 +515,7 @@ function br2dt($date)
 
 function sy_slugify($string, $ignoreCase = false)
 {
-  $string = preg_replace("`\[.*\]`U", "", $string);
+  $string = preg_replace('`\[.*\]`U', "", $string);
   $string = preg_replace('`&(amp;)?#?[a-z0-9]+;`i', '-', $string);
   $string = htmlentities($string, ENT_COMPAT, 'utf-8');
   $string = preg_replace("`&([a-z])(acute|uml|circ|grave|ring|cedil|slash|tilde|caron|lig|quot|rsquo);`i", "\\1", $string);
@@ -528,6 +528,15 @@ function sy_slugify($string, $ignoreCase = false)
   return trim($string, '-');
 }
 
+/**
+ * Convert a flat array with inner references (such as parent_id) to hierarchical structure
+ *
+ * @param unknown_type $flat
+ * @param unknown_type $pk
+ * @param unknown_type $parent
+ * @param unknown_type $children
+ * @return multitype:unknown
+ */
 function sy_flat_to_hierarchical($flat, $pk = 'id', $parent = 'parent_id', $children = 'children')
 {
   $parents = array();
@@ -562,6 +571,14 @@ function sy_flat_to_hierarchical($flat, $pk = 'id', $parent = 'parent_id', $chil
   return $data;
 }
 
+/**
+ * Find an element in an array by one of it's properties
+ *
+ * @param mixed[] $array
+ * @param string $key
+ * @param mixed $value
+ * @return mixed
+ */
 function sy_find_item($array, $key, $value)
 {
   $found = false;
@@ -574,6 +591,14 @@ function sy_find_item($array, $key, $value)
   return $found;
 }
 
+/**
+ * Find the key of an element in an array by one of it's properties
+ *
+ * @param mixed[] $array
+ * @param string $key
+ * @param mixed $value
+ * @return mixed
+ */
 function sy_find_key($array, $key, $value)
 {
   $found = false;
@@ -586,6 +611,11 @@ function sy_find_key($array, $key, $value)
   return $found;
 }
 
+/**
+ *
+ * Polyfill for date_parse_from_format (PHP 5.3+)
+ *
+ */
 if (!function_exists('date_parse_from_format')) {
 
   function date_parse_from_format($format, $date)

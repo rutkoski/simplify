@@ -1,5 +1,31 @@
 <?php
 
+/**
+ * SimplifyPHP Framework
+ *
+ * This file is part of SimplifyPHP Framework.
+ *
+ * SimplifyPHP Framework is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * SimplifyPHP Framework is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
+ */
+
+/**
+ *
+ * Basic Simplify_Db_RepositoryInterface implementation for a single table
+ *
+ */
 class Simplify_Db_TableDataGateway implements Simplify_Db_RepositoryInterface
 {
 
@@ -47,7 +73,7 @@ class Simplify_Db_TableDataGateway implements Simplify_Db_RepositoryInterface
    */
   public static function getInstance($table, $pk = null, $orderField = null)
   {
-    if (! isset(self::$instances[$table])) {
+    if (!isset(self::$instances[$table])) {
       self::$instances[$table] = new self($table, $pk, $orderField);
     }
 
@@ -56,7 +82,8 @@ class Simplify_Db_TableDataGateway implements Simplify_Db_RepositoryInterface
 
   public function move($id, $direction, $params = null)
   {
-    if (! in_array($direction, array('top', 'up', 'down', 'bottom', 'first', 'left', 'right', 'last', 'previous', 'next'))) {
+    if (!in_array($direction,
+      array('top', 'up', 'down', 'bottom', 'first', 'left', 'right', 'last', 'previous', 'next'))) {
       return;
     }
 
@@ -67,9 +94,10 @@ class Simplify_Db_TableDataGateway implements Simplify_Db_RepositoryInterface
     switch ($direction) {
       case 'top' :
       case 'first' :
-        $data = s::db()->query()->setParams($params)->from($this->table)->select($this->pk)->where("$field <= $pos AND $this->pk != $id")->execute()->fetchCol();
+        $data = s::db()->query()->setParams($params)->from($this->table)->select($this->pk)->where(
+          "$field <= $pos AND $this->pk != $id")->execute()->fetchCol();
         $dif = -1;
-        $dis = - count($data);
+        $dis = -count($data);
         break;
 
       case 'up' :
@@ -77,7 +105,8 @@ class Simplify_Db_TableDataGateway implements Simplify_Db_RepositoryInterface
       case 'previous' :
         $dif = -1;
         $dis = -1;
-        $data = s::db()->query()->setParams($params)->from($this->table)->select($this->pk)->where("($field = $pos - 1 OR $field = $pos) AND $this->pk != $id")->orderBy("$field DESC")->execute()->fetchCol();
+        $data = s::db()->query()->setParams($params)->from($this->table)->select($this->pk)->where(
+          "($field = $pos - 1 OR $field = $pos) AND $this->pk != $id")->orderBy("$field DESC")->execute()->fetchCol();
         break;
 
       case 'down' :
@@ -85,19 +114,22 @@ class Simplify_Db_TableDataGateway implements Simplify_Db_RepositoryInterface
       case 'next' :
         $dif = 1;
         $dis = 1;
-        $data = s::db()->query()->setParams($params)->from($this->table)->select($this->pk)->where("($field = $pos + 1 OR $field = $pos) AND $this->pk != $id")->orderBy("$field ASC")->execute()->fetchCol();
+        $data = s::db()->query()->setParams($params)->from($this->table)->select($this->pk)->where(
+          "($field = $pos + 1 OR $field = $pos) AND $this->pk != $id")->orderBy("$field ASC")->execute()->fetchCol();
         break;
 
       case 'bottom' :
       case 'last' :
-        $data = s::db()->query()->setParams($params)->from($this->table)->select($this->pk)->where("$field >= $pos AND $this->pk != $id")->execute()->fetchCol();
+        $data = s::db()->query()->setParams($params)->from($this->table)->select($this->pk)->where(
+          "$field >= $pos AND $this->pk != $id")->execute()->fetchCol();
         $dif = 1;
         $dis = count($data);
         break;
     }
 
-    if (! empty($data)) {
-      $sql = "UPDATE $this->table SET $field = GREATEST(0, $field - $dif) WHERE $this->pk IN (".implode(', ', $data).")";
+    if (!empty($data)) {
+      $sql = "UPDATE $this->table SET $field = GREATEST(0, $field - $dif) WHERE $this->pk IN (" . implode(', ', $data) .
+         ")";
       s::db()->query($sql)->execute();
     }
 
@@ -143,7 +175,8 @@ class Simplify_Db_TableDataGateway implements Simplify_Db_RepositoryInterface
    */
   public function findCount($params = null)
   {
-    $query = s::db()->query()->setParams($params)->from($this->table)->select(false)->limit(false)->offset(false)->select("COUNT($this->pk)");
+    $query = s::db()->query()->setParams($params)->from($this->table)->select(false)->limit(false)->offset(false)->select(
+      "COUNT($this->pk)");
     $result = $query->execute(sy_get_param($params, 'data'))->fetchOne();
     return intval($result);
   }

@@ -1,5 +1,31 @@
 <?php
 
+/**
+ * SimplifyPHP Framework
+ *
+ * This file is part of SimplifyPHP Framework.
+ *
+ * SimplifyPHP Framework is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * SimplifyPHP Framework is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
+ */
+
+/**
+ *
+ * PDO Query Result
+ *
+ */
 class Simplify_Db_Pdo_QueryResult extends Simplify_Db_QueryResult
 {
 
@@ -34,6 +60,7 @@ class Simplify_Db_Pdo_QueryResult extends Simplify_Db_QueryResult
   protected $offset;
 
   /**
+   * Constructs a new PDO query result object
    *
    * @param PDOStatement $stmt
    * @param string $query
@@ -60,6 +87,10 @@ class Simplify_Db_Pdo_QueryResult extends Simplify_Db_QueryResult
     Simplify_Db_Database::log(array($query, $data, $limit, $offset));
   }
 
+  /**
+   * (non-PHPdoc)
+   * @see Simplify_Db_QueryResult::query()
+   */
   public function query()
   {
     return $this->query;
@@ -67,7 +98,7 @@ class Simplify_Db_Pdo_QueryResult extends Simplify_Db_QueryResult
 
   /**
    * (non-PHPdoc)
-   * @see simplify/kernel/dao/api/IQueryResult#free()
+   * @see Simplify_Db_QueryResult::free()
    */
   public function free()
   {
@@ -76,7 +107,7 @@ class Simplify_Db_Pdo_QueryResult extends Simplify_Db_QueryResult
 
   /**
    * (non-PHPdoc)
-   * @see simplify/kernel/dao/api/IQueryResult#fetchOne()
+   * @see Simplify_Db_QueryResult::fetchOne()
    */
   public function fetchOne()
   {
@@ -86,7 +117,7 @@ class Simplify_Db_Pdo_QueryResult extends Simplify_Db_QueryResult
 
   /**
    * (non-PHPdoc)
-   * @see simplify/kernel/dao/api/IQueryResult#fetchRow($n)
+   * @see Simplify_Db_QueryResult::fetchRow()
    */
   public function fetchRow($n = null)
   {
@@ -98,7 +129,7 @@ class Simplify_Db_Pdo_QueryResult extends Simplify_Db_QueryResult
 
   /**
    * (non-PHPdoc)
-   * @see simplify/kernel/dao/api/IQueryResult#fetchCol($n)
+   * @see Simplify_Db_QueryResult::fetchCol()
    */
   public function fetchCol($n = null)
   {
@@ -110,7 +141,7 @@ class Simplify_Db_Pdo_QueryResult extends Simplify_Db_QueryResult
 
   /**
    * (non-PHPdoc)
-   * @see simplify/kernel/dao/api/IQueryResult#fetchAll()
+   * @see Simplify_Db_QueryResult::fetchAll()
    */
   public function fetchAll()
   {
@@ -120,7 +151,7 @@ class Simplify_Db_Pdo_QueryResult extends Simplify_Db_QueryResult
 
   /**
    * (non-PHPdoc)
-   * @see simplify/kernel/dao/api/IQueryResult#numRows()
+   * @see Simplify_Db_QueryResult::numRows()
    */
   public function numRows()
   {
@@ -136,7 +167,7 @@ class Simplify_Db_Pdo_QueryResult extends Simplify_Db_QueryResult
 
   /**
    * (non-PHPdoc)
-   * @see simplify/kernel/dao/api/IQueryResult#numCols()
+   * @see Simplify_Db_QueryResult::numCols()
    */
   public function numCols()
   {
@@ -146,7 +177,7 @@ class Simplify_Db_Pdo_QueryResult extends Simplify_Db_QueryResult
 
   /**
    * (non-PHPdoc)
-   * @see simplify/kernel/dao/QueryResult#columnNames()
+   * @see Simplify_Db_QueryResult::columnNames()
    */
   public function columnNames()
   {

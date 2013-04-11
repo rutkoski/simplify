@@ -21,12 +21,8 @@
  * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
  */
 
-if (!function_exists('syck_load')) {
-  require_once (SY_DIR . '/vendor/spyc.php');
-}
-
 /**
- * 
+ *
  * YAML wrapper
  *
  */
@@ -64,7 +60,9 @@ class Simplify_Syml
     if (function_exists('syck_load')) {
       return syck_load($yaml);
     }
-    
+
+    require_once (SY_DIR . '/vendor/spyc.php');
+
     return spyc_load($yaml);
   }
 
@@ -78,7 +76,9 @@ class Simplify_Syml
     if (function_exists('syck_dump')) {
       return syck_dump($data);
     }
-    
+
+    require_once (SY_DIR . '/vendor/spyc.php');
+
     return Spyc::YAMLDump($data);
   }
 

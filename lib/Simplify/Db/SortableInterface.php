@@ -22,9 +22,9 @@
  */
 
 /**
- * Common interface for sortable repositories.
  *
- * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
+ * Common interface for sortable repositories
+ *
  */
 interface Simplify_Db_SortableInterface
 {

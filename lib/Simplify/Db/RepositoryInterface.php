@@ -22,9 +22,9 @@
  */
 
 /**
- * Common interface for data repositories.
  *
- * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
+ * Common interface for data repositories
+ *
  */
 interface Simplify_Db_RepositoryInterface
 {
@@ -36,7 +36,6 @@ interface Simplify_Db_RepositoryInterface
    * @param mixed $id value for primary key
    * @param array $params query parameters
    * @return mixed
-   * @throws RecordNotFoundException if record not found
    */
   public function find($id = null, $params = null);
 

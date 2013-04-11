@@ -23,7 +23,7 @@
  */
 
 /**
- * 
+ *
  * Composite filter
  *
  */
@@ -46,7 +46,7 @@ class Simplify_Filter_Composite implements Simplify_FilterInterface
     foreach ($this->filters as $filter) {
       $value = $filter->filter($value);
     }
-    
+
     return $value;
   }
 
@@ -56,7 +56,7 @@ class Simplify_Filter_Composite implements Simplify_FilterInterface
    * @param Simplify_FilterInterface $filter
    * @return Simplify_Filter_Composite
    */
-  public function addFilter(IFilter $filter)
+  public function addFilter(Simplify_FilterInterface $filter)
   {
     $this->filters[] = $filter;
     return $this;
