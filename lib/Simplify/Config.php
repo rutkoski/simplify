@@ -22,7 +22,7 @@
  */
 
 /**
- * 
+ *
  * Simplify config
  *
  */
@@ -85,14 +85,14 @@ class Simplify_Config implements Simplify_DictionaryInterface, ArrayAccess
   public function del($name)
   {
     $ref = & $this->data;
-    
+
     $sub = $name;
     while (($i = strpos($sub, ':')) !== false) {
       $name = substr($sub, 0, $i);
       $sub = substr($sub, $i + 1);
       $ref = & $ref[$name];
     }
-    
+
     unset($ref[$sub]);
   }
 
@@ -103,20 +103,26 @@ class Simplify_Config implements Simplify_DictionaryInterface, ArrayAccess
   public function &get($name, $default = null, $flags = 0)
   {
     $ref = & $this->data;
-    
+
     $sub = $name;
     while (($i = strpos($sub, ':')) !== false) {
       $name = substr($sub, 0, $i);
       $sub = substr($sub, $i + 1);
       $ref = & $ref[$name];
     }
-    
-    $value = & $ref[$sub];
-    
+
+    if ($flags == Simplify_Dictionary::FILTER_NULL && is_null($ref[$sub])) {
+      $value = $default;
+    } elseif ($flags == Simplify_Dictionary::FILTER_EMPTY && empty($ref[$sub])) {
+      $value = $default;
+    } else {
+      $value = & $ref[$sub];
+    }
+
     if (is_string($value)) {
       $value = $this->resolveReferences($value);
     }
-    
+
     return $value;
   }
 
@@ -130,7 +136,7 @@ class Simplify_Config implements Simplify_DictionaryInterface, ArrayAccess
   }
 
   /**
-   * 
+   *
    * @return array
    */
   public function &getData()
@@ -173,14 +179,14 @@ class Simplify_Config implements Simplify_DictionaryInterface, ArrayAccess
   public function set($name, $value = null)
   {
     $ref = & $this->data;
-    
+
     $sub = $name;
     while (($i = strpos($sub, ':')) !== false) {
       $name = substr($sub, 0, $i);
       $sub = substr($sub, $i + 1);
       $ref = & $ref[$name];
     }
-    
+
     if (!is_numeric($sub) && empty($sub)) {
       $ref[] = & $value;
     }
@@ -190,7 +196,7 @@ class Simplify_Config implements Simplify_DictionaryInterface, ArrayAccess
   }
 
   /**
-   * 
+   *
    * @param array $data
    */
   public function setData(&$data)
@@ -200,7 +206,7 @@ class Simplify_Config implements Simplify_DictionaryInterface, ArrayAccess
 
   /**
    * Resolve internal references on config value
-   * 
+   *
    * @param string $value
    * @return mixed
    */
@@ -212,7 +218,7 @@ class Simplify_Config implements Simplify_DictionaryInterface, ArrayAccess
         $value = str_replace('{' . $name . '}', $this->get($name), $value);
       }
     }
-    
+
     return $value;
   }
 

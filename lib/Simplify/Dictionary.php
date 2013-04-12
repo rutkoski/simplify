@@ -22,12 +22,17 @@
  */
 
 /**
- * 
+ *
  * Basic Simplify_DictionaryInterface implementation.
- * 
+ *
  */
 class Simplify_Dictionary implements Simplify_DictionaryInterface, ArrayAccess
 {
+
+  /**
+   * Filter null values
+   */
+  const FILTER_NONE = 0;
 
   /**
    * Filter null values
@@ -136,14 +141,14 @@ class Simplify_Dictionary implements Simplify_DictionaryInterface, ArrayAccess
   public function get($name, $default = null, $flags = 0)
   {
     $args = func_get_args();
-    
+
     $func = array($this, '_get');
-    
+
     if ($this->hasGetter($name)) {
       $func = array($this, 'get_' . $name);
       unset($args[0]);
     }
-    
+
     return call_user_func_array($func, $args);
   }
 
@@ -154,57 +159,57 @@ class Simplify_Dictionary implements Simplify_DictionaryInterface, ArrayAccess
   public function getAll($flags = 0)
   {
     $data = $this->data;
-    
+
     foreach ($this->getGetterNames() as $name) {
       $data[$name] = $this->{$name};
     }
-    
+
     return $data;
   }
 
   /**
    * Get the setter names
-   * 
+   *
    * @return string[]
    */
   public function getSetterNames()
   {
     $names = array();
-    
+
     $methods = get_class_methods($this);
-    
+
     foreach ($methods as $method) {
       if (strpos($method, 'set_') === 0) {
         $names[] = substr($method, 4);
       }
     }
-    
+
     return $names;
   }
 
   /**
-   * Get the getter names 
+   * Get the getter names
    *
    * @return string[]
    */
   public function getGetterNames()
   {
     $names = array();
-    
+
     $methods = get_class_methods($this);
-    
+
     foreach ($methods as $method) {
       if (strpos($method, 'get_') === 0) {
         $names[] = substr($method, 4);
       }
     }
-    
+
     return $names;
   }
 
   /**
    * Check if getter exists
-   * 
+   *
    * @param string $name getter name
    * @return boolean
    */
@@ -256,7 +261,7 @@ class Simplify_Dictionary implements Simplify_DictionaryInterface, ArrayAccess
     if (!($data instanceof Simplify_DictionaryInterface)) {
       $data = new Simplify_Dictionary($data);
     }
-    
+
     return $data;
   }
 
@@ -277,14 +282,14 @@ class Simplify_Dictionary implements Simplify_DictionaryInterface, ArrayAccess
   public function set($name, $value)
   {
     $args = func_get_args();
-    
+
     $func = array($this, '_set');
-    
+
     if ($this->hasSetter($name)) {
       $func = array($this, 'set_' . $name);
       unset($args[0]);
     }
-    
+
     return call_user_func_array($func, $args);
   }
 
@@ -318,21 +323,21 @@ class Simplify_Dictionary implements Simplify_DictionaryInterface, ArrayAccess
   {
     if (empty($data))
       return;
-    
+
     if ($data instanceof Simplify_DictionaryInterface) {
       $data = $data->getAll();
     }
-    
+
     foreach ($data as $name => $value) {
       if ((Simplify_Dictionary::FILTER_NULL & $flags) == $flags && is_null($value))
         continue;
-      
+
       if ((Simplify_Dictionary::FILTER_EMPTY & $flags) == $flags && empty($value))
         continue;
-      
+
       $this->set($name, $value);
     }
-    
+
     return $this;
   }
 
@@ -345,7 +350,7 @@ class Simplify_Dictionary implements Simplify_DictionaryInterface, ArrayAccess
     if (isset($this->data[$name])) {
       unset($this->data[$name]);
     }
-    
+
     return $this;
   }
 
@@ -358,7 +363,7 @@ class Simplify_Dictionary implements Simplify_DictionaryInterface, ArrayAccess
     if ($this->_has($name, $flags)) {
       return $this->data[$name];
     }
-    
+
     return $default;
   }
 
@@ -371,15 +376,15 @@ class Simplify_Dictionary implements Simplify_DictionaryInterface, ArrayAccess
     if (!isset($this->data[$name])) {
       return false;
     }
-    
+
     if ((Simplify_Dictionary::FILTER_NULL & $flags) == $flags && is_null($this->data[$name])) {
       return false;
     }
-    
+
     if ((Simplify_Dictionary::FILTER_EMPTY & $flags) == $flags && empty($this->data[$name])) {
       return false;
     }
-    
+
     return true;
   }
 
