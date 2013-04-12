@@ -35,16 +35,27 @@ class Simplify_Localization_Array extends Simplify_Localization
    */
   protected $lang = array();
 
+  public function __construct()
+  {
+    $this->add('default', Simplify_Localization::DOMAIN_DEFAULT);
+  }
+
   /**
    * (non-PHPdoc)
    * @see Simplify_Localization::add()
    */
   public function add($name, $domain = Simplify_Localization::DOMAIN_DEFAULT)
   {
-    $path = s::config()->get('locale_dir', APP_DIR . '/language');
-    $path .= '/' . $this->locale . '/' . $domain . '.php';
+    $filename = s::config()->get('locale_dir', APP_DIR . '/language', Simplify_Dictionary::FILTER_EMPTY);
+    $filename .= '/' . $this->locale . '/' . $domain . '.php';
 
-    $this->lang[$domain] += require_once($path);
+    if (! file_exists($filename)) {
+      throw new Exception("Localization file <b>{$name}</b> for domain <b>{$domain}</b> not found: <b>{$filename}</b>");
+    }
+
+    $lang = require_once ($filename);
+
+    $this->lang[$domain] = array_merge((array) $this->lang[$domain], (array) $lang);
   }
 
   /**
@@ -66,11 +77,13 @@ class Simplify_Localization_Array extends Simplify_Localization
    */
   public function dngettext($domain, $single, $plural, $number)
   {
-    if (isset($this->lang[$domain][$msgid])) {
-      return $number == 1 ? $this->lang[$domain][$msgid][0] : $this->lang[$domain][$msgid][1];
+    if ($number == 1) {
+      $value = isset($this->lang[$domain][$single]) ? $this->lang[$domain][$single] : $single;
+    } else {
+      $value = isset($this->lang[$domain][$plural]) ? $this->lang[$domain][$plural] : $plural;
     }
 
-    return $number == 1 ? $single : $plural;
+    return sprintf($value, $number);
   }
 
 }

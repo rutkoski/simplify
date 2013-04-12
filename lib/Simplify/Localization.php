@@ -48,7 +48,7 @@ abstract class Simplify_Localization
    *
    * @var string
    */
-  protected $locale = 'en';
+  protected $locale = 'pt-BR';
 
   /**
    * Get/set current locale
