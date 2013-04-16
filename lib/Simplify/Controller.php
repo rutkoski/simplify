@@ -130,7 +130,7 @@ abstract class Simplify_Controller extends Simplify_Renderable
   {
     $controller = $this->getName();
     
-    $func = Inflector::variablize($action . 'Action');
+    $func = Simplify_Inflector::variablize($action . 'Action');
     
     $method = new ReflectionMethod($this, $func);
     $parameters = $method->getParameters();
@@ -174,7 +174,7 @@ abstract class Simplify_Controller extends Simplify_Renderable
    */
   public function callAction($action, $params = null)
   {
-    $func = Inflector::variablize($action . 'Action');
+    $func = Simplify_Inflector::variablize($action . 'Action');
     
     if (!method_exists($this, $func)) {
       throw new Simplify_RouterException('Action not found');

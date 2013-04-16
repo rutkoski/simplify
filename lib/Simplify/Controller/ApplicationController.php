@@ -77,8 +77,8 @@ class Simplify_Controller_ApplicationController
    */
   public function factory($params)
   {
-    $module = sy_get_param($params, Simplify_Router::MODULE);//Inflector::camelize(sy_get_param($params, Simplify_Router::MODULE));
-    $controller = Inflector::camelize(sy_get_param($params, Simplify_Router::CONTROLLER));
+    $module = sy_get_param($params, Simplify_Router::MODULE);//Simplify_Inflector::camelize(sy_get_param($params, Simplify_Router::MODULE));
+    $controller = Simplify_Inflector::camelize(sy_get_param($params, Simplify_Router::CONTROLLER));
 
     $path = isset($params['path']) ? DIRECTORY_SEPARATOR . $params['path'] : '';
     $class = $controller . 'Controller';

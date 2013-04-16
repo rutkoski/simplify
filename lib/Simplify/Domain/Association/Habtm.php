@@ -163,8 +163,8 @@ class Simplify_Domain_Association_Habtm extends Simplify_Domain_Association
       $target = $this->getTargetModel();
 
       $tables = array(
-        Inflector::pluralize($target->getName()),
-        Inflector::pluralize($source->getName())
+        Simplify_Inflector::pluralize($target->getName()),
+        Simplify_Inflector::pluralize($source->getName())
       );
 
       sort($tables);

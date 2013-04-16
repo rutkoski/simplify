@@ -64,7 +64,7 @@ class Simplify_Domain
       $name = $model;
 
       if (! isset(self::$model['objects'][$name])) {
-        $class = Inflector::camelize($name . 'Model');
+        $class = Simplify_Inflector::camelize($name . 'Model');
 
         if (class_exists($class)) {
           self::$model['objects'][$name] = new $class;

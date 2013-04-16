@@ -81,7 +81,7 @@ class Simplify_Domain_Model_Entity extends Simplify_Domain_Model_DomObj
       $name = 'id';
     }
     else {
-      $name = Inflector::underscore($this->getName() . '_id');
+      $name = Simplify_Inflector::underscore($this->getName() . '_id');
 
       if (! $this->hasAttribute($name)) {
         throw new DomainException("Could not determine primary key in entity {$this->getName()}");
@@ -100,7 +100,7 @@ class Simplify_Domain_Model_Entity extends Simplify_Domain_Model_DomObj
     $table = $this->getAttribute($this->getPrimaryKey())->getTable();
 
     if (empty($table)) {
-      $table = Inflector::tableize($this->getName());
+      $table = Simplify_Inflector::tableize($this->getName());
     }
 
     return $table;
@@ -214,7 +214,7 @@ class Simplify_Domain_Model_Entity extends Simplify_Domain_Model_DomObj
         throw new DomainException('Could not determine association type');
       }
 
-      $type = Inflector::camelize($type);
+      $type = Simplify_Inflector::camelize($type);
 
       $class = $type . 'Association';
 

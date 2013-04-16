@@ -99,7 +99,7 @@ class Simplify_Domain_Association_HasMany extends Simplify_Domain_Association
     if (! isset($this->model['foreignKey'])) {
       $target = $this->getTargetModel();
 
-      $this->model['foreignKey'] = Inflector::variablize($source->getName() . '_' . $source->getPrimaryKey());
+      $this->model['foreignKey'] = Simplify_Inflector::variablize($source->getName() . '_' . $source->getPrimaryKey());
     }
 
     return $this->model['foreignKey'];

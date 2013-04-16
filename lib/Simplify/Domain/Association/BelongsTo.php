@@ -89,7 +89,7 @@ class Simplify_Domain_Association_BelongsTo extends Simplify_Domain_Association
     if (! isset($this->model['localKey'])) {
       $target = $this->getTargetModel();
 
-      $this->model['localKey'] = Inflector::variablize($target->getName() . '_' . $target->getPrimaryKey());
+      $this->model['localKey'] = Simplify_Inflector::variablize($target->getName() . '_' . $target->getPrimaryKey());
     }
 
     return $this->model['localKey'];
