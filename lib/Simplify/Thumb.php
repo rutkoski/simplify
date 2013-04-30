@@ -47,6 +47,14 @@ class Simplify_Thumb
 
   const CENTER = 'C';
 
+  const NO_SCALE = 0;
+
+  const FIT_INSIDE = -1;
+
+  const FIT_OUTSIDE = 1;
+
+  const SCALE_TO_FIT = 2;
+
   public $baseDir;
 
   public $filesPath;
@@ -117,13 +125,12 @@ class Simplify_Thumb
    * 
    * @param int $width reference output width
    * @param int $height reference output height
-   * @param bool $proportional keep original proportion
-   * @param bool $fitInside fit image inside (true) or outside (false) $width and $height
-   * @param bool $far output exactly $width and $height and fill empty space with $background color
+   * @param int $mode resizing mode
+   * @param int $far force aspect ratio
    * @param int $background background color or transparent (false)
    * @return Simplify_Thumb
    */
-  public function resize($width = null, $height = null, $proportional = true, $fitInside = true, $far = false, $background = 0xffffff)
+  public function resize($width = null, $height = null, $mode = Simplify_Thumb::FIT_INSIDE, $far = false, $background = 0xffffff)
   {
     $params = func_get_args();
     array_unshift($params, 'Simplify_Thumb_Plugin_Resize');
@@ -325,7 +332,8 @@ class Simplify_Thumb
       $type = $this->originalType;
     }
     
-    $filename = $this->cachePath . '/' . $this->getCachePrefix() . md5(serialize($this->operations)) . image_type_to_extension($type);
+    $filename = $this->cachePath . '/' . $this->getCachePrefix() . md5(serialize($this->operations)) .
+       image_type_to_extension($type);
     
     return $filename;
   }

@@ -35,9 +35,7 @@ class Simplify_Thumb_Plugin_ZoomCrop extends Simplify_Thumb_Plugin
    */
   protected function process(Simplify_Thumb_Processor $thumb, $width = null, $height = null, $gravity = Simplify_Thumb::CENTER)
   {
-    $image = $thumb->image;
-
-    $thumb->image = Simplify_Thumb_Functions::resize($image, $width, $height, true, false);
+    $thumb->image = Simplify_Thumb_Functions::resize($thumb->image, $width, $height, Simplify_Thumb::FIT_OUTSIDE);
 
     $w0 = imagesx($thumb->image);
     $h0 = imagesy($thumb->image);

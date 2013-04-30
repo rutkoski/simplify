@@ -1,1 +1,0 @@
-<h1>Simplify PHP</h1>

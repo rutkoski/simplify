@@ -100,7 +100,7 @@ class Simplify_Config implements Simplify_DictionaryInterface, ArrayAccess
    * (non-PHPdoc)
    * @see Simplify_DictionaryInterface::get()
    */
-  public function &get($name, $default = null, $flags = 0)
+  public function get($name, $default = null, $flags = 0)
   {
     $ref = & $this->data;
 

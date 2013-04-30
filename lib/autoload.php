@@ -1,6 +1,6 @@
 <?php
 
-define('SY_DIR', __dir__);
+define('SY_DIR', dirname(__file__));
 
 require_once('functions.php');
 

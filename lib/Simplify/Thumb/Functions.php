@@ -22,7 +22,7 @@
  */
 
 /**
- * 
+ *
  * Basic image operations
  *
  */
@@ -31,14 +31,14 @@ class Simplify_Thumb_Functions
 
   /**
    * Load an image
-   * 
+   *
    * @param string $file
    * @throws Simplify_Thumb_ThumbException
    * @return resource
    */
   public static function load($file)
   {
-    if (! file_exists($file) || ! is_file($file)) {
+    if (!file_exists($file) || !is_file($file)) {
       throw new Simplify_ThumbException('File not found');
     }
 
@@ -49,15 +49,15 @@ class Simplify_Thumb_Functions
     $image = null;
 
     switch ($originalType) {
-      case IMAGETYPE_JPEG:
+      case IMAGETYPE_JPEG :
         $image = @imagecreatefromjpeg($file);
         break;
 
-      case IMAGETYPE_GIF:
+      case IMAGETYPE_GIF :
         $image = @imagecreatefromgif($file);
         break;
 
-      case IMAGETYPE_PNG:
+      case IMAGETYPE_PNG :
         $image = @imagecreatefrompng($file);
         break;
     }
@@ -69,7 +69,7 @@ class Simplify_Thumb_Functions
 
   /**
    * Output an image
-   * 
+   *
    * @param resource $image
    * @param string $type
    * @param int $quality
@@ -87,22 +87,23 @@ class Simplify_Thumb_Functions
       header("Cache-Control: private, max-age={$cacheSeconds}, pre-check={$cacheSeconds}");
       header("Expires: " . date(DATE_RFC822, strtotime("{$cacheSeconds} seconds")));
       header("Pragma: private");
-    } else {
+    }
+    else {
       header("Pragma: no-cache");
     }
 
     header('Content-Type: ' . self::getImageMimeType($type));
 
     switch ($type) {
-      case IMAGETYPE_JPEG:
+      case IMAGETYPE_JPEG :
         imagejpeg($image, null, $quality);
         break;
 
-      case IMAGETYPE_GIF:
+      case IMAGETYPE_GIF :
         imagegif($image);
         break;
 
-      case IMAGETYPE_PNG:
+      case IMAGETYPE_PNG :
         imagepng($image);
         break;
     }
@@ -112,7 +113,7 @@ class Simplify_Thumb_Functions
 
   /**
    * Save an image
-   * 
+   *
    * @param resource $image
    * @param string $file
    * @param string $type
@@ -127,16 +128,16 @@ class Simplify_Thumb_Functions
     }
 
     switch ($type) {
-      case IMAGETYPE_JPEG:
+      case IMAGETYPE_JPEG :
         imagejpeg($image, $file, $quality);
         break;
 
-      case IMAGETYPE_GIF:
+      case IMAGETYPE_GIF :
         imagesavealpha($image, true);
         imagegif($image, $file);
         break;
 
-      case IMAGETYPE_PNG:
+      case IMAGETYPE_PNG :
         imagesavealpha($image, true);
         imagepng($image, $file);
         break;
@@ -145,7 +146,7 @@ class Simplify_Thumb_Functions
 
   /**
    * Destroy image resource
-   * 
+   *
    * @param resource $image
    */
   public static function destroy($image)
@@ -156,7 +157,7 @@ class Simplify_Thumb_Functions
 
   /**
    * Validate image resource
-   * 
+   *
    * @param resource $image
    * @throws Simplify_Thumb_ThumbException
    */
@@ -173,7 +174,7 @@ class Simplify_Thumb_Functions
 
   /**
    * Get mime type
-   * 
+   *
    * @param string $type
    * @return string
    */
@@ -184,7 +185,7 @@ class Simplify_Thumb_Functions
 
   /**
    * Get the font size the fits text inside $width and $height
-   * 
+   *
    * @param int $width
    * @param int $height
    * @param string $font
@@ -210,91 +211,104 @@ class Simplify_Thumb_Functions
       $th = abs($box[1]) + abs($box[5]);
     }
 
-    if ($tw >= $width) $size -= $inc;
+    if ($tw >= $width)
+      $size -= $inc;
 
     return $size;
   }
 
   /**
    * Resize image
-   * 
+   *
    * @param resource $image
    * @param int $width
    * @param int $height
-   * @param bool $proportional
-   * @param bool $fitInside
+   * @param int $mode
    * @param bool $far
    * @param int $background
    * @throws Simplify_Thumb_ThumbException
-   * @return unknown|Simplify_Thumb_Functions|resource
+   * @return resource
    */
-  public static function resize($image, $width = null, $height = null, $proportional = true, $fitInside = true, $far = false, $background = 0xffffff)
+  public static function resize($image, $width = null, $height = null, $mode = Simplify_Thumb::FIT_INSIDE, $far = false, $background = 0xffffff)
   {
     self::validateImageResource($image);
 
-    if (empty($width) && empty($height)) return $image;
+    if (empty($width) && empty($height))
+      return $image;
 
     $w0 = imagesx($image);
     $h0 = imagesy($image);
 
-    $w1 = $w2 = empty($width) ? $w0 : $width;
-    $h1 = $h2 = empty($height) ? $h0 : $height;
+    if ($w0 == $width && $h0 == $height)
+      return $image;
 
-    if ($w0 == $w2 && $h0 == $h2) return $this;
+    switch ($mode) {
+      case Simplify_Thumb::FIT_INSIDE :
+        if (($w0 / $h0) > ($width / $height)) {
+          $w1 = $width;
+          $prop = $w1 / $w0;
+          $h1 = $h0 * $prop;
+        }
+        else {
+          $h1 = $height;
+          $prop = $h1 / $h0;
+          $w1 = $w0 * $prop;
+        }
 
-    if ($proportional) {
-      if ($fitInside) {
-        if (($w0 / $h0) > ($w1 / $h1)) {
-          $w2 = $w1;
-          $prop = $w2 / $w0;
-          $h2 = $h0 * $prop;
-        } else {
-          $h2 = $h1;
-          $prop = $h2 / $h0;
-          $w2 = $w0 * $prop;
+        $w2 = $far ? $width : $w1;
+        $h2 = $far ? $height : $h1;
+        break;
+
+      case Simplify_Thumb::FIT_OUTSIDE :
+        if (($w0 / $h0) > ($width / $height)) {
+          $h1 = $height;
+          $prop = $h1 / $h0;
+          $w1 = $w0 * $prop;
         }
-      } else {
-        if (($w0 / $h0) > ($w1 / $h1)) {
-          $h2 = $h1;
-          $prop = $h2 / $h0;
-          $w2 = $w0 * $prop;
-        } else {
-          $w2 = $w1;
-          $prop = $w2 / $w0;
-          $h2 = $h0 * $prop;
+        else {
+          $w1 = $width;
+          $prop = $w1 / $w0;
+          $h1 = $h0 * $prop;
         }
-      }
+
+        $w2 = $far ? $width : $w1;
+        $h2 = $far ? $height : $h1;
+        break;
+
+      case Simplify_Thumb::NO_SCALE :
+        $w1 = $w0;
+        $h1 = $h0;
+
+        $w2 = $far ? $width : $w1;
+        $h2 = $far ? $height : $h1;
+        break;
+
+      case Simplify_Thumb::SCALE_TO_FIT :
+        $w1 = $w2 = $width;
+        $h1 = $h2 = $height;
+        break;
     }
 
-    $w2 = floor($w2);
-    $h2 = floor($h2);
+    $x0 = ($w2 - $w1) / 2;
+    $y0 = ($h2 - $h1) / 2;
 
-    $x0 = 0;
-    $y0 = 0;
-
-    if ($far) {
-      $temp = imagecreatetruecolor($width, $height);
-
-      $x0 = ($width - $w2) / 2;
-      $y0 = ($height - $h2) / 2;
-    } else {
-      $temp = imagecreatetruecolor($w2, $h2);
-    }
+    $temp = imagecreatetruecolor($w2, $h2);
 
     if ($background === false) {
       imagealphablending($temp, false);
       $trans = imagecolorallocatealpha($temp, 255, 255, 255, 127);
-      imagefilledrectangle($temp, 0, 0, $width, $height, $trans);
+      imagefilledrectangle($temp, 0, 0, $w2, $h2, $trans);
       imagealphablending($temp, true);
       imagesavealpha($temp, true);
-    } else {
-      imagefilledrectangle($temp, 0, 0, $width, $height, $background);
+    }
+    else {
+      imagefilledrectangle($temp, 0, 0, $w2, $h2, $background);
     }
 
     imagealphablending($temp, true);
     imagesavealpha($temp, false);
 
-    if (! imagecopyresampled($temp, $image, $x0, $y0, 0, 0, $w2, $h2, $w0, $h0)) {
+    if (!imagecopyresampled($temp, $image, $x0, $y0, 0, 0, $w1, $h1, $w0, $h0)) {
       throw new Simplify_ThumbException('There was an error resizing the image');
     }
 
@@ -303,7 +317,7 @@ class Simplify_Thumb_Functions
 
   /**
    * Crop image
-   * 
+   *
    * @param resource $image
    * @param int $x
    * @param int $y
@@ -318,7 +332,7 @@ class Simplify_Thumb_Functions
 
     $temp = imagecreatetruecolor($width, $height);
 
-    if (! imagecopyresampled($temp, $image, 0, 0, $x, $y, $width, $height, $width, $height)) {
+    if (!imagecopyresampled($temp, $image, 0, 0, $x, $y, $width, $height, $width, $height)) {
       throw new Simplify_ThumbException('There was an error cropping the image');
     }
 
