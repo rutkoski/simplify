@@ -551,7 +551,8 @@ function sy_flat_to_hierarchical($flat, $pk = 'id', $parent = 'parent_id', $chil
     $parent_id = $row[$parent];
 
     if (empty($parent_id)) {
-      continue;
+      $data[$node_id] = $row;
+      $parents[$node_id] = & $data[$node_id];
     }
     elseif (!isset($parents[$parent_id])) {
       $data[$node_id] = $row;
