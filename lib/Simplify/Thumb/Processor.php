@@ -31,21 +31,21 @@ class Simplify_Thumb_Processor
 
   /**
    * Default jpg quality
-   * 
+   *
    * @var int
    */
   public $quality = 99;
 
   /**
-   * Image resource 
-   * 
+   * Image resource
+   *
    * @var resource
    */
   protected $image;
 
   /**
    * Call a plugin
-   * 
+   *
    * @param string $name
    */
   public function callPlugin($name)
@@ -63,7 +63,7 @@ class Simplify_Thumb_Processor
 
   /**
    * Set jpg quality
-   * 
+   *
    * @param int $q
    */
   public function quality($q)
@@ -73,14 +73,14 @@ class Simplify_Thumb_Processor
 
   /**
    * Load image file
-   * 
+   *
    * @param string $file
    * @throws Simplify_ThumbException
    */
   public function load($file)
   {
     if (! file_exists($file) || ! is_file($file)) {
-      throw new Simplify_ThumbException('File not found');
+      throw new Simplify_ThumbException("File not found: <b>{$file}</b>");
     }
 
     $info = getimagesize($file);
@@ -111,7 +111,7 @@ class Simplify_Thumb_Processor
 
   /**
    * Output image
-   * 
+   *
    * @param string $type image type
    * @param int $cacheSeconds cache time in seconds
    */
@@ -154,7 +154,7 @@ class Simplify_Thumb_Processor
 
   /**
    * Save file
-   * 
+   *
    * @param string $file
    * @param string $type
    */
@@ -191,7 +191,7 @@ class Simplify_Thumb_Processor
 
   /**
    * Get mime type
-   * 
+   *
    * @param string $type
    * @return string
    */

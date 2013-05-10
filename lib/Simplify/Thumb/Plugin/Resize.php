@@ -33,9 +33,9 @@ class Simplify_Thumb_Plugin_Resize extends Simplify_Thumb_Plugin
    * (non-PHPdoc)
    * @see Simplify_Thumb_Plugin::process()
    */
-  protected function process(Simplify_Thumb_Processor $thumb, $width = null, $height = null, $mode = Simplify_Thumb::FIT_INSIDE, $far = false, $background = 0xffffff)
+  protected function process(Simplify_Thumb_Processor $thumb, $width = null, $height = null, $mode = Simplify_Thumb::FIT_INSIDE, $far = false, $r = 0, $g = 0, $b = 0, $a = 0)
   {
-    $thumb->image = Simplify_Thumb_Functions::resize($thumb->image, $width, $height, $mode, $far, $background);
+    $thumb->image = Simplify_Thumb_Functions::resize($thumb->image, $width, $height, $mode, $far, $r, $g, $b, $a);
   }
 
 }

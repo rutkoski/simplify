@@ -23,20 +23,22 @@
 
 /**
  *
- * Brightness plugin
+ * Wrapper for PHP imagefilter function
  *
  */
-class Simplify_Thumb_Plugin_Brightness extends Simplify_Thumb_Plugin
+class Simplify_Thumb_Plugin_ImageFilter extends Simplify_Thumb_Plugin
 {
 
   /**
    * (non-PHPdoc)
    * @see Simplify_Thumb_Plugin::process()
    */
-  protected function process(Simplify_Thumb_Processor $thumb, $level)
+  protected function process(Simplify_Thumb_Processor $thumb, $filter = null)
   {
     Simplify_Thumb_Functions::validateImageResource($thumb->image);
-    imagefilter($thumb->image, IMG_FILTER_BRIGHTNESS, $level);
+    $args = func_get_args();
+    $args[0] = $thumb->image;
+    call_user_func_array('imagefilter', $args);
   }
 
 }

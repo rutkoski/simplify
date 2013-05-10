@@ -23,20 +23,19 @@
 
 /**
  *
- * Constrast plugin
+ * Offset plugin
  *
  */
-class Simplify_Thumb_Plugin_Constrast extends Simplify_Thumb_Plugin
+class Simplify_Thumb_Plugin_Offset extends Simplify_Thumb_Plugin
 {
 
   /**
    * (non-PHPdoc)
    * @see Simplify_Thumb_Plugin::process()
    */
-  protected function process(Simplify_Thumb_Processor $thumb, $level)
+  protected function process(Simplify_Thumb_Processor $thumb, $top = null, $right = null, $bottom = null, $left = null, $r = 0, $g = 0, $b = 0, $a = 0)
   {
-    Simplify_Thumb_Functions::validateImageResource($thumb->image);
-    imagefilter($thumb->image, IMG_FILTER_CONTRAST, $level);
+    $thumb->image = Simplify_Thumb_Functions::offset($thumb->image, $top, $right, $bottom, $left, $r, $g, $b, $a);
   }
 
 }

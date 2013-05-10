@@ -35,50 +35,7 @@ class Simplify_Thumb_Plugin_ZoomCrop extends Simplify_Thumb_Plugin
    */
   protected function process(Simplify_Thumb_Processor $thumb, $width = null, $height = null, $gravity = Simplify_Thumb::CENTER)
   {
-    $thumb->image = Simplify_Thumb_Functions::resize($thumb->image, $width, $height, Simplify_Thumb::FIT_OUTSIDE);
-
-    $w0 = imagesx($thumb->image);
-    $h0 = imagesy($thumb->image);
-
-    $w1 = empty($width) ? $w0 : $width;
-    $h1 = empty($height) ? $h0 : $height;
-
-    if ($w0 == $w1 && $h0 == $h1)
-      return;
-
-    switch ($gravity) {
-      case Simplify_Thumb::TOP_LEFT :
-      case Simplify_Thumb::LEFT :
-      case Simplify_Thumb::BOTTOM_LEFT :
-        $x = 0;
-        break;
-      case Simplify_Thumb::TOP_RIGHT :
-      case Simplify_Thumb::RIGHT :
-      case Simplify_Thumb::BOTTOM_RIGHT :
-        $x = $w0 - $w1;
-        break;
-      case Simplify_Thumb::CENTER :
-      default :
-        $x = floor($w0 - $w1) / 2;
-    }
-
-    switch ($gravity) {
-      case Simplify_Thumb::TOP_LEFT :
-      case Simplify_Thumb::TOP :
-      case Simplify_Thumb::TOP_RIGHT :
-        $y = 0;
-        break;
-      case Simplify_Thumb::BOTTOM_LEFT :
-      case Simplify_Thumb::BOTTOM :
-      case Simplify_Thumb::BOTTOM_RIGHT :
-        $y = $h0 - $h1;
-        break;
-      case Simplify_Thumb::CENTER :
-      default :
-        $y = floor($h0 - $h1) / 2;
-    }
-
-    $thumb->image = Simplify_Thumb_Functions::crop($thumb->image, $x, $y, $w1, $h1);
+    $thumb->image = Simplify_Thumb_Functions::zoomCrop($thumb->image, $width, $height, $gravity);
   }
 
 }

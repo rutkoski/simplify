@@ -33,9 +33,9 @@ class Simplify_Thumb_Plugin_Crop extends Simplify_Thumb_Plugin
    * (non-PHPdoc)
    * @see Simplify_Thumb_Plugin::process()
    */
-  protected function process(Simplify_Thumb_Processor $thumb, $x, $y, $width, $height)
+  protected function process(Simplify_Thumb_Processor $thumb, $x = null, $y = null, $width = null, $height = null, $r = 0, $g = 0, $b = 0, $a = 0)
   {
-    $thumb->image = Simplify_Thumb_Functions::crop($thumb->image, $x, $y, $width, $height);
+    $thumb->image = Simplify_Thumb_Functions::crop($thumb->image, $x, $y, $width, $height, $r, $g, $b, $a);
   }
 
 }
