@@ -72,7 +72,7 @@ class Simplify_URL
    *
    * @return void
    */
-  public function __construct($route = null, array $params = null, $keepOriginal = false, array $remove = null, $format = null)
+  public function __construct($route = null, array $params = null, $keepOriginal = null, array $remove = null, $format = null)
   {
     $this->route = $route;
     $this->params = (array) $params;
@@ -95,7 +95,7 @@ class Simplify_URL
    *
    * @return Simplify_URL
    */
-  public static function make($route = null, array $params = null, $keepOriginal = false, array $remove = null, $format = null)
+  public static function make($route = null, array $params = null, $keepOriginal = null, array $remove = null, $format = null)
   {
     $url = new self($route, $params, $keepOriginal, $remove, $format);
     return $url;
@@ -126,13 +126,17 @@ class Simplify_URL
    *
    * @return Simplify_URL
    */
-  public function extend($route = null, array $params = null, $keepOriginal = false, array $remove = null, $format = null)
+  public function extend($route = null, array $params = null, $keepOriginal = null, array $remove = null, $format = null)
   {
     $url = new self($route, $params, $keepOriginal, $remove, $format);
     $url->extend = $this;
     return $url;
   }
 
+  /**
+   *
+   * @return Simplify_URL
+   */
   public function copy()
   {
     $url = new self();
@@ -144,26 +148,56 @@ class Simplify_URL
     return $url;
   }
 
+  /**
+   *
+   * @param null|boolean $keep
+   * @return Simplify_URL
+   */
   public function keepOriginal($keep = true)
   {
     $this->keepOriginal = $keep;
+    return $this;
   }
 
-  public function remove(array $remove = null)
+  /**
+   *
+   * @param mixed $remove
+   * @return Simplify_URL
+   */
+  public function remove($remove = null)
   {
-    if (!is_null($remove)) {
-      $this->remove = $remove;
-      return $this;
+    if ($remove === false) {
+      $this->remove = null;
+    }
+    elseif (is_null($remove)) {
+      return $this->remove;
+    } else {
+      foreach (func_get_args() as $remove) {
+        if (is_array($remove)) {
+          $this->remove = array_merge($this->remove, $remove);
+        } else {
+          $this->remove[] = $remove;
+        }
+      }
     }
 
-    return $this->remove;
+    return $this;
   }
 
+  /**
+   *
+   * @param string $name
+   * @return mixed
+   */
   public function get($name)
   {
     return $this->params[$name];
   }
 
+  /**
+   *
+   * @return Simplify_URL
+   */
   public function set($name, $value)
   {
     $this->params[$name] = $value;
@@ -223,13 +257,13 @@ class Simplify_URL
 
     if ($this->_keepOriginal()) {
       $keep = s::request()->get()->getAll();
-
-      $remove = $this->_remove();
-      if (!empty($remove)) {
-        $keep = array_diff_key($keep, $remove);
-      }
-
       $params = array_merge($keep, $params);
+    }
+
+    $remove = $this->_remove();
+    if (!empty($remove)) {
+      $keep = array_diff_key($params, array_flip($remove));
+      $params = array_intersect_key($params, $keep);
     }
 
     if (!empty($params)) {
@@ -246,7 +280,7 @@ class Simplify_URL
 
   protected function _keepOriginal()
   {
-    return $this->extend ? $this->extend->_keepOriginal() && $this->keepOriginal : $this->keepOriginal;
+    return $this->extend ? $this->extend->_keepOriginal() === true || $this->keepOriginal === true : $this->keepOriginal;
   }
 
   protected function _route()
