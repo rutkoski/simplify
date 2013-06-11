@@ -169,7 +169,7 @@ abstract class Simplify_Db_Database implements Simplify_Db_DatabaseInterface
   public function quote($value, $type = null)
   {
     if (! is_numeric($value)) {
-      return "`{$value}`";
+      return "'{$value}'";
     }
     return $value;
   }
