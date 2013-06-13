@@ -83,7 +83,7 @@ class Simplify_Localization_Array extends Simplify_Localization
       $value = isset($this->lang[$domain][$plural]) ? $this->lang[$domain][$plural] : $plural;
     }
 
-    return sprintf($value, $number);
+    return $value;
   }
 
 }
