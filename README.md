@@ -1,4 +1,3 @@
-simplify-php
-============
+# Simplify PHP Framework
 
-Simplify PHP
+Because everyone should have their own framework :)
