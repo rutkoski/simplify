@@ -44,7 +44,7 @@ class Simplify_Config implements Simplify_DictionaryInterface, ArrayAccess
    * (non-PHPdoc)
    * @see ArrayAccess::offsetGet()
    */
-  public function &offsetGet($offset)
+  public function offsetGet($offset)
   {
     return $this->get($offset);
   }
