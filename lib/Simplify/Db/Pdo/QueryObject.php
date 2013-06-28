@@ -87,9 +87,11 @@ class Simplify_Db_Pdo_QueryObject extends Simplify_Db_QueryObject
   {
     $query = $this->buildQuery();
 
+    $this->stmt = $this->db()->query($query);
+
     $this->lastQuery = $query;
 
-    $this->lastResult = new Simplify_Db_Pdo_QueryResult($this->db()->query($query), $query);
+    $this->lastResult = new Simplify_Db_Pdo_QueryResult($this->stmt, $query);
 
     return $this->lastResult;
   }

@@ -198,7 +198,7 @@ class Simplify_Db_TableDataGateway implements Simplify_Db_RepositoryInterface
    *
    * @return integer
    */
-  public function delete($id, $params = array())
+  public function delete($id = null, $params = null)
   {
     $result = s::db()->delete($this->table, "$this->pk = ?")->execute($id);
     return $result->numRows();

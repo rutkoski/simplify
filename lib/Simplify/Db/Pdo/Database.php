@@ -163,7 +163,9 @@ class Simplify_Db_Pdo_Database extends Simplify_Db_Database
    */
   public static function validate($res)
   {
-    $error = $res->errorInfo();
+    if ($res !== false) {
+      $error = $res->errorInfo();
+    }
 
     if (!empty($error[2])) {
       $args = func_get_args();

@@ -80,7 +80,9 @@ class Simplify_Db_Pdo_QueryResult extends Simplify_Db_QueryResult
      */
     if (! is_null($data)) {}
 
-    $this->stmt->execute((array) $data);
+    if ($this->stmt instanceof PDOStatement) {
+      $this->stmt->execute((array) $data);
+    }
 
     Simplify_Db_Pdo_Database::validate($this->stmt, $query, $data);
 
