@@ -24,7 +24,7 @@
 /**
  *
  * Basic implementation of the renderable interface
- * 
+ *
  */
 abstract class Simplify_Renderable extends Simplify_Dictionary implements Simplify_RenderableInterface
 {
@@ -58,15 +58,15 @@ abstract class Simplify_Renderable extends Simplify_Dictionary implements Simpli
           case s::request()->json() :
             $type = Simplify_View::JSON;
             break;
-          
+
           default :
             $type = Simplify_View::PHP;
         }
       }
-      
+
       $this->view = Simplify_View::factory($type, $this);
     }
-    
+
     return $this->view;
   }
 
@@ -77,29 +77,34 @@ abstract class Simplify_Renderable extends Simplify_Dictionary implements Simpli
   public function getLayout()
   {
     $filename = empty($this->layout) ? $this->getLayoutFilename() : $this->layout;
-    
-    if ((is_null($this->layout) && s::request()->ajax()) || $this->layout === false) {
-      return false;
+
+    if ((is_null($filename) && s::request()->ajax()) || $filename === false) {
+      $layout = false;
     }
-    
+
     elseif (sy_path_is_absolute($filename)) {
       $layout = $filename;
-    }
-    
-    else {
-      $path = (array) $this->getLayoutsPath();
-      
-      while (count($path)) {
-        $layout = array_shift($path) . '/' . $filename . '_layout.php';
-        if (file_exists($layout))
-          break;
+
+      if (!file_exists($layout)) {
+        throw new Exception("Layout not found: file not found: <b>{$layout}</b>");
       }
     }
-    
-    if (!file_exists($layout)) {
-      throw new Exception("Layout file not found: <b>{$layout}</b>");
+
+    else {
+      $path = (array) $this->getLayoutsPath();
+
+      $layout = array();
+      do {
+        $layout[] = array_shift($path) . '/' . $filename . '_layout.php';
+      } while (count($path) && ! file_exists(end($layout)));
+
+      if (!file_exists(end($layout))) {
+        throw new Exception("Layout not found: <b>{$filename}</b><br/><br/>Using path:<br/><b>".implode('</b><br/><b>', $layout)."</b>");
+      }
+
+      $layout = end($layout);
     }
-    
+
     return $layout;
   }
 
@@ -110,8 +115,8 @@ abstract class Simplify_Renderable extends Simplify_Dictionary implements Simpli
 
   /**
    * Get a list of paths where layouts can be found
-   * 
-   * @return string|string[] array of file paths 
+   *
+   * @return string|string[] array of file paths
    */
   public function getLayoutsPath()
   {
@@ -124,40 +129,45 @@ abstract class Simplify_Renderable extends Simplify_Dictionary implements Simpli
    */
   public function getTemplate()
   {
-    $filename = empty($this->template) ? $this->getTemplateFilename() : $this->template;
-    
-    if ($this->template === false) {
-      return false;
+    $filename = empty($this->template) ?  $this->getTemplateFilename() : $this->template;
+
+    if ($filename === false) {
+      $template = false;
     }
-    
+
     elseif (empty($filename)) {
-      throw new Exception('Template file not set');
+      throw new Exception('Template not set');
     }
-    
+
     elseif (sy_path_is_absolute($filename)) {
       $template = $filename;
-    }
-    
-    else {
-      $path = (array) $this->getTemplatesPath();
-      
-      while (count($path)) {
-        $template = array_shift($path) . '/' . $filename . '.php';
-        if (file_exists($template))
-          break;
+
+      if (!file_exists($template)) {
+        throw new Exception("Template not found: file not found: <b>{$filename}</b>");
       }
     }
-    
-    if (!file_exists($template)) {
-      throw new Exception("Template file not found: <b>{$template}</b>");
+
+    else {
+      $path = (array) $this->getTemplatesPath();
+
+      $template = array();
+      do {
+        $template[] = array_shift($path) . '/' . $filename . '.php';
+      } while (count($path) && ! file_exists(end($template)));
+
+      if (!file_exists(end($template))) {
+        throw new Exception("Template not found: <b>{$filename}</b><br/><br/>Using path:<br/><b>".implode('</b><br/><b>', $template)."</b>");
+      }
+
+      $template = end($template);
     }
-    
+
     return $template;
   }
 
   /**
    * Get the template filename
-   * 
+   *
    * @return string
    */
   public function getTemplateFilename()
@@ -195,7 +205,7 @@ abstract class Simplify_Renderable extends Simplify_Dictionary implements Simpli
 
   /**
    * Call render and return the rendered view
-   * 
+   *
    * @return string
    */
   public function __toString()
@@ -205,10 +215,10 @@ abstract class Simplify_Renderable extends Simplify_Dictionary implements Simpli
     }
     catch (Exception $e) {
       sy_exception_handler($e);
-      
+
       $output = '';
     }
-    
+
     return $output;
   }
 

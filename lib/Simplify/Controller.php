@@ -31,49 +31,56 @@ abstract class Simplify_Controller extends Simplify_Renderable
 
   /**
    * Default controller action name
-   * 
+   *
    * @var string
    */
   const ACTION_DEFAULT = 'index';
 
   /**
    * Action name
-   * 
+   *
    * @var string
    */
   protected $name;
 
   /**
    * Current action
-   * 
+   *
    * @var string
    */
   protected $action;
 
   /**
+   * Controller base
+   *
+   * @var string
+   */
+  protected $base;
+
+  /**
    * Controller path
-   * 
+   *
    * @var string
    */
   protected $path;
 
   /**
    * Controller module
-   * 
+   *
    * @var string
    */
   protected $module;
 
   /**
    * Current layout
-   * 
+   *
    * @var string
    */
   protected $layout = 'default';
 
   /**
    * Constructor
-   * 
+   *
    * @return void
    */
   public function __construct()
@@ -83,7 +90,7 @@ abstract class Simplify_Controller extends Simplify_Renderable
 
   /**
    * Initialize callback runs once
-   * 
+   *
    * @return void
    */
   protected function initialize()
@@ -120,29 +127,29 @@ abstract class Simplify_Controller extends Simplify_Renderable
 
   /**
    * Order the named params in the route to match the action params
-   * 
+   *
    * @param string $action the action
    * @param array $params action params
-   * @throws BadMethodCallException if any action parameter is missing 
-   * @return array action parameters in the right order 
+   * @throws BadMethodCallException if any action parameter is missing
+   * @return array action parameters in the right order
    */
   protected function orderParams($action, $params)
   {
     $controller = $this->getName();
-    
+
     $func = Simplify_Inflector::variablize($action . 'Action');
-    
+
     $method = new ReflectionMethod($this, $func);
     $parameters = $method->getParameters();
-    
+
     $_params = array();
-    
+
     foreach ($parameters as $parameter) {
       $name = $parameter->name;
-      
+
       if (isset($params[$name])) {
         $_params[$name] = $params[$name];
-        
+
         unset($params[$name]);
       }
       elseif ($parameter->isDefaultValueAvailable()) {
@@ -152,21 +159,21 @@ abstract class Simplify_Controller extends Simplify_Renderable
         throw new BadMethodCallException("Missing parameter <b>{$name}</b> on action <b>{$action}</b> of controller <b>{$controller}</b>");
       }
     }
-    
+
     unset($parameters, $method);
-    
+
     foreach ($params as $name => $param) {
       if (is_numeric($name)) {
         $_params[$name] = $param;
       }
     }
-    
+
     return $_params;
   }
 
   /**
    * Call an action in the controller and return its result
-   * 
+   *
    * @param string $action the action
    * @param array $params action parameters
    * @throws RouterException if the action is not found
@@ -175,31 +182,31 @@ abstract class Simplify_Controller extends Simplify_Renderable
   public function callAction($action, $params = null)
   {
     $func = Simplify_Inflector::variablize($action . 'Action');
-    
+
     if (!method_exists($this, $func)) {
       throw new Simplify_RouterException('Action not found');
     }
-    
+
     $this->action = $action;
-    
+
     $params = $this->orderParams($action, (array) $params);
-    
+
     $this->beforeAction();
-    
+
     $output = call_user_func_array(array($this, $func), (array) $params);
-    
+
     $this->afterAction($output);
-    
+
     if ($output === Simplify_Response::AUTO) {
       $output = $this->getView();
     }
-    
+
     return $output;
   }
 
   /**
    * Forward the request to another route
-   * 
+   *
    * @param string $uri the route
    * @return mixed
    */
@@ -210,7 +217,7 @@ abstract class Simplify_Controller extends Simplify_Renderable
 
   /**
    * Get the module name
-   * 
+   *
    * @return string
    */
   public function getModule()
@@ -220,7 +227,7 @@ abstract class Simplify_Controller extends Simplify_Renderable
 
   /**
    * Get the action name
-   * 
+   *
    * @return string
    */
   public function getAction()
@@ -230,7 +237,7 @@ abstract class Simplify_Controller extends Simplify_Renderable
 
   /**
    * Get the controller name
-   * 
+   *
    * @return string
    */
   public function getName()
@@ -238,13 +245,13 @@ abstract class Simplify_Controller extends Simplify_Renderable
     if (empty($this->name)) {
       $this->name = strtolower(substr(get_class($this), 0, strrpos(get_class($this), 'Controller')));
     }
-    
+
     return $this->name;
   }
 
   /**
    * Get the controller path
-   * 
+   *
    * @return string
    */
   public function getPath()
@@ -253,12 +260,26 @@ abstract class Simplify_Controller extends Simplify_Renderable
   }
 
   /**
+   * Get the controller path
+   *
+   * @return string
+   */
+  public function getBase()
+  {
+    return $this->base;
+  }
+
+  /**
    * (non-PHPdoc)
    * @see Simplify_Renderable::getLayoutsPath()
    */
   public function getLayoutsPath()
   {
-    return array(s::config()->get('modules_dir') . '/' . $this->module . '/templates/layouts', s::config()->get('templates_dir') . '/layouts/' . $this->module, s::config()->get('templates_dir') . '/layouts');
+    $path = array();
+    $path[] = $this->getBase() . '/templates/layouts';
+    $path[] = s::config()->get('templates_dir') . '/' . $this->getModule() . '/layouts';
+    $path[] = s::config()->get('templates_dir') . '/layouts';
+    return $path;
   }
 
   /**
@@ -276,7 +297,40 @@ abstract class Simplify_Controller extends Simplify_Renderable
    */
   public function getTemplatesPath()
   {
-    return array(s::config()->get('templates_dir') . '/' . $this->module, s::config()->get('modules_dir') . '/' . $this->module . '/templates', s::config()->get('templates_dir'));
+    $path = array();
+    $path[] = s::config()->get('templates_dir') . '/' . $this->getModule() . $this->getPath();
+    $path[] = $this->getBase() . '/templates' . $this->getPath();
+    return $path;
+  }
+
+  /**
+   * Set the controller path
+   *
+   * @param string $path controller path
+   */
+  public function setPath($path)
+  {
+    $this->path = $path;
+  }
+
+  /**
+   * Set the controller base dir
+   *
+   * @param string $base controller base dir
+   */
+  public function setBase($base)
+  {
+    $this->base = $base;
+  }
+
+  /**
+   * Set the module name
+   *
+   * @param string $module module name
+   */
+  public function setModule($module)
+  {
+    $this->module = $module;
   }
 
 }

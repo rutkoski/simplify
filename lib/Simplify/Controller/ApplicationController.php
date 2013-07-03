@@ -22,7 +22,7 @@
  */
 
 /**
- * 
+ *
  * Default Application Controller
  *
  */
@@ -77,7 +77,7 @@ class Simplify_Controller_ApplicationController
    */
   public function factory($params)
   {
-    $module = sy_get_param($params, Simplify_Router::MODULE);//Simplify_Inflector::camelize(sy_get_param($params, Simplify_Router::MODULE));
+    $module = sy_get_param($params, Simplify_Router::MODULE);
     $controller = Simplify_Inflector::camelize(sy_get_param($params, Simplify_Router::CONTROLLER));
 
     $path = isset($params['path']) ? DIRECTORY_SEPARATOR . $params['path'] : '';
@@ -85,40 +85,38 @@ class Simplify_Controller_ApplicationController
     $filename = $class . '.php';
 
     if ($module) {
-      $base = s::config()->get('modules:' . $module . ':path') . DIRECTORY_SEPARATOR . 'controller';
+      $base = s::config()->get('modules:' . $module . ':dir', s::config()->get('modules:dir') . '/' . $module, Simplify_Dictionary::FILTER_NULL);
 
-      $filename = $base . $path . DIRECTORY_SEPARATOR . $filename;
-
-      if (! file_exists($filename)) {
-        throw new Exception("Could not factory controller <b>{$controller}</b>: file not found");
-      }
-
-      require_once($filename);
+      $filename = $base . DIRECTORY_SEPARATOR . 'controller' . $path . DIRECTORY_SEPARATOR . $filename;
     }
 
     else {
       $modules = s::config()->get('modules');
 
-      foreach ($modules as $k => $v) {
-        $base = s::config()->get('modules:' . $k . ':path') . DIRECTORY_SEPARATOR . 'controller';
-
-        $filename = $base . $path . DIRECTORY_SEPARATOR . $filename;
-
-        if (file_exists($filename)) {
-          require_once($filename);
-
-          break;
-        }
+      reset($modules);
+      do {
+        $module = key($modules);
+        $base = s::config()->get('modules:' . $module . ':dir');
+        $filename = $base . DIRECTORY_SEPARATOR . 'controller' . $path . DIRECTORY_SEPARATOR . $filename;
+        $valid = next($module) !== false;
       }
+      while (! file_exists($filename) && $valid);
     }
 
+    if (! file_exists($filename)) {
+     throw new Exception("Could not factory controller: file not found: <b>{$filename}</b>");
+    }
+
+    require_once($filename);
+
     if (! class_exists($class)) {
-      throw new Exception("Could not factory controller <b>{$controller}</b>: class not found");
+      throw new Exception("Could not factory controller: class not found: <b>{$class}</b>");
     }
 
     $Controller = new $class();
-    $Controller->path = $path;
-    $Controller->module = $module;
+    $Controller->setBase($base);
+    $Controller->setPath($path);
+    $Controller->setModule($module);
 
     return $Controller;
   }
