@@ -116,8 +116,6 @@ abstract class Simplify_Db_Database implements Simplify_Db_DatabaseInterface
    */
   public static function getInstance($id = 'default', $engine = null, $params = null)
   {
-    $config = s::config();
-
     if (! isset(Simplify_Db_Database::$instances[$id])) {
       if (empty($engine)) {
         $engine = Simplify_Db_Database::$defaultEngine;
@@ -125,26 +123,38 @@ abstract class Simplify_Db_Database implements Simplify_Db_DatabaseInterface
 
       $class = $engine;
 
-      if (! isset($config['database'][$id])) {
-        throw new Exception("Database configuration for <b>$id</b> not found");
-      }
+      $params = self::getParams($id, $params);
 
-      $_params = $config['database'][$id]['*'];
-
-      if (isset($config['database'][$id][$_SERVER['SERVER_NAME']])) {
-        $_params = array_merge($_params, $config['database'][$id][$_SERVER['SERVER_NAME']]);
-      }
-
-      if (is_array($params) && ! empty($params)) {
-        $_params = array_merge($_params, $params);
-      }
-
-      $dao = new $class($_params);
+      $dao = new $class($params);
 
       Simplify_Db_Database::$instances[$id] = $dao;
     }
 
     return Simplify_Db_Database::$instances[$id];
+  }
+
+  /**
+   *
+   *
+   * @param string $id configuration profile
+   * @param mixed $params extra parameters
+   * @return array database connection parameters
+   */
+  public static function getParams($id = 'default', $params = null)
+  {
+    $config = s::config();
+
+    $_params = $config['database'][$id]['*'];
+
+    if (isset($config['database'][$id][$_SERVER['SERVER_NAME']])) {
+      $_params = array_merge($_params, $config['database'][$id][$_SERVER['SERVER_NAME']]);
+    }
+
+    if (is_array($params) && ! empty($params)) {
+      $_params = array_merge($_params, $params);
+    }
+
+    return $_params;
   }
 
   /**
