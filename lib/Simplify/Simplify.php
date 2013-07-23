@@ -35,7 +35,7 @@ class s
   protected static $config;
 
   /**
-   * @var Simplify_Controller_ApplicationController
+   * @var Simplify_ApplicationController
    */
   protected static $application;
 
@@ -57,16 +57,16 @@ class s
   /**
    * Get the application controller object
    *
-   * @return Simplify_Controller_ApplicationController
+   * @return Simplify_ApplicationController
    */
-  public static function app(Simplify_Controller_ApplicationController $app = null)
+  public static function app(Simplify_ApplicationController $app = null)
   {
     if (empty(self::$application)) {
       if (!empty($app)) {
         self::$application = $app;
       }
       else {
-        self::$application = new Simplify_Controller_ApplicationController();
+        self::$application = new Simplify_ApplicationController();
       }
     }
 

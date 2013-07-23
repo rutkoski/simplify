@@ -210,7 +210,7 @@ class Simplify_Config implements Simplify_DictionaryInterface, ArrayAccess
    * @param string $value
    * @return mixed
    */
-  protected function resolveReferences($value)
+  public function resolveReferences($value)
   {
     while (($s = strpos($value, '{')) !== false) {
       if (($f = strpos($value, '}', $s)) !== false) {

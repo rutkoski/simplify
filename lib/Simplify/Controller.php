@@ -22,7 +22,7 @@
  */
 
 /**
- * 
+ *
  * Basic controller
  *
  */
@@ -276,9 +276,10 @@ abstract class Simplify_Controller extends Simplify_Renderable
   public function getLayoutsPath()
   {
     $path = array();
-    $path[] = $this->getBase() . '/templates/layouts';
-    $path[] = s::config()->get('templates_dir') . '/' . $this->getModule() . '/layouts';
-    $path[] = s::config()->get('templates_dir') . '/layouts';
+    $path[] = s::config()->resolveReferences("{$this->getBase()}/templates/{theme}/layouts");
+    $path[] = s::config()->resolveReferences("{$this->getBase()}/templates/layouts");
+    $path[] = s::config()->resolveReferences("{templates_dir}/{$this->getModule()}/layouts");
+    $path[] = s::config()->resolveReferences("{templates_dir}/layouts");
     return $path;
   }
 
@@ -298,8 +299,10 @@ abstract class Simplify_Controller extends Simplify_Renderable
   public function getTemplatesPath()
   {
     $path = array();
-    $path[] = s::config()->get('templates_dir') . '/' . $this->getModule() . $this->getPath();
-    $path[] = $this->getBase() . '/templates' . $this->getPath();
+    $path[] = s::config()->resolveReferences("{templates_dir}/{$this->getModule()}{$this->getPath()}");
+    $path[] = s::config()->resolveReferences("{templates_dir}{$this->getPath()}");
+    $path[] = s::config()->resolveReferences("{$this->getBase()}/templates/{theme}{$this->getPath()}");
+    $path[] = s::config()->resolveReferences("{$this->getBase()}/templates{$this->getPath()}");
     return $path;
   }
 
