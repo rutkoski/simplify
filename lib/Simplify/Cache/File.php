@@ -170,11 +170,11 @@ class Simplify_Cache_File implements Simplify_CacheInterface
     }
 
     if (empty($file)) {
-      $file = sy_fix_path($this->path . DIRECTORY_SEPARATOR . $name, 'php');
+      $file = sy_fix_path($this->path . '/' . $name, 'php');
     } else {
-      rename($file, $this->path . DIRECTORY_SEPARATOR . $name . '.php');
+      rename($file, $this->path . '/' . $name . '.php');
 
-      $file = $this->path . DIRECTORY_SEPARATOR . $name . '.php';
+      $file = $this->path . '/' . $name . '.php';
     }
 
     if (! is_string($data)) {
@@ -186,13 +186,13 @@ class Simplify_Cache_File implements Simplify_CacheInterface
 
   /**
    * Find the cache filename
-   * 
+   *
    * @param string $id cache name
    * @return string cache filename
    */
   protected function findFile($id)
   {
-    $found = glob($this->path . DIRECTORY_SEPARATOR . $id . '*.php');
+    $found = glob($this->path . '/' . $id . '*.php');
     return sy_get_param((array)$found, 0);
   }
 

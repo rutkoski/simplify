@@ -5,12 +5,12 @@ if (! defined('SY_DIR')) {
 
   require_once('functions.php');
 
-  require_once ('Simplify' . DIRECTORY_SEPARATOR . 'Autoload.php');
+  require_once ('Simplify/Autoload.php');
 
   sy_autoload_register(array('Simplify_Autoload', 'autoload'));
 }
 
-require_once ('Simplify' . DIRECTORY_SEPARATOR . 'Simplify.php');
+require_once ('Simplify/Simplify.php');
 
 Simplify_Autoload::registerPath(SY_DIR);
-Simplify_Autoload::registerPath(SY_DIR . DIRECTORY_SEPARATOR . 'vendor');
+Simplify_Autoload::registerPath(SY_DIR . '/vendor');

@@ -87,7 +87,7 @@ function sy_log($file, $data, $lines = 300)
     return;
   }
 
-  $file = APP_DIR . DIRECTORY_SEPARATOR . 'logs' . DIRECTORY_SEPARATOR . $file . '.log';
+  $file = APP_DIR . '/logs/' . $file . '.log';
 
   $a = @file($file, FILE_IGNORE_NEW_LINES);
   if ($lines && count($a) > $lines) {

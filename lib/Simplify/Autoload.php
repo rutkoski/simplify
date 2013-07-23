@@ -33,7 +33,7 @@ class Simplify_Autoload
   public static function registerPath($path)
   {
     if (! sy_path_is_absolute($path)) {
-      $path = SY_DIR . DIRECTORY_SEPARATOR . $path;
+      $path = SY_DIR . '/' . $path;
     }
 
     array_unshift(self::$path, $path);
@@ -47,12 +47,12 @@ class Simplify_Autoload
     if (false !== ($lastNsPos = strrpos($className, '\\'))) {
       $namespace = substr($className, 0, $lastNsPos);
       $className = substr($className, $lastNsPos + 1);
-      $fileName = str_replace('\\', DIRECTORY_SEPARATOR, $namespace) . DIRECTORY_SEPARATOR;
+      $fileName = str_replace('\\', '/', $namespace) . '/';
     }
-    $fileName .= str_replace('_', DIRECTORY_SEPARATOR, $className) . '.php';
+    $fileName .= str_replace('_', '/', $className) . '.php';
 
     foreach (self::$path as $path) {
-      $filename = $path . DIRECTORY_SEPARATOR . $fileName;
+      $filename = $path . '/' . $fileName;
 
       if (file_exists($filename)) {
         require_once ($filename);
