@@ -160,13 +160,11 @@ abstract class Simplify_View extends Simplify_Dictionary implements Simplify_Vie
   public function __toString()
   {
     try {
-      $output = $this->render();
+      return $this->render();
     }
     catch (Exception $e) {
-      $output = $e->getMessage();
+      trigger_error($e->getMessage());
     }
-
-    return $output;
   }
 
   /**

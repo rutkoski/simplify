@@ -218,12 +218,26 @@ class Simplify_URL
       return $url;
     }
 
-    if (!sy_url_is_absolute($url)) {
+    if (!sy_url_is_absolute($url) || strpos($route, 'route://') === 0) {
       if (empty($route)) {
         $route = s::request()->route();
       }
 
-      while (strpos($route, '//') === 0) {
+      elseif (strpos($route, 'route://') === 0) {
+        $route = substr($route, 8);
+
+        if (($p = strpos($route, '?')) !== false) {
+          $name = substr($route, 0, $p);
+          parse_str(substr($route, $p + 1), $params);
+        } else {
+          $name = $route;
+          $params = null;
+        }
+
+        $route = s::router()->build($name, $params);
+      }
+
+      while (strpos($route, '//') !== false) {
         $route = str_replace('//', '/', $route);
       }
 
@@ -275,7 +289,12 @@ class Simplify_URL
 
   public function __toString()
   {
-    return $this->build();
+    try {
+      return $this->build();
+    }
+    catch (Exception $e) {
+      trigger_error($e->getMessage());
+    }
   }
 
   protected function _keepOriginal()

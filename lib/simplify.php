@@ -19,8 +19,7 @@ $config['cache_dir'] = '{app_dir}/cache';
 
 $config['templates_dir'] = '{app_dir}/templates/{theme}';
 
-$config['modules:dir'] = '{app_dir}/modules';
-$config['modules:app:path'] = '{app_dir}';
+$config['modules_dir'] = '{app_dir}/modules';
 
 $config['public_path'] = '';
 
