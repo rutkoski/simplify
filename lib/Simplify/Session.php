@@ -29,6 +29,10 @@
 class Simplify_Session implements Simplify_DictionaryInterface
 {
 
+  const MESSAGES_NOTICES = 'notices';
+
+  const MESSAGES_WARNINGS = 'warnings';
+
   /**
    * Singleton instance of Simplify_Session
    *
@@ -120,6 +124,59 @@ class Simplify_Session implements Simplify_DictionaryInterface
     else {
       $_SESSION['__flash__'][$name] = $value;
     }
+  }
+
+  /**
+   *
+   * @param string|string[] $messages the messages
+   * @param string $namespace group messages in a namespace
+   * @return string[]
+   */
+  public function warnings($messages = null, $namespace = '*')
+  {
+    return $this->flashMessages(self::MESSAGES_WARNINGS, $messages, $namespace);
+  }
+
+  /**
+   *
+   * @param string|string[] $messages the messages
+   * @param string $namespace group messages in a namespace
+   * @return string[]
+   */
+  public function notices($messages = null, $namespace = '*')
+  {
+    return $this->flashMessages(self::MESSAGES_NOTICES, $messages, $namespace);
+  }
+
+  /**
+   *
+   */
+  public function clearMessages()
+  {
+    if (isset($_SESSION['__messages__'])) {
+      unset($_SESSION['__messages__']);
+    }
+  }
+
+  /**
+   *
+   * @param string $type message type
+   * @param string|string[] $messages the messages
+   * @param string $namespace group messages in a namespace
+   * @return string[]
+   */
+  public function flashMessages($type, $messages = null, $namespace = '*')
+  {
+    if (func_num_args() > 1) {
+      $_SESSION['__messages__'][$type][$namespace] = array_unique(
+        array_filter(array_merge($_SESSION['__messages__'][$type][$namespace], (array) $messages)));
+    }
+
+    if (isset($_SESSION['__messages__'][$type][$namespace])) {
+      return $_SESSION['__messages__'][$type][$namespace];
+    }
+
+    return array();
   }
 
   /**
