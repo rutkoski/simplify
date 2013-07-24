@@ -70,7 +70,9 @@ class Simplify_Db_Pdo_QueryObject extends Simplify_Db_QueryObject
       $this->lastQuery = $query;
     }
 
-    if (!is_null($data) && !is_array($data) && func_num_args() > 1) {
+    if (func_num_args() == 0) {
+      $data = $this->data;
+    } elseif (!is_null($data) && !is_array($data) && func_num_args() > 1) {
       $data = func_get_args();
     }
 
