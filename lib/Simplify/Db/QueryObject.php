@@ -371,7 +371,7 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
       $this->where = array();
     }
     elseif (!empty($condition)) {
-      $condition = (array) $condition;
+      $condition = array($condition);
 
       if ($remove) {
         $this->where = array_diff($this->where, $condition);
