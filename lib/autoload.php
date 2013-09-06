@@ -1,9 +1,5 @@
 <?php
 
-if (! function_exists('sy_autoload_register')) {
-  require_once('functions.php');
-}
-
 if (! class_exists('Simplify_Autoload')) {
   require_once ('Simplify' . DIRECTORY_SEPARATOR . 'Autoload.php');
 
