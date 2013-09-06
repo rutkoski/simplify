@@ -12,7 +12,8 @@
         }
     ],
     "require": {
-        "php": ">=5.2.4"
+        "php": ">=5.2.4",
+        "rutkoski/simplify-functions": "dev-master"
     },
     "autoload": {
         "files": ["lib/simplify.php"]
