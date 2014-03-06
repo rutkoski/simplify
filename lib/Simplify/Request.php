@@ -129,7 +129,7 @@ class Simplify_Request
    */
   protected function parse()
   {
-    $dirname = dirname($_SERVER['SCRIPT_NAME']);
+    $dirname = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME']));
 
     $regex = '#' . $dirname . '(?:(' . quotemeta($this->self()) . '))?(.*?)(?:\.([^\?]+))?(?:\?.*)?/*$#';
 
