@@ -125,7 +125,7 @@ class Simplify_Db_Pdo_Database extends Simplify_Db_Database
           $this->options);
       }
       catch (PDOException $e) {
-        throw new Simplify_Db_Exception('Database connection failed with message: ' . $e->getMessage());
+        throw new Simplify_Db_DatabaseException('Database connection failed with message: ' . $e->getMessage());
       }
     }
 
@@ -179,7 +179,7 @@ class Simplify_Db_Pdo_Database extends Simplify_Db_Database
 
       $msg = implode("\n", array_filter($info));
 
-      throw Simplify_Db_Exception::factoryException($error[0], $msg, $error[1]);
+      throw Simplify_Db_DatabaseException::factoryException($error[0], $msg, $error[1]);
     }
   }
 

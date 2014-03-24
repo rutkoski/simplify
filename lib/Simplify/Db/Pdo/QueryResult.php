@@ -157,7 +157,7 @@ class Simplify_Db_Pdo_QueryResult extends Simplify_Db_QueryResult
    */
   public function numRows()
   {
-    if (is_int($this->stmt) || is_bool($this->stmt)) {
+    if (is_int($this->stmt)) {
       $return = $this->stmt;
     }
     else {

@@ -86,7 +86,7 @@ abstract class Simplify_View extends Simplify_Dictionary implements Simplify_Vie
     }
 
     elseif (empty($this->layout)) {
-      $layout = s::config()->get('templates_dir') . '/layouts/layout.php';
+      $layout = s::config()->get('templates_dir') . '/layouts/default_layout.php';
 
       if (!file_exists($layout)) {
         throw new Exception("Default layout file not found: <b>{$layout}</b>");
@@ -94,11 +94,11 @@ abstract class Simplify_View extends Simplify_Dictionary implements Simplify_Vie
     }
 
     elseif (sy_path_is_absolute($this->layout)) {
-      $layout = $this->layout;
+      $layout = sy_fix_extension($this->layout, 'php');
     }
 
     else {
-      $layout = s::config()->get('templates_dir') . '/layouts/' . $this->layout . '.php';
+      $layout = s::config()->get('templates_dir') . '/layouts/' . $this->layout . '_layout.php';
     }
 
     if (!file_exists($layout)) {

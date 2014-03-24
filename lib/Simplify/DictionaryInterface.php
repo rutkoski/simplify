@@ -26,7 +26,7 @@
  *
  * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
  */
-interface Simplify_DictionaryInterface
+interface Simplify_DictionaryInterface extends JsonSerializable
 {
 
   /**

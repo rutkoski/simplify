@@ -131,9 +131,11 @@ class Simplify_Request
   {
     $dirname = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME']));
 
-    $regex = '#' . $dirname . '(?:(' . quotemeta($this->self()) . '))?(.*?)(?:\.([^\?]+))?(?:\?.*)?/*$#';
+    $regex = '#' . preg_replace('/\/$/', '', $dirname) . '(?:(' . quotemeta(self::self()) . '))?(.*?)(?:\.([^\?]+))?(?:\/*\?.*)?/*$#';
 
-    if (!preg_match($regex, $this->uri(), $o)) {
+    $uri = self::uri();
+
+    if (!preg_match($regex, $uri, $o)) {
       throw new Exception('Could not parse url');
     }
 
@@ -319,8 +321,7 @@ class Simplify_Request
   public function url()
   {
     $dir = dirname($_SERVER['SCRIPT_NAME']);
-    if ($dir == '/')
-      $dir = '';
+    if ($dir == '/') $dir = '';
     return $this->base() . $dir;
   }
 

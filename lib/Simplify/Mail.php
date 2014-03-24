@@ -133,7 +133,7 @@ class Simplify_Mail
 
       sy_log('mail', $this->error);
 
-      throw new Exception($this->error);
+      throw new Exception(var_export($this->error, true));
     }
   }
 

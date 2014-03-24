@@ -222,4 +222,13 @@ class Simplify_Config implements Simplify_DictionaryInterface, ArrayAccess
     return $value;
   }
 
+  /**
+   * (non-PHPdoc)
+   * @see JsonSerializable::jsonSerialize()
+   */
+  public function jsonSerialize()
+  {
+    return $this->data;
+  }
+
 }

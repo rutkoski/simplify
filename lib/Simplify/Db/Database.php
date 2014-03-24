@@ -116,7 +116,7 @@ abstract class Simplify_Db_Database implements Simplify_Db_DatabaseInterface
    */
   public static function getInstance($id = 'default', $engine = null, $params = null)
   {
-    if (! isset(Simplify_Db_Database::$instances[$id])) {
+    if (!isset(Simplify_Db_Database::$instances[$id])) {
       if (empty($engine)) {
         $engine = Simplify_Db_Database::$defaultEngine;
       }
@@ -146,11 +146,26 @@ abstract class Simplify_Db_Database implements Simplify_Db_DatabaseInterface
 
     $_params = $config['database'][$id]['*'];
 
-    if (isset($config['database'][$id][$_SERVER['SERVER_NAME']])) {
-      $_params = array_merge($_params, $config['database'][$id][$_SERVER['SERVER_NAME']]);
+    foreach ($config['database'][$id] as $__params) {
+      if (isset($__params['matchHost'])) {
+        $regex = $__params['matchHost'];
+
+        if (!preg_match('/^\d{1-3}\.\d{1-3}\.\d{1-3}\.\d{1-3}$/', $regex)) {
+          $regex = '([^.]+\.)?' . preg_quote($regex);
+        }
+        else {
+          $regex = preg_quote($regex);
+        }
+
+        $regex = '/' . $regex . '$/i';
+
+        if (preg_match($regex, $_SERVER['SERVER_NAME'])) {
+          $_params = array_merge($_params, $__params);
+        }
+      }
     }
 
-    if (is_array($params) && ! empty($params)) {
+    if (is_array($params) && !empty($params)) {
       $_params = array_merge($_params, $params);
     }
 
@@ -165,7 +180,7 @@ abstract class Simplify_Db_Database implements Simplify_Db_DatabaseInterface
    */
   public static function log($data = null)
   {
-    if (! empty($data)) {
+    if (!empty($data)) {
       self::$log[] = array_filter($data);
     }
 
@@ -178,7 +193,7 @@ abstract class Simplify_Db_Database implements Simplify_Db_DatabaseInterface
    */
   public function quote($value, $type = null)
   {
-    if (! is_numeric($value)) {
+    if (!is_numeric($value)) {
       return "'{$value}'";
     }
     return $value;

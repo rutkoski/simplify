@@ -22,7 +22,7 @@
  */
 
 /**
- * 
+ *
  * Outputs data as a JSON string
  *
  */
@@ -38,20 +38,18 @@ class Simplify_View_Json extends Simplify_View
     if (empty($object)) {
       $object = $this->object;
     }
-    
+
     if (s::request()->ajax()) {
       s::response()->header('Content-type: application/json; charset="utf-8"');
     }
     else {
       s::response()->header('Content-Type: text/html; charset=UTF-8');
     }
-    
-    $data = $object->getAll();
-    
-    array_walk_recursive($data, 'sy_array_map');
-    
+
+    $data = $object->jsonSerialize();
+
     $output = json_encode($data);
-    
+
     return $output;
   }
 

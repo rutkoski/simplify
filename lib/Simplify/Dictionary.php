@@ -398,4 +398,13 @@ class Simplify_Dictionary implements Simplify_DictionaryInterface, ArrayAccess
     return $this;
   }
 
+  /**
+   * (non-PHPdoc)
+   * @see JsonSerializable::jsonSerialize()
+   */
+  public function jsonSerialize()
+  {
+    return $this->data;
+  }
+
 }

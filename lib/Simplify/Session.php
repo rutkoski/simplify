@@ -290,4 +290,13 @@ class Simplify_Session implements Simplify_DictionaryInterface
     return $this;
   }
 
+  /**
+   * (non-PHPdoc)
+   * @see JsonSerializable::jsonSerialize()
+   */
+  public function jsonSerialize()
+  {
+    return $_SESSION;
+  }
+
 }

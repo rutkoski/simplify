@@ -184,7 +184,7 @@ class Simplify_Upload
     if (empty($this->uploadedPath))
       throw new Simplify_UploadException('No file has been uploaded');
 
-    return /*$this->getUploadPath() . */$this->uploadedPath;
+    return $this->getUploadPath() . $this->uploadedPath;
   }
 
   /**

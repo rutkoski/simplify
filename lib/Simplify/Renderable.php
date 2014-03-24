@@ -83,7 +83,7 @@ abstract class Simplify_Renderable extends Simplify_Dictionary implements Simpli
     }
 
     elseif (sy_path_is_absolute($filename)) {
-      $layout = $filename;
+      $layout = sy_fix_extension($filename, 'php');
 
       if (!file_exists($layout)) {
         throw new Exception("Layout not found: file not found: <b>{$layout}</b>");
