@@ -259,8 +259,12 @@ class Simplify_Request
    *
    * @return string
    */
-  public function route()
+  public function route($segment = null)
   {
+    if (is_int($segment)) {
+      $segments = array_filter(explode('/', $this->route));
+      return isset($segments[$segment]) ? $segments[$segment] : false;
+    }
     return $this->route;
   }
 
