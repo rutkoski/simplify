@@ -99,6 +99,7 @@ class Simplify_Router
    * @param string $uri route uri
    * @param string[] $defaults default values for named parameters
    * @param string[] $match regular expressions for matching parameters
+   * @return Simplify_Router
    */
   public function connect($name, $uri, $defaults = array(), $match = array())
   {
@@ -110,6 +111,8 @@ class Simplify_Router
     else {
       $this->routes[$name] = $route;
     }
+
+    return $this;
   }
 
   /**

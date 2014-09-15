@@ -377,7 +377,7 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
         $this->where = array_diff($this->where, $condition);
       }
       else {
-        $this->where = array_unique(array_merge($this->where, $condition));
+        $this->where = array_merge($this->where, $condition);
       }
 
       $this->__sql = null;

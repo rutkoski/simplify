@@ -181,10 +181,16 @@ abstract class Simplify_Controller extends Simplify_Renderable
    */
   public function callAction($action, $params = null)
   {
-    $func = Simplify_Inflector::variablize($action . 'Action');
+    $func = Simplify_Inflector::variablize(strtolower(s::request()->method()) . '_' . $action . '_action');
 
-    if (!method_exists($this, $func)) {
-      throw new Simplify_RouterException('Action not found');
+    if (method_exists($this, $func)) {
+      $action = Simplify_Inflector::variablize(strtolower(s::request()->method()) . '_' . $action);
+    } else {
+      $func = Simplify_Inflector::variablize($action . '_action');
+
+      if (!method_exists($this, $func)) {
+        throw new Simplify_RouterException('Action not found');
+      }
     }
 
     $this->action = $action;
