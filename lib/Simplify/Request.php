@@ -130,6 +130,7 @@ class Simplify_Request
   protected function parse()
   {
     $dirname = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME']));
+    $dirname = str_replace($_SERVER['DOCUMENT_ROOT'], '', $dirname);
 
     $regex = '#' . preg_replace('/\/$/', '', $dirname) . '(?:(' . quotemeta(self::self()) . '))?(.*?)(?:\.([^\?]+))?(?:\/*\?.*)?/*$#';
 
@@ -324,9 +325,10 @@ class Simplify_Request
    */
   public function url()
   {
-    $dir = dirname($_SERVER['SCRIPT_NAME']);
-    if ($dir == '/') $dir = '';
-    return $this->base() . $dir;
+    $dirname = dirname($_SERVER['SCRIPT_NAME']);
+    $dirname = str_replace($_SERVER['DOCUMENT_ROOT'], '', $dirname);
+    if ($dirname == '/') $dirname = '';
+    return $this->base() . $dirname;
   }
 
   /**
