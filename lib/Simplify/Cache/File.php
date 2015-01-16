@@ -21,13 +21,19 @@
  * @author Rodrigo Rutkoski Rodrigues, <rutkoski@gmail.com>
  */
 
+namespace Simplify\Cache;
+
+use Simplify;
+use Simplify\CacheInterface;
+use Simplify\CacheException;
+
 /**
  * File Cache.
  *
  * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
  * @package Kernel_Cache
  */
-class Simplify_Cache_File implements Simplify_CacheInterface
+class File implements CacheInterface
 {
 
   /**
@@ -50,17 +56,17 @@ class Simplify_Cache_File implements Simplify_CacheInterface
   public function __construct($path = null, $ttl = null)
   {
     if (empty($path)) {
-      $path = s::config()->get('cache_dir', '{app_dir}/cache');
+      $path = Simplify::config()->get('cache_dir', '{app_dir}/cache');
     }
 
     $path = sy_fix_path($path);
 
     if (!is_dir($path) && !mkdir($path)) {
-      throw new Simplify_CacheException("Cache dir does not exist and could not be created: <b>$path</b>");
+      throw new CacheException("Cache dir does not exist and could not be created: <b>$path</b>");
     }
 
     if (!is_writable($path) && !chmod($path, 0755)) {
-      throw new Simplify_CacheException("Cache dir is not writable by the web server: <b>$path</b>");
+      throw new CacheException("Cache dir is not writable by the web server: <b>$path</b>");
     }
 
     $this->path = $path;
@@ -69,7 +75,7 @@ class Simplify_Cache_File implements Simplify_CacheInterface
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_CacheInterface::cached()
+   * @see CacheInterface::cached()
    */
   public function cached($id)
   {
@@ -91,7 +97,7 @@ class Simplify_Cache_File implements Simplify_CacheInterface
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_CacheInterface::delete()
+   * @see CacheInterface::delete()
    */
   public function delete($id)
   {
@@ -104,7 +110,7 @@ class Simplify_Cache_File implements Simplify_CacheInterface
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_CacheInterface::flush()
+   * @see CacheInterface::flush()
    */
   public function flush()
   {
@@ -122,14 +128,14 @@ class Simplify_Cache_File implements Simplify_CacheInterface
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_CacheInterface::read()
+   * @see CacheInterface::read()
    */
   public function read($id)
   {
     $file = $this->findFile($id);
 
     if (empty($file)) {
-      throw new Simplify_CacheException('Cache file not found');
+      throw new CacheException('Cache file not found');
     }
 
     $filename = basename($file);
@@ -140,7 +146,7 @@ class Simplify_Cache_File implements Simplify_CacheInterface
       if (mktime() > $ttl) {
         unlink($file);
 
-        throw new Simplify_CacheException('Cached file ttl expired');
+        throw new CacheException('Cached file ttl expired');
       }
     }
 
@@ -152,7 +158,7 @@ class Simplify_Cache_File implements Simplify_CacheInterface
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_CacheInterface::write()
+   * @see CacheInterface::write()
    */
   public function write($id, $data = '', $ttl = null)
   {

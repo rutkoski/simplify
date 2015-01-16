@@ -21,12 +21,17 @@
  * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
  */
 
+namespace Simplify\Db;
+
+use Simplify;
+use Simplify\Pager;
+
 /**
  *
- * Basic Simplify_Db_RepositoryInterface implementation for a single table
+ * Basic Simplify\Db\RepositoryInterface implementation for a single table
  *
  */
-class Simplify_Db_TableDataGateway implements Simplify_Db_RepositoryInterface
+class TableDataGateway implements RepositoryInterface
 {
 
   /**
@@ -89,12 +94,12 @@ class Simplify_Db_TableDataGateway implements Simplify_Db_RepositoryInterface
 
     $field = $this->orderField;
 
-    $pos = s::db()->query()->setParams($params)->from($this->table)->select($this->pk)->where("$this->pk = $id")->execute()->fetchOne();
+    $pos = Simplify::db()->query()->setParams($params)->from($this->table)->select($this->pk)->where("$this->pk = $id")->execute()->fetchOne();
 
     switch ($direction) {
       case 'top' :
       case 'first' :
-        $data = s::db()->query()->setParams($params)->from($this->table)->select($this->pk)->where(
+        $data = Simplify::db()->query()->setParams($params)->from($this->table)->select($this->pk)->where(
           "$field <= $pos AND $this->pk != $id")->execute()->fetchCol();
         $dif = -1;
         $dis = -count($data);
@@ -105,7 +110,7 @@ class Simplify_Db_TableDataGateway implements Simplify_Db_RepositoryInterface
       case 'previous' :
         $dif = -1;
         $dis = -1;
-        $data = s::db()->query()->setParams($params)->from($this->table)->select($this->pk)->where(
+        $data = Simplify::db()->query()->setParams($params)->from($this->table)->select($this->pk)->where(
           "($field = $pos - 1 OR $field = $pos) AND $this->pk != $id")->orderBy("$field DESC")->execute()->fetchCol();
         break;
 
@@ -114,13 +119,13 @@ class Simplify_Db_TableDataGateway implements Simplify_Db_RepositoryInterface
       case 'next' :
         $dif = 1;
         $dis = 1;
-        $data = s::db()->query()->setParams($params)->from($this->table)->select($this->pk)->where(
+        $data = Simplify::db()->query()->setParams($params)->from($this->table)->select($this->pk)->where(
           "($field = $pos + 1 OR $field = $pos) AND $this->pk != $id")->orderBy("$field ASC")->execute()->fetchCol();
         break;
 
       case 'bottom' :
       case 'last' :
-        $data = s::db()->query()->setParams($params)->from($this->table)->select($this->pk)->where(
+        $data = Simplify::db()->query()->setParams($params)->from($this->table)->select($this->pk)->where(
           "$field >= $pos AND $this->pk != $id")->execute()->fetchCol();
         $dif = 1;
         $dis = count($data);
@@ -130,12 +135,12 @@ class Simplify_Db_TableDataGateway implements Simplify_Db_RepositoryInterface
     if (!empty($data)) {
       $sql = "UPDATE $this->table SET $field = GREATEST(0, $field - $dif) WHERE $this->pk IN (" . implode(', ', $data) .
          ")";
-      s::db()->query($sql)->execute();
+      Simplify::db()->query($sql)->execute();
     }
 
     if ($pos + $dis != $pos) {
       $sql = "UPDATE $this->table SET $field = GREATEST(0, $field + $dis) WHERE $this->pk = $id";
-      s::db()->query($sql)->execute();
+      Simplify::db()->query($sql)->execute();
     }
   }
 
@@ -150,7 +155,7 @@ class Simplify_Db_TableDataGateway implements Simplify_Db_RepositoryInterface
     $limit = $params['limit'];
     $offset = $params['offset'];
 
-    return new Simplify_Pager($this->findCount($params), $limit, $offset);
+    return new Pager($this->findCount($params), $limit, $offset);
   }
 
   /**
@@ -159,7 +164,7 @@ class Simplify_Db_TableDataGateway implements Simplify_Db_RepositoryInterface
    */
   public function find($id = null, $params = null)
   {
-    $query = s::db()->query()->setParams($params)->from($this->table)->where("$this->pk = :$this->pk")->limit(1);
+    $query = Simplify::db()->query()->setParams($params)->from($this->table)->where("$this->pk = :$this->pk")->limit(1);
 
     $data = (array) sy_get_param($params, 'data');
     $data[$this->pk] = $id;
@@ -175,7 +180,7 @@ class Simplify_Db_TableDataGateway implements Simplify_Db_RepositoryInterface
    */
   public function findCount($params = null)
   {
-    $query = s::db()->query()->setParams($params)->from($this->table)->select(false)->limit(false)->offset(false)->select(
+    $query = Simplify::db()->query()->setParams($params)->from($this->table)->select(false)->limit(false)->offset(false)->select(
       "COUNT($this->pk)");
     $result = $query->execute(sy_get_param($params, 'data'))->fetchOne();
     return intval($result);
@@ -189,7 +194,7 @@ class Simplify_Db_TableDataGateway implements Simplify_Db_RepositoryInterface
    */
   public function findAll($params = null)
   {
-    $query = s::db()->query()->setParams($params)->from($this->table);
+    $query = Simplify::db()->query()->setParams($params)->from($this->table);
     $result = $query->execute(sy_get_param($params, 'data'))->fetchAll();
     return $result;
   }
@@ -200,7 +205,7 @@ class Simplify_Db_TableDataGateway implements Simplify_Db_RepositoryInterface
    */
   public function delete($id = null, $params = null)
   {
-    $result = s::db()->delete($this->table, "$this->pk = ?")->execute($id);
+    $result = Simplify::db()->delete($this->table, "$this->pk = ?")->execute($id);
     return $result->numRows();
   }
 
@@ -210,7 +215,7 @@ class Simplify_Db_TableDataGateway implements Simplify_Db_RepositoryInterface
    */
   public function deleteAll($params = null)
   {
-    $result = s::db()->delete($this->table, "$this->pk = ?")->setParams($params)->execute();
+    $result = Simplify::db()->delete($this->table, "$this->pk = ?")->setParams($params)->execute();
     return $result->numRows();
   }
 
@@ -238,8 +243,8 @@ class Simplify_Db_TableDataGateway implements Simplify_Db_RepositoryInterface
    */
   public function insert(&$data)
   {
-    s::db()->insert($this->table, $data)->execute($data);
-    $data[$this->pk] = s::db()->lastInsertId();
+    Simplify::db()->insert($this->table, $data)->execute($data);
+    $data[$this->pk] = Simplify::db()->lastInsertId();
   }
 
   /**
@@ -252,7 +257,7 @@ class Simplify_Db_TableDataGateway implements Simplify_Db_RepositoryInterface
     $result = 0;
 
     if (count($data) > 1) {
-      $result = s::db()->update($this->table, $data, "$this->pk = :$this->pk")->execute($data)->numRows();
+      $result = Simplify::db()->update($this->table, $data, "$this->pk = :$this->pk")->execute($data)->numRows();
     }
 
     return $result;

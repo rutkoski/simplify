@@ -21,12 +21,14 @@
  * @author Rodrigo Rutkoski Rodrigues, <rutkoski@gmail.com>
  */
 
+namespace Simplify;
+
 /**
  *
  * Dictionary view of session data
  *
  */
-class Simplify_Session implements Simplify_DictionaryInterface
+class Session implements DictionaryInterface
 {
 
   const MESSAGES_NOTICES = 'notices';
@@ -34,16 +36,16 @@ class Simplify_Session implements Simplify_DictionaryInterface
   const MESSAGES_WARNINGS = 'warnings';
 
   /**
-   * Singleton instance of Simplify_Session
+   * Singleton instance of Session
    *
-   * @var Simplify_Session
+   * @var Session
    */
   private static $instance;
 
   /**
-   * Get the singletoin instance of Simplify_Session
+   * Get the singletoin instance of Session
    *
-   * @return Simplify_Session
+   * @return Session
    */
   public static function getInstance()
   {
@@ -143,6 +145,19 @@ class Simplify_Session implements Simplify_DictionaryInterface
    * @param string $namespace group messages in a namespace
    * @return string[]
    */
+  public function flushWarnings($messages = null, $namespace = '*')
+  {
+    $messages = $this->flashMessages(self::MESSAGES_WARNINGS, $messages, $namespace);
+    $this->clearMessages(self::MESSAGES_WARNINGS);
+    return $messages;
+  }
+
+  /**
+   *
+   * @param string|string[] $messages the messages
+   * @param string $namespace group messages in a namespace
+   * @return string[]
+   */
   public function notices($messages = null, $namespace = '*')
   {
     return $this->flashMessages(self::MESSAGES_NOTICES, $messages, $namespace);
@@ -150,10 +165,26 @@ class Simplify_Session implements Simplify_DictionaryInterface
 
   /**
    *
+   * @param string|string[] $messages the messages
+   * @param string $namespace group messages in a namespace
+   * @return string[]
    */
-  public function clearMessages()
+  public function flushNotices($messages = null, $namespace = '*')
   {
-    if (isset($_SESSION['__messages__'])) {
+    $messages = $this->flashMessages(self::MESSAGES_NOTICES, $messages, $namespace);
+    $this->clearMessages(self::MESSAGES_NOTICES);
+    return $messages;
+  }
+
+  /**
+   *
+   */
+  public function clearMessages($type = null)
+  {
+    if ($type && isset($_SESSION['__messages__'][$type])) {
+      unset($_SESSION['__messages__'][$type]);
+    }
+    elseif (isset($_SESSION['__messages__'])) {
       unset($_SESSION['__messages__']);
     }
   }
@@ -167,36 +198,36 @@ class Simplify_Session implements Simplify_DictionaryInterface
    */
   public function flashMessages($type, $messages = null, $namespace = '*')
   {
+    if (!isset($_SESSION['__messages__'][$type][$namespace])) {
+      $_SESSION['__messages__'][$type][$namespace] = array();
+    }
+
     if (func_num_args() > 1) {
       $_SESSION['__messages__'][$type][$namespace] = array_unique(
         array_filter(array_merge((array) $_SESSION['__messages__'][$type][$namespace], (array) $messages)));
     }
 
-    if (isset($_SESSION['__messages__'][$type][$namespace])) {
-      return $_SESSION['__messages__'][$type][$namespace];
-    }
-
-    return array();
+    return $_SESSION['__messages__'][$type][$namespace];
   }
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_DictionaryInterface::copyAll()
+   * @see DictionaryInterface::copyAll()
    */
   public function copyAll($data, $flags = 0)
   {
     if (empty($data))
       return;
 
-    if ($data instanceof Simplify_DictionaryInterface) {
+    if ($data instanceof DictionaryInterface) {
       $data = $data->getAll();
     }
 
     foreach ($data as $name => $value) {
-      if ((Simplify_Dictionary::FILTER_NULL & $flags) == $flags && is_null($value))
+      if ((Dictionary::FILTER_NULL & $flags) == $flags && is_null($value))
         continue;
 
-      if ((Simplify_Dictionary::FILTER_EMPTY & $flags) == $flags && empty($value))
+      if ((Dictionary::FILTER_EMPTY & $flags) == $flags && empty($value))
         continue;
 
       $this->set($name, $value);
@@ -207,7 +238,7 @@ class Simplify_Session implements Simplify_DictionaryInterface
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_DictionaryInterface::del()
+   * @see DictionaryInterface::del()
    */
   public function del($name)
   {
@@ -220,7 +251,7 @@ class Simplify_Session implements Simplify_DictionaryInterface
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_DictionaryInterface::get()
+   * @see DictionaryInterface::get()
    */
   public function get($name, $default = null, $flags = 0)
   {
@@ -233,7 +264,7 @@ class Simplify_Session implements Simplify_DictionaryInterface
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_DictionaryInterface::getAll()
+   * @see DictionaryInterface::getAll()
    */
   public function getAll($flags = 0)
   {
@@ -242,7 +273,7 @@ class Simplify_Session implements Simplify_DictionaryInterface
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_DictionaryInterface::getNames()
+   * @see DictionaryInterface::getNames()
    */
   public function getNames()
   {
@@ -251,7 +282,7 @@ class Simplify_Session implements Simplify_DictionaryInterface
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_DictionaryInterface::has()
+   * @see DictionaryInterface::has()
    */
   public function has($name, $flags = 0)
   {
@@ -259,11 +290,11 @@ class Simplify_Session implements Simplify_DictionaryInterface
       return false;
     }
 
-    if ((Simplify_Dictionary::FILTER_NULL & $flags) == $flags && is_null($_SESSION[$name])) {
+    if ((Dictionary::FILTER_NULL & $flags) == $flags && is_null($_SESSION[$name])) {
       return false;
     }
 
-    if ((Simplify_Dictionary::FILTER_EMPTY & $flags) == $flags && empty($_SESSION[$name])) {
+    if ((Dictionary::FILTER_EMPTY & $flags) == $flags && empty($_SESSION[$name])) {
       return false;
     }
 
@@ -272,7 +303,7 @@ class Simplify_Session implements Simplify_DictionaryInterface
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_DictionaryInterface::reset()
+   * @see DictionaryInterface::reset()
    */
   public function reset($data = null)
   {
@@ -282,7 +313,7 @@ class Simplify_Session implements Simplify_DictionaryInterface
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_DictionaryInterface::set()
+   * @see DictionaryInterface::set()
    */
   public function set($name, $value)
   {

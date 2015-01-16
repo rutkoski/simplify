@@ -22,28 +22,30 @@
  * @copyright Copyright 2008 Rodrigo Rutkoski Rodrigues
  */
 
+namespace Simplify;
+
 /**
  *
  * File Upload Component
  *
  * @example
- *    $upload = new UploadComponent();
+ *    $upload = new Upload();
  *
  *    // optional
- *    $upload->set('files_dir', s::config()->get('files_dir'));
+ *    $upload->set('files_dir', \Simplify::config()->get('files_dir'));
  *
  *    try {
  *      $upload->upload('my_file');
- *    } catch (UploadException $e) {
+ *    } catch (\Simplify\UploadException $e) {
  *      echo $upload->getError();
- *    } catch (ValidationException $e) {
+ *    } catch (\Simplify\ValidationException $e) {
  *      echo $upload->getError();
  *    }
  *
  *    echo $upload->getUploadedPath();
  *
  */
-class Simplify_Upload
+class Upload
 {
 
   /**
@@ -158,7 +160,7 @@ class Simplify_Upload
   public function getUploadPath()
   {
     if (empty($this->uploadPath)) {
-      $this->uploadPath = s::config()->get('files_path');
+      $this->uploadPath = \Simplify::config()->get('files_path');
     }
 
     return $this->uploadPath;
@@ -182,9 +184,9 @@ class Simplify_Upload
   public function getUploadedPath()
   {
     if (empty($this->uploadedPath))
-      throw new Simplify_UploadException('No file has been uploaded');
+      throw new \Simplify\UploadException('No file has been uploaded');
 
-    return $this->getUploadPath() . $this->uploadedPath;
+    return sy_fix_path($this->getUploadPath() . '/' . $this->uploadedPath);
   }
 
   /**
@@ -194,8 +196,6 @@ class Simplify_Upload
    */
   public function getFileSize()
   {
-    /*if (! $this->uploaded())
-      throw new UploadException('No file has been uploaded');*/
     if (empty($this->fileSize)) {
       $this->fileSize = $this->file['size'];
     }
@@ -267,7 +267,7 @@ class Simplify_Upload
       if (is_null($index)) {
         if (!isset($_FILES[$name])) {
           $this->error = sprintf(__('No such index: $_FILES[%s]'), $name);
-          throw new Exception($this->error);
+          throw new \Exception($this->error);
         }
 
         $this->file = $_FILES[$name];
@@ -276,7 +276,7 @@ class Simplify_Upload
       else {
         if (!isset($_FILES[$name]['name'][$index])) {
           $this->error = sprintf(__('No such index: $_FILES[%s][%s]'), $name, $index);
-          throw new Exception('File not found');
+          throw new \Exception('File not found');
         }
 
         $this->file = array('name' => $_FILES[$name]['name'][$index], 'type' => $_FILES[$name]['type'][$index],
@@ -297,7 +297,7 @@ class Simplify_Upload
     $path = $this->getUploadPath();
 
     if (!sy_path_is_absolute($path)) {
-      $path = s::config()->get('www_dir') . $path;
+      $path = \Simplify::config()->get('www_dir') . $path;
     }
 
     $filename = empty($this->filename) ? $this->file['name'] : $this->filename;
@@ -309,25 +309,34 @@ class Simplify_Upload
     }
 
     $subpath .= '/';
+    
+    $dir = sy_fix_path($path . '/' . $subpath);
 
-    if (!is_writable($path . $subpath)) {
+    if (!is_dir($dir)) {
+      if (!mkdir($dir)) {
+        $this->error = __('Could not create upload path: <b>' . sy_fix_path($path . $subpath) . '</b>');
+        throw new \Simplify\UploadException($this->error);
+      }
+    }
+
+    if (!is_writable($dir)) {
       $this->error = __('Upload path does not exist or is not writable: <b>' . sy_fix_path($path . $subpath) . '</b>');
-      throw new Simplify_UploadException($this->error);
+      throw new \Simplify\UploadException($this->error);
     }
 
     if ($this->hashFilename) {
-      $filename = $this->genHashFilename($path . $subpath, '/' . $filename);
+      $filename = $this->genHashFilename($dir, '/' . $filename);
     }
     elseif ($this->replaceIfExists === false) {
-      $filename = $this->findUniqueFilename($path . $subpath, '/' . $filename);
+      $filename = $this->findUniqueFilename($dir, '/' . $filename);
     }
 
-    if (!@move_uploaded_file($this->file['tmp_name'], $path . $subpath . $filename)) {
+    if (!@move_uploaded_file($this->file['tmp_name'], $dir . $filename)) {
       $this->error = __('Could not move uploaded file');
-      throw new Simplify_UploadException($this->error);
+      throw new \Simplify\UploadException($this->error);
     }
 
-    chmod($path . $subpath . $filename, 0644);
+    chmod($dir . $filename, 0644);
 
     $this->uploadedPath = $subpath . $filename;
   }
@@ -345,7 +354,7 @@ class Simplify_Upload
 
       if (!preg_match('/\.(' . $type . ')$/i', $this->file['name'])) {
         $this->error = __('Invalid file type');
-        throw new Simplify_ValidationException($this->error);
+        throw new \Simplify\ValidationException($this->error);
       }
     }
 
@@ -353,7 +362,7 @@ class Simplify_Upload
     if ($this->fileMimeType) {
       if (!preg_match('#' . $this->fileMimeType . '#i', $this->getMimeType())) {
         $this->error = sprintf(__('Invalid mime type. Required: %s Found: %s', $type, $this->getMimeType()));
-        throw new Simplify_ValidationException($this->error);
+        throw new \Simplify\ValidationException($this->error);
       }
     }
 
@@ -361,7 +370,7 @@ class Simplify_Upload
     if ($this->maxFileSize) {
       if ($this->getFileSize() > $this->maxFileSize) {
         $this->error = __('Maximum file size exceded');
-        throw new Simplify_ValidationException($this->error);
+        throw new \Simplify\ValidationException($this->error);
       }
     }
   }
@@ -398,7 +407,7 @@ class Simplify_Upload
     }
 
     if (!empty($this->error)) {
-      throw new Simplify_UploadException($this->error, $this->file['error']);
+      throw new \Simplify\UploadException($this->error, $this->file['error']);
     }
   }
 
@@ -461,7 +470,7 @@ class Simplify_Upload
     if (!@file_exists($base . $path)) {
       if (!@mkdir($base . $path, 0644, true)) {
         $this->error = __('Date based path could not be created.');
-        throw new Simplify_UploadException($this->error);
+        throw new \Simplify\UploadException($this->error);
       }
     }
 

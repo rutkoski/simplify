@@ -28,12 +28,12 @@ namespace Simplify\View;
  * Basic view using native PHP
  *
  */
-class Php extends \Simplify\View
+class Twig extends \Simplify\View
 {
 
   /**
    * (non-PHPdoc)
-   * @see \Simplify\ViewInterface::render()
+   * @see Simplify_ViewInterface::render()
    */
   public function render(\Simplify\RenderableInterface $object = null)
   {
@@ -47,27 +47,11 @@ class Php extends \Simplify\View
       return '';
     }
 
-    if (sy_path_is_absolute($template)) {
-      if (!file_exists($template)) {
-        throw new \Exception("Template not found: <b>$template</b>");
-      }
-    }
-    else {
-      $filename = $template;
+    /*if (!file_exists($template)) {
+      throw new \Exception("Template file not found: <b>$template</b>");
+    }*/
 
-      $path = $object->getTemplatesPath();
-
-      $template = array();
-      do {
-        $template[] = array_shift($path) . '/' . $filename . '.php';
-      } while (count($path) && ! file_exists(end($template)));
-      
-      if (!file_exists(end($template))) {
-        throw new \Exception("Template not found: <b>{$filename}</b><br/><br/>Using path:<br/><b>".implode('</b><br/><b>', $template)."</b>");
-      }
-      
-      $template = end($template);
-    }
+    \Simplify::response()->header('Content-Type: text/html; charset=UTF-8');
 
     $output = $this->internalRender($object, $template);
 
@@ -83,7 +67,8 @@ class Php extends \Simplify\View
       $view->copyAll($this);
       $view->set('layout_content', $output);
       $view->setTemplate($layout);
-      $view->setTemplatesPath($object->getLayoutsPath());
+      //$view->setTemplatesPath($object->getLayoutsPath());
+      $view->setTemplatesPath($object->getTemplatesPath());
       $view->setLayout(false);
 
       $output = $view->render();
@@ -93,33 +78,60 @@ class Php extends \Simplify\View
   }
 
   /**
-   * Renders the template
    *
-   * @param RenderableInterface $object
-   * @param string $template
+   * @param unknown_type $template
+   * @param unknown_type $data
    * @return string
    */
-  protected function internalRender(\Simplify\RenderableInterface $object, $template)
-  {
-    \Simplify::response()->header('Content-Type: text/html; charset=UTF-8');
-
-    extract($object->getAll(), EXTR_REFS);
-
-    ob_start();
-
-    require ($template);
-
-    $output = ob_get_clean();
-
-    return $output;
-  }
-
   protected function includeTemplate($template, $data = null)
   {
     $view = new self();
     $view->setTemplate($template);
     $view->copyAll($data);
     return $view->render();
+  }
+
+  /**
+   * Renders the template
+   *
+   * @param Simplify_RenderableInterface $object
+   * @param string $template
+   * @return string
+   */
+  protected function internalRender(\Simplify\RenderableInterface $object, $template)
+  {
+    $path = $object->getTemplatesPath();
+
+    $path = array_filter($path, function($path) { return is_dir($path); });
+
+    $loader = new \Twig_Loader_Filesystem($path);
+
+    $twig = new \Twig_Environment($loader, array(
+      //'cache' => \Simplify::config()->get('cache_dir'),
+      'autoescape' => false,
+    ));
+
+    $this->loadExtensions($twig);
+
+    $output = $twig->render($template . '.php', $object->getAll());
+
+    return $output;
+  }
+
+  protected function loadExtensions(\Twig_Environment $twig)
+  {
+    foreach ((array)\Simplify::config()->get('view:twig:globals') as $name => $value) {
+      $twig->addGlobal($name, $value);
+    }
+
+    $twig->addGlobal('config', \Simplify::config());
+    $twig->addGlobal('request', \Simplify::request());
+
+    $twig->addFunction(new \Twig_SimpleFunction('makeUrl', array('\Simplify\URL', 'make')));
+    $twig->addFunction(new \Twig_SimpleFunction('optionsValue', array('\Amplify\Options', 'value')));
+    
+    $twig->addFunction(new \Twig_SimpleFunction('scripts', array('\Simplify\AssetManager', 'javascript')));
+    $twig->addFunction(new \Twig_SimpleFunction('styles', array('\Simplify\AssetManager', 'style')));
   }
 
 }

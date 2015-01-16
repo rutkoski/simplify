@@ -21,29 +21,35 @@
  * @author Rodrigo Rutkoski Rodrigues, <rutkoski@gmail.com>
  */
 
+namespace Simplify\View;
+
+use Simplify;
+use Simplify\View;
+use Simplify\RenderableInterface;
+
 /**
  *
  * Outputs data as a JSON string
  *
  */
-class Simplify_View_Json extends Simplify_View
+class Json extends View
 {
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_ViewInterface::render()
+   * @see ViewInterface::render()
    */
-  public function render(Simplify_RenderableInterface $object = null)
+  public function render(RenderableInterface $object = null)
   {
     if (empty($object)) {
       $object = $this->object;
     }
 
-    if (s::request()->ajax()) {
-      s::response()->header('Content-type: application/json; charset="utf-8"');
+    if (Simplify::request()->ajax()) {
+      Simplify::response()->header('Content-type: application/json; charset="utf-8"');
     }
     else {
-      s::response()->header('Content-Type: text/html; charset=UTF-8');
+      Simplify::response()->header('Content-Type: text/html; charset=UTF-8');
     }
 
     $data = $object->jsonSerialize();

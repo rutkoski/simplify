@@ -21,53 +21,55 @@
  * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
  */
 
+namespace Simplify\Db;
+
 /**
  *
  * Interface that represents a DBMS
  *
  */
-interface Simplify_Db_DatabaseInterface
+interface DatabaseInterface
 {
 
   /**
    * Begin a transaction
    *
-   * @return Simplify_Db_DatabaseInterface
+   * @return Simplify\Db\DatabaseInterface
    */
   public function beginTransaction();
 
   /**
    * Commit a transaction
    *
-   * @return Simplify_Db_DatabaseInterface
+   * @return Simplify\Db\DatabaseInterface
    */
   public function commit();
 
   /**
    * Rollback a transaction
    *
-   * @return Simplify_Db_DatabaseInterface
+   * @return Simplify\Db\DatabaseInterface
    */
   public function rollback();
 
   /**
    * Factory a query object of the implemented type
    *
-   * @return Simplify_Db_QueryObject
+   * @return Simplify\Db\QueryObject
    */
   public function factoryQueryObject();
 
   /**
    * Connect to the datasource
    *
-   * @return Simplify_Db_DatabaseInterface
+   * @return Simplify\Db\DatabaseInterface
    */
   public function connect();
 
   /**
    * Disconnect from the datasource
    *
-   * @return Simplify_Db_DatabaseInterface
+   * @return Simplify\Db\DatabaseInterface
    */
   public function disconnect();
 
@@ -79,38 +81,38 @@ interface Simplify_Db_DatabaseInterface
   public function lastInsertId();
 
   /**
-   * Factory an Simplify_Db_QueryObject for a SELECT operation
+   * Factory an Simplify\Db\QueryObject for a SELECT operation
    *
    * @param string|null $sql
-   * @return Simplify_Db_QueryObject
+   * @return Simplify\Db\QueryObject
    */
   public function query($sql = null);
 
   /**
-   * Factory an Simplify_Db_QueryObject for an INSERT operation
+   * Factory an Simplify\Db\QueryObject for an INSERT operation
    *
    * @param string $table
    * @param array $data
-   * @return Simplify_Db_QueryObject
+   * @return Simplify\Db\QueryObject
    */
   public function insert($table = null, $data = null);
 
   /**
-   * Factory an Simplify_Db_QueryObject for an UPDATE operation
+   * Factory an Simplify\Db\QueryObject for an UPDATE operation
    *
    * @param string $table
    * @param array $data
    * @param string|array $where
-   * @return Simplify_Db_QueryObject
+   * @return Simplify\Db\QueryObject
    */
   public function update($table = null, $data = null, $where = null);
 
   /**
-   * Factory an Simplify_Db_QueryObject for a DELETE operation
+   * Factory an Simplify\Db\QueryObject for a DELETE operation
    *
    * @param string $table
    * @param string|array $where
-   * @return Simplify_Db_QueryObject
+   * @return Simplify\Db\QueryObject
    */
   public function delete($table = null, $where = null);
 

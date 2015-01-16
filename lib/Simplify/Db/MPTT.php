@@ -21,12 +21,17 @@
  * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
  */
 
+namespace Simplify\Db;
+
+use Exception;
+use Simplify;
+
 /**
  *
  * Modified Pre-order Tree Traversal (Mptt) utility class
  *
  */
-class Simplify_Db_MPTT
+class MPTT
 {
 
   /**
@@ -198,7 +203,7 @@ class Simplify_Db_MPTT
    */
   public function query()
   {
-    $q = s::db()->query()->from("{$this->table} AS node")->from("{$this->table} AS parent")->select('node.*')->select(
+    $q = Simplify::db()->query()->from("{$this->table} AS node")->from("{$this->table} AS parent")->select('node.*')->select(
       "(COUNT(parent.{$this->pk}) - 1) AS depth")->where(
       "node.{$this->left} BETWEEN parent.{$this->left} AND parent.{$this->right}")->groupBy("node.{$this->pk}")->orderBy(
       "node.{$this->left}");
@@ -251,19 +256,19 @@ class Simplify_Db_MPTT
   {
     try {
       if ($id == 0) {
-        throw new Simplify_Db_MpttException("Cannot remove id 0");
+        throw new Simplify\Db\MpttException("Cannot remove id 0");
       }
 
       $this->lock();
 
-      $dao = s::db();
+      $dao = Simplify::db();
 
       $data = $dao->query()->from($this->table)->select(
         "$this->left, $this->right, $this->right - $this->left + 1 AS width, $this->parent")->where("$this->pk = ?")->execute(
         $id)->fetchRow();
 
       if (empty($data)) {
-        throw new Simplify_Db_MpttException(
+        throw new Simplify\Db\MpttException(
           "Row not found in table <b>$this->table</b> where <b>$this->pk</b> = <b>$id</b>");
       }
 
@@ -299,19 +304,19 @@ class Simplify_Db_MPTT
   {
     try {
       if ($id == 0) {
-        throw new Simplify_Db_MpttException("Cannot remove id 0");
+        throw new Simplify\Db\MpttException("Cannot remove id 0");
       }
 
       $this->lock();
 
-      $dao = s::db();
+      $dao = Simplify::db();
 
       $data = $dao->query()->from($this->table)->select(
         "$this->left, $this->right, $this->right - $this->left + 1 AS width, $this->parent")->where("$this->pk = ?")->execute(
         $id)->fetchRow();
 
       if (empty($data)) {
-        throw new Simplify_Db_MpttException(
+        throw new Simplify\Db\MpttException(
           "Row not found in table <b>$this->table</b> where <b>$this->pk</b> = <b>$id</b>");
       }
 
@@ -343,7 +348,7 @@ class Simplify_Db_MPTT
    */
   public function numChildren($id)
   {
-    $dao = s::db();
+    $dao = Simplify::db();
 
     $sql = "SELECT (node.$this->right - node.$this->left - 1) / 2 FROM $this->table AS node WHERE node.$this->pk = ?";
 
@@ -363,17 +368,17 @@ class Simplify_Db_MPTT
   {
     try {
       if ($id == 0) {
-        throw new Simplify_Db_MpttException("\$id must be greather then 0");
+        throw new Simplify\Db\MpttException("\$id must be greather then 0");
       }
 
-      $dao = s::db();
+      $dao = Simplify::db();
 
       $this->lock();
 
       $left_id = $dao->query()->from($this->table)->select($this->left)->where("$this->pk = ?")->execute($id)->fetchOne();
 
       if (is_null($left_id)) {
-        throw new Simplify_Db_MpttException(
+        throw new Simplify\Db\MpttException(
           "Row not found in table <b>$this->table</b> where <b>$this->pk</b> = <b>$id</b>");
       }
 
@@ -408,17 +413,17 @@ class Simplify_Db_MPTT
   {
     try {
       if ($id == 0) {
-        throw new Simplify_Db_MpttException("\$id must be greather then 0");
+        throw new Simplify\Db\MpttException("\$id must be greather then 0");
       }
 
-      $dao = s::db();
+      $dao = Simplify::db();
 
       $this->lock();
 
       $right_id = $dao->query()->from($this->table)->select($this->right)->where("$this->pk = ?")->execute($id)->fetchOne();
 
       if (is_null($right_id)) {
-        throw new Simplify_Db_MpttException(
+        throw new Simplify\Db\MpttException(
           "Row not found in table <b>$this->table</b> where <b>$this->pk</b> = <b>$id</b>");
       }
 
@@ -452,7 +457,7 @@ class Simplify_Db_MPTT
   public function append(&$data, $parent_id = 0)
   {
     try {
-      $dao = s::db();
+      $dao = Simplify::db();
 
       $this->lock();
 
@@ -464,7 +469,7 @@ class Simplify_Db_MPTT
         $right_id = $dao->query()->from($this->table)->select($this->right)->where("$this->pk = ?")->execute($parent_id)->fetchOne();
 
         if (is_null($right_id)) {
-          throw new Simplify_Db_MpttException(
+          throw new Simplify\Db\MpttException(
             "Row not found in table <b>$this->table</b> where <b>$this->pk</b> = <b>$parent_id</b>");
         }
 
@@ -500,7 +505,7 @@ class Simplify_Db_MPTT
     try {
       $this->lock();
 
-      $dao = s::db();
+      $dao = Simplify::db();
 
       $left_id = 0;
 
@@ -508,7 +513,7 @@ class Simplify_Db_MPTT
         $left_id = $dao->query()->from($this->table)->select($this->left)->where("$this->pk = ?")->execute($parent_id)->fetchOne();
 
         if (is_null($left_id)) {
-          throw new Simplify_Db_MpttException(
+          throw new Simplify\Db\MpttException(
             "Row not found in table <b>$this->table</b> where <b>$this->pk</b> = <b>$parent_id</b>");
         }
       }
@@ -542,14 +547,14 @@ class Simplify_Db_MPTT
   public function move($id, $ref_id, $pos = self::AFTER)
   {
     if ($id == $ref_id) {
-      throw new Simplify_Db_MpttException("Both ids cannot be equal");
+      throw new Simplify\Db\MpttException("Both ids cannot be equal");
     }
 
     if (($pos == self::BEFORE || $pos == self::AFTER) && $ref_id == 0) {
-      throw new Simplify_Db_MpttException("\$id must be greather then 0");
+      throw new Simplify\Db\MpttException("\$id must be greather then 0");
     }
 
-    $dao = s::db();
+    $dao = Simplify::db();
 
     $this->lock($this->table, "$this->table a", "$this->table b");
 
@@ -581,27 +586,27 @@ class Simplify_Db_MPTT
 
   protected function __isChild($id, $ref_id)
   {
-    $dao = s::db();
+    $dao = Simplify::db();
 
     $is_child = $dao->query(
       "SELECT b.$this->left BETWEEN a.$this->left AND a.$this->right FROM $this->table a, $this->table b WHERE a.$this->pk = ? AND b.$this->pk = ?")->execute(
       $id, $ref_id)->fetchOne();
 
     if ($is_child) {
-      throw new Simplify_Db_MpttException("Cannot move a node into one of it's children");
+      throw new Simplify\Db\MpttException("Cannot move a node into one of it's children");
     }
   }
 
   protected function __removeBranch($id)
   {
-    $dao = s::db();
+    $dao = Simplify::db();
 
     $data = $dao->query()->from($this->table)->select(
       "$this->left, $this->right, $this->right - $this->left + 1 AS width, $this->parent")->where("$this->pk = ?")->execute(
       $id)->fetchRow();
 
     if (empty($data)) {
-      throw new Simplify_Db_MpttException(
+      throw new Simplify\Db\MpttException(
         "Row not found in table <b>$this->table</b> where <b>$this->pk</b> = <b>$id</b>");
     }
 
@@ -626,7 +631,7 @@ class Simplify_Db_MPTT
 
   protected function __insertSpace($removed, $ref_id, $pos)
   {
-    $dao = s::db();
+    $dao = Simplify::db();
 
     $ids = $removed['ids'];
     $width = $removed['width'];
@@ -640,7 +645,7 @@ class Simplify_Db_MPTT
         $right_id = $dao->query()->from($this->table)->select($this->right)->where("$this->pk = ?")->execute($ref_id)->fetchOne();
 
         if (is_null($right_id)) {
-          throw new Simplify_Db_MpttException(
+          throw new Simplify\Db\MpttException(
             "Row not found in table <b>$this->table</b> where <b>$this->pk</b> = <b>$ref_id</b>");
         }
 
@@ -659,7 +664,7 @@ class Simplify_Db_MPTT
         $left_id = $dao->query()->from($this->table)->select($this->left)->where("$this->pk = ?")->execute($ref_id)->fetchOne();
 
         if (is_null($left_id)) {
-          throw new Simplify_Db_MpttException(
+          throw new Simplify\Db\MpttException(
             "Row not found in table <b>$this->table</b> where <b>$this->pk</b> = <b>$ref_id</b>");
         }
 
@@ -681,7 +686,7 @@ class Simplify_Db_MPTT
           $left_id = $dao->query()->from($this->table)->select($this->left)->where("$this->pk = ?")->execute($ref_id)->fetchOne();
 
           if (is_null($left_id)) {
-            throw new Simplify_Db_MpttException(
+            throw new Simplify\Db\MpttException(
               "Row not found in table <b>$this->table</b> where <b>$this->pk</b> = <b>$ref_id</b>");
           }
         }
@@ -702,7 +707,7 @@ class Simplify_Db_MPTT
           $right_id = $dao->query()->from($this->table)->select($this->right)->where("$this->pk = ?")->execute($ref_id)->fetchOne();
 
           if (is_null($right_id)) {
-            throw new Simplify_Db_MpttException(
+            throw new Simplify\Db\MpttException(
               "Row not found in table <b>$this->table</b> where <b>$this->pk</b> = <b>$ref_id</b>");
           }
 
@@ -728,7 +733,7 @@ class Simplify_Db_MPTT
 
   protected function __insertBranch($removed, $ref_id, $pos)
   {
-    $dao = s::db();
+    $dao = Simplify::db();
 
     $ids = $removed['ids'];
     $width = $removed['width'];
@@ -746,7 +751,7 @@ class Simplify_Db_MPTT
 
   protected function _rebuild($orderBy = null, $parent_id = 0, $left_id = 0)
   {
-    $dao = s::db();
+    $dao = Simplify::db();
 
     $right_id = $left_id + 1;
 
@@ -777,16 +782,16 @@ class Simplify_Db_MPTT
 
     $tables = implode(', ', $tables);
 
-    s::db()->query("LOCK TABLES $tables")->executeRaw();
+    Simplify::db()->query("LOCK TABLES $tables")->executeRaw();
   }
 
   protected function unlock()
   {
-    s::db()->query("UNLOCK TABLES")->executeRaw();
+    Simplify::db()->query("UNLOCK TABLES")->executeRaw();
   }
 
 }
 
-class Simplify_Db_MpttException extends Exception
+class MpttException extends \Exception
 {
 }

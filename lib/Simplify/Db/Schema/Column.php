@@ -1,6 +1,8 @@
 <?php
 
-class Simplify_Db_Column
+namespace Simplify\Db\Schema;
+
+class Column
 {
 
   public $field;

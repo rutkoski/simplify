@@ -1,6 +1,8 @@
 <?php
 
-class Simplify_Db_Table
+namespace Simplify\Db\Schema;
+
+class Table
 {
 
   /**
@@ -61,7 +63,7 @@ class Simplify_Db_Table
   public function setPrimaryKey($primaryKey)
   {
     if (empty($this->indexes['PRIMARY'])) {
-      $this->indexes['PRIMARY'] = new Simplify_Db_Index();
+      $this->indexes['PRIMARY'] = new \Simplify\Db\Schema\Index();
     }
 
     $this->indexes['PRIMARY']->fields = (array) $primaryKey;
@@ -94,36 +96,36 @@ class Simplify_Db_Table
     return is_array($pk) && count($pk) > 1 ? $pk : array_shift($pk);
   }
 
-  public function addColumn(Simplify_Db_Column $column, $field)
+  public function addColumn(\Simplify\Db\Schema\Column $column)
   {
-    s::db()->query(sprintf("ALTER TABLE `{$this->name}` %s %s", 'ADD COLUMN ', $column->getColumnSql()))->execute();
+    \Simplify::db()->query(sprintf("ALTER TABLE `{$this->name}` %s %s", 'ADD COLUMN ', $column->getColumnSql()))->execute();
   }
 
-  public function dropColumn(Simplify_Db_Column $column, $field)
+  public function dropColumn($name)
   {
-    s::db()->query(sprintf("ALTER TABLE `{$this->name}` %s %s", 'DROP COLUMN ', $field))->execute();
+    \Simplify::db()->query(sprintf("ALTER TABLE `{$this->name}` %s %s", 'DROP COLUMN ', $name))->execute();
   }
 
-  public function changeColumn(Simplify_Db_Column $column, $field)
+  public function changeColumn($name, \Simplify\Db\Schema\Column $column)
   {
-    s::db()->query(sprintf("ALTER TABLE `{$this->name}` %s %s", "CHANGE COLUMN `{$field}`", $column->getColumnSql()))->execute();
+    \Simplify::db()->query(sprintf("ALTER TABLE `{$this->name}` %s %s", "CHANGE COLUMN `{$name}`", $column->getColumnSql()))->execute();
   }
 
-  public function addIndex($name, Simplify_Db_Index $index)
+  public function addIndex($name, \Simplify\Db\Schema\Index $index)
   {
-    s::db()->query(
+    \Simplify::db()->query(
       sprintf("ALTER TABLE `{$this->name}` ADD %s `%s` (`%s`)", $index->unique ? 'UNIQUE INDEX' : 'INDEX', $name,
         implode('`, `', (array) $index->fields)))->execute();
   }
 
   public function dropIndex($name)
   {
-    s::db()->query(sprintf("ALTER TABLE `{$this->name}` DROP INDEX %s`", $name))->execute();
+    \Simplify::db()->query(sprintf("ALTER TABLE `{$this->name}` DROP INDEX %s`", $name))->execute();
   }
 
-  public function addForeignKey($name, Simplify_Db_Constraint $constraint)
+  public function addForeignKey($name, \Simplify\Db\Schema\Constraint $constraint)
   {
-    s::db()->query(
+    \Simplify::db()->query(
       sprintf(
         "ALTER TABLE `{$this->name}` ADD FOREIGN KEY `%s` (`%s`) REFERENCES `%s` (`%s`) ON UPDATE %s ON DELETE %s",
         $name, implode('`, `', (array) $constraint->column), $constraint->referencedTable,
@@ -132,20 +134,20 @@ class Simplify_Db_Table
 
   public function dropForeignKey($name)
   {
-    s::db()->query(sprintf("ALTER TABLE `{$this->name}` DROP FOREIGN KEY %s`", $name))->execute();
+    \Simplify::db()->query(sprintf("ALTER TABLE `{$this->name}` DROP FOREIGN KEY %s`", $name))->execute();
   }
 
   public function loadSchema()
   {
     if ($this->exists()) {
-      $_columns = s::db()->query("SHOW COLUMNS FROM {$this->name}")->execute()->fetchAll();
+      $_columns = \Simplify::db()->query("SHOW COLUMNS FROM {$this->name}")->execute()->fetchAll();
 
       $this->columns = array();
       $this->indexes = array();
       $this->constraints = array();
 
       foreach ($_columns as &$_column) {
-        $column = new Simplify_Db_Column($_column['Field']);
+        $column = new \Simplify\Db\Schema\Column($_column['Field']);
 
         if (preg_match('/([a-z]+)(?:\((.+)\))?( unsigned)*( zerofill)*/', $_column['Type'], $type)) {
           $column->type = $type[1];
@@ -166,11 +168,11 @@ class Simplify_Db_Table
         $this->_schema['columns'][$_column['Field']] = $column;
       }
 
-      $_indexes = s::db()->query("SHOW INDEX FROM {$this->name}")->execute()->fetchAll();
+      $_indexes = \Simplify::db()->query("SHOW INDEX FROM {$this->name}")->execute()->fetchAll();
 
       foreach ($_indexes as $_index) {
         if (empty($this->indexes[$_index['Key_name']])) {
-          $index = new Simplify_Db_Index();
+          $index = new \Simplify\Db\Schema\Index();
           $index->unique = empty($_index['Non_unique']);
 
           $this->indexes[$_index['Key_name']] = $index;
@@ -181,7 +183,7 @@ class Simplify_Db_Table
         $this->_schema['indexes'][$_index['Key_name']] = $this->indexes[$_index['Key_name']];
       }
 
-      $db = sy_get_param(s::db()->getParams(), 'name');
+      $db = sy_get_param(\Simplify::db()->getParams(), 'name');
 
       $sql = "
         SELECT CONSTRAINT_NAME, TABLE_NAME, COLUMN_NAME,
@@ -191,10 +193,10 @@ class Simplify_Db_Table
           AND (REFERENCED_TABLE_NAME = '{$this->name}' OR TABLE_NAME = '{$this->name}')
       ";
 
-      $_constraints = s::db()->query($sql)->execute()->fetchAll();
+      $_constraints = \Simplify::db()->query($sql)->execute()->fetchAll();
 
       foreach ($_constraints as $_constraint) {
-        $constraint = new Simplify_Db_Constraint();
+        $constraint = new \Simplify\Db\Schema\Constraint();
         $constraint->table = $_constraint['TABLE_NAME'];
         $constraint->column = $_constraint['COLUMN_NAME'];
         $constraint->referencedTable = $_constraint['REFERENCED_TABLE_NAME'];
@@ -216,7 +218,7 @@ class Simplify_Db_Table
     $tables = false;
 
     if (!empty($this->name)) {
-      $tables = s::db()->query("SHOW TABLES")->executeRaw()->fetchCol();
+      $tables = \Simplify::db()->query("SHOW TABLES")->executeRaw()->fetchCol();
     }
 
     return $tables && in_array($this->name, $tables);
@@ -226,7 +228,7 @@ class Simplify_Db_Table
   {
     if (!$this->exists()) {
       if (empty($this->columns)) {
-        throw new Simplify_Db_Exception('Cannot create empty table');
+        throw new \Simplify\Db\DatabaseException('Cannot create empty table');
       }
 
       $create = "CREATE TABLE `%1\$s` (\n%2\$s\n) \nCOLLATE='utf8_general_ci' ENGINE=InnoDB";
@@ -251,7 +253,7 @@ class Simplify_Db_Table
 
       $sql = sprintf($create, $this->name, implode(",\n", $s));
 
-      s::db()->query($sql)->execute();
+      \Simplify::db()->query($sql)->execute();
 
       $this->loadSchema();
     }

@@ -21,12 +21,14 @@
  * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
  */
 
+namespace Simplify\Db\Pdo;
+
 /**
  *
  * PDO Query Result
  *
  */
-class Simplify_Db_Pdo_QueryResult extends Simplify_Db_QueryResult
+class QueryResult extends \Simplify\Db\QueryResult
 {
 
   /**
@@ -80,18 +82,18 @@ class Simplify_Db_Pdo_QueryResult extends Simplify_Db_QueryResult
      */
     if (! is_null($data)) {}
 
-    if ($this->stmt instanceof PDOStatement) {
+    if ($this->stmt instanceof \PDOStatement) {
       $this->stmt->execute((array) $data);
     }
 
-    Simplify_Db_Pdo_Database::validate($this->stmt, $query, $data);
+    Database::validate($this->stmt, $query, $data);
 
-    Simplify_Db_Database::log(array($query, $data, $limit, $offset));
+    Database::log(array($query, $data, $limit, $offset));
   }
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Db_QueryResult::query()
+   * @see Simplify\Db\QueryResult::query()
    */
   public function query()
   {
@@ -100,7 +102,7 @@ class Simplify_Db_Pdo_QueryResult extends Simplify_Db_QueryResult
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Db_QueryResult::free()
+   * @see Simplify\Db\QueryResult::free()
    */
   public function free()
   {
@@ -109,7 +111,7 @@ class Simplify_Db_Pdo_QueryResult extends Simplify_Db_QueryResult
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Db_QueryResult::fetchOne()
+   * @see Simplify\Db\QueryResult::fetchOne()
    */
   public function fetchOne()
   {
@@ -119,41 +121,41 @@ class Simplify_Db_Pdo_QueryResult extends Simplify_Db_QueryResult
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Db_QueryResult::fetchRow()
+   * @see Simplify\Db\QueryResult::fetchRow()
    */
   public function fetchRow($n = null)
   {
     $return = is_null($n)
-      ? $this->stmt->fetch(PDO::FETCH_ASSOC)
-      : $this->stmt->fetch(PDO::FETCH_ASSOC, PDO::FETCH_ORI_NEXT, $n);
+      ? $this->stmt->fetch(\PDO::FETCH_ASSOC)
+      : $this->stmt->fetch(\PDO::FETCH_ASSOC, \PDO::FETCH_ORI_NEXT, $n);
     return $return;
   }
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Db_QueryResult::fetchCol()
+   * @see Simplify\Db\QueryResult::fetchCol()
    */
   public function fetchCol($n = null)
   {
     $return = is_null($n)
-      ? $this->stmt->fetchAll(PDO::FETCH_COLUMN)
-      : $this->stmt->fetchAll(PDO::FETCH_COLUMN, intval($n));
+      ? $this->stmt->fetchAll(\PDO::FETCH_COLUMN)
+      : $this->stmt->fetchAll(\PDO::FETCH_COLUMN, intval($n));
     return $return;
   }
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Db_QueryResult::fetchAll()
+   * @see Simplify\Db\QueryResult::fetchAll()
    */
   public function fetchAll()
   {
-    $return = $this->stmt->fetchAll(PDO::FETCH_ASSOC);
+    $return = $this->stmt->fetchAll(\PDO::FETCH_ASSOC);
     return $return;
   }
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Db_QueryResult::numRows()
+   * @see Simplify\Db\QueryResult::numRows()
    */
   public function numRows()
   {
@@ -169,7 +171,7 @@ class Simplify_Db_Pdo_QueryResult extends Simplify_Db_QueryResult
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Db_QueryResult::numCols()
+   * @see Simplify\Db\QueryResult::numCols()
    */
   public function numCols()
   {
@@ -179,11 +181,11 @@ class Simplify_Db_Pdo_QueryResult extends Simplify_Db_QueryResult
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Db_QueryResult::columnNames()
+   * @see Simplify\Db\QueryResult::columnNames()
    */
   public function columnNames()
   {
-    throw new Exception('TODO');
+    throw new \Exception('TODO');
   }
 
 }

@@ -1,32 +1,8 @@
 <?php
 
-/**
- * SimplifyPHP Framework
- *
- * This file is part of SimplifyPHP Framework.
- *
- * SimplifyPHP Framework is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
- *
- * SimplifyPHP Framework is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- * @author Rodrigo Rutkoski Rodrigues, <rutkoski@gmail.com>
- */
+namespace Simplify;
 
-/**
- *
- * Handles request information and data
- *
- */
-class Simplify_Request
+class Request
 {
 
   /**
@@ -210,7 +186,7 @@ class Simplify_Request
   public function post($name = null, $default = null, $flags = 0)
   {
     if (!$this->post) {
-      $this->post = new Simplify_Data_View(sy_strip_slashes_deep($_POST));
+      $this->post = new \Simplify\Data\View(sy_strip_slashes_deep($_POST));
     }
 
     if (!is_null($name)) {
@@ -231,7 +207,7 @@ class Simplify_Request
   public function get($name = null, $default = null, $flags = 0)
   {
     if (!$this->get) {
-      $this->get = new Simplify_Data_View(sy_strip_slashes_deep($_GET));
+      $this->get = new \Simplify\Data\View(sy_strip_slashes_deep($_GET));
     }
 
     if (!is_null($name)) {
@@ -262,10 +238,18 @@ class Simplify_Request
    */
   public function route($segment = null)
   {
-    if (is_int($segment)) {
-      $segments = array_filter(explode('/', $this->route));
-      return isset($segments[$segment]) ? $segments[$segment] : false;
+    if (!empty($segment)) {
+      $segments = array_values(array_filter(explode('/', $this->route)));
+
+      if (is_int($segment) && isset($segments[$segment])) {
+        return  $segments[$segment];
+      } elseif ($segment === true) {
+        return $segments;
+      }
+
+      return false;
     }
+
     return $this->route;
   }
 

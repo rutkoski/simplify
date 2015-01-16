@@ -21,12 +21,14 @@
  * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
  */
 
+namespace Simplify\Db;
+
 /**
  *
- * Query parameters that can be passed to Simplify_Db_QueryObject::setParams()
+ * Query parameters that can be passed to Simplify\Db\QueryObject::setParams()
  *
  */
-class Simplify_Db_QueryParameters
+class QueryParameters
 {
 
   const SQL = 'sql';

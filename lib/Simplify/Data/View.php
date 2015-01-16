@@ -21,12 +21,17 @@
  * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
  */
 
+namespace Simplify\Data;
+
+use Simplify\Dictionary;
+use Simplify\DictionaryInterface;
+
 /**
- * 
- * Simplify_Data_View profides a Simplify_Dictionary interface to any array or array-like object
+ *
+ * View profides a Dictionary interface to any array or array-like object
  *
  */
-class Simplify_Data_View extends Simplify_Dictionary
+class View extends Dictionary
 {
 
   /**
@@ -45,12 +50,12 @@ class Simplify_Data_View extends Simplify_Dictionary
   public static function getIterator($data)
   {
     $class = get_class($this);
-    return new Simplify_Data_ViewIterator($data, $class);
+    return new ViewIterator($data, $class);
   }
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Dictionary::_del()
+   * @see Dictionary::_del()
    */
   protected function _del($name)
   {
@@ -59,7 +64,7 @@ class Simplify_Data_View extends Simplify_Dictionary
         unset($this->data[$name]);
       }
     }
-    elseif ($this->data instanceof Simplify_DictionaryInterface) {
+    elseif ($this->data instanceof DictionaryInterface) {
       $this->data->del($name);
     }
 
@@ -68,7 +73,7 @@ class Simplify_Data_View extends Simplify_Dictionary
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Dictionary::_get()
+   * @see Dictionary::_get()
    */
   protected function _get($name, $default = null)
   {
@@ -77,7 +82,7 @@ class Simplify_Data_View extends Simplify_Dictionary
         return $this->data[$name];
       }
     }
-    elseif ($this->data instanceof Simplify_DictionaryInterface) {
+    elseif ($this->data instanceof DictionaryInterface) {
       $args = func_get_args();
       return call_user_func_array(array($this->data, 'get'), $args);
     }
@@ -87,28 +92,28 @@ class Simplify_Data_View extends Simplify_Dictionary
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Dictionary::_has()
+   * @see Dictionary::_has()
    */
   protected function _has($name)
   {
     if (is_array($this->data)) {
       return isset($this->data[$name]);
     }
-    elseif ($this->data instanceof Simplify_DictionaryInterface) {
+    elseif ($this->data instanceof DictionaryInterface) {
       return $this->data->has($name);
     }
   }
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Dictionary::_set()
+   * @see Dictionary::_set()
    */
   protected function _set($name, $value)
   {
     if (is_array($this->data)) {
       $this->data[$name] = $value;
     }
-    elseif ($this->data instanceof Simplify_DictionaryInterface) {
+    elseif ($this->data instanceof DictionaryInterface) {
       $this->data->set($name, $value);
     }
 

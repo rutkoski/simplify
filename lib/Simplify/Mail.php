@@ -22,6 +22,8 @@
  * @copyright Copyright 2008 Rodrigo Rutkoski Rodrigues
  */
 
+namespace Simplify;
+
 require_once (SY_DIR . '/vendor/html_mime_mail/htmlMimeMail5.php');
 
 /**
@@ -29,7 +31,7 @@ require_once (SY_DIR . '/vendor/html_mime_mail/htmlMimeMail5.php');
  * Basic mail class
  *
  */
-class Simplify_Mail
+class Mail
 {
 
   const MAIL = 'mail';
@@ -107,12 +109,12 @@ class Simplify_Mail
   {
     if (!$this->mailFrom) {
       $this->error = __('Missing mail_from parameter.');
-      throw new Exception($this->error);
+      throw new \Exception($this->error);
     }
 
     if (!$this->htmlTemplate) {
       $this->error = __('Missing html_template parameter.');
-      throw new Exception($this->error);
+      throw new \Exception($this->error);
     }
 
     $htmlTpl = $this->htmlTemplate;
@@ -133,7 +135,7 @@ class Simplify_Mail
 
       sy_log('mail', $this->error);
 
-      throw new Exception(var_export($this->error, true));
+      throw new \Exception(var_export($this->error, true));
     }
   }
 
@@ -142,7 +144,7 @@ class Simplify_Mail
    */
   protected function render($data, $htmlTpl, $textTpl = null)
   {
-    $html = Simplify_View::factory();
+    $html = \Simplify\View::factory();
     $html->setTemplate($htmlTpl);
     $html->setLayout($this->htmlLayout);
     $html->copyAll($data);
@@ -156,7 +158,7 @@ class Simplify_Mail
     }
 
     else {
-      $text = Simplify_View::factory();
+      $text = \Simplify\View::factory();
       $text->setTemplate($textTpl);
       $text->setLayout(false);
       $text->copyAll($data);

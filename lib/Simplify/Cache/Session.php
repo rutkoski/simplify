@@ -21,18 +21,23 @@
  * @author Rodrigo Rutkoski Rodrigues, <rutkoski@gmail.com>
  */
 
+namespace Simplify;
+
+use Simplify\CacheInterface;
+use Simplify\CacheException;
+
 /**
  * Session Cache.
  *
  * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
  * @package Kernel_Cache
  */
-class Simplify_Cache_Session implements Simplify_CacheInterface
+class Session implements CacheInterface
 {
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_CacheInterface::cached()
+   * @see CacheInterface::cached()
    */
   public function cached($id)
   {
@@ -46,7 +51,7 @@ class Simplify_Cache_Session implements Simplify_CacheInterface
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_CacheInterface::delete()
+   * @see CacheInterface::delete()
    */
   public function delete($id)
   {
@@ -56,7 +61,7 @@ class Simplify_Cache_Session implements Simplify_CacheInterface
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_CacheInterface::flush()
+   * @see CacheInterface::flush()
    */
   public function flush()
   {
@@ -65,12 +70,12 @@ class Simplify_Cache_Session implements Simplify_CacheInterface
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_CacheInterface::read()
+   * @see CacheInterface::read()
    */
   public function read($id)
   {
     if (!$this->cached($id)) {
-      throw new Simplify_CacheException('Not cached');
+      throw new CacheException('Not cached');
     }
 
     $data = $_SESSION['simplify_cache_session'][$id];
@@ -78,7 +83,7 @@ class Simplify_Cache_Session implements Simplify_CacheInterface
     if (mktime() > $data['expires']) {
       $this->delete($id);
 
-      throw new Simplify_CacheException('Cache expired');
+      throw new CacheException('Cache expired');
     }
 
     return $data['data'];
@@ -86,7 +91,7 @@ class Simplify_Cache_Session implements Simplify_CacheInterface
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_CacheInterface::write()
+   * @see CacheInterface::write()
    */
   public function write($id, $data = '', $ttl = 0)
   {

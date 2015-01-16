@@ -83,7 +83,7 @@ function sy_log($file, $data, $lines = 300)
     $logs = array();
   }
 
-  if (! s::config()) {
+  if (! Simplify::config()) {
     return;
   }
 
@@ -105,7 +105,7 @@ function sy_log($file, $data, $lines = 300)
     if (is_string($data)) {
       $output .= trim($data);
     }
-    elseif ($data instanceof Simplify_DictionaryInterface) {
+    elseif ($data instanceof \Simplify\DictionaryInterface) {
       $data = $data->getAll();
       array_walk_recursive($data, 'sy_array_map');
       $output .= var_export($data, true);
@@ -131,7 +131,7 @@ function sy_exception_error_handler($errno, $errstr, $errfile, $errline)
 
 function sy_exception_handler($e)
 {
-  if (sy_debug_level() && s::request()->json()) {
+  if (sy_debug_level() && Simplify::request()->json()) {
     header('Content-type: application/json; charset="utf-8"');
     $response = array('exception' => array('class' => get_class($e), 'message' => $e->getMessage(), 'trace' => $e->getTraceAsString(), 'file' => $e->getFile(), 'line' => $e->getLine()));
     $output = json_encode($response);

@@ -131,12 +131,14 @@ IM012 DRIVER keyword syntax error
 IM013 Trace file error
 */
 
+namespace Simplify\Db;
+
 /**
  *
  * Database exception
  *
  */
-class Simplify_Db_DatabaseException extends Exception
+class DatabaseException extends \Exception
 {
 
   /**
@@ -151,7 +153,9 @@ class Simplify_Db_DatabaseException extends Exception
   {
     switch ($SQLSTATE) {
       case '42S02' :
-        return new Simplify_Db_TableNotFoundException($info, $code);
+        return new TableNotFoundException($info, $code);
+      case '42S22' :
+        return new ColumnNotFoundException($info, $code);
     }
 
     return new self($info, $code);

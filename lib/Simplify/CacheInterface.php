@@ -21,12 +21,14 @@
  * @author Rodrigo Rutkoski Rodrigues, <rutkoski@gmail.com>
  */
 
+namespace Simplify;
+
 /**
- * 
+ *
  * Interface for cache
  *
  */
-interface Simplify_CacheInterface
+interface CacheInterface
 {
 
   /**

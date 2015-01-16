@@ -21,21 +21,23 @@
  * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
  */
 
+namespace Simplify;
+
 /**
- * 
+ *
  * Facade for cache
  *
  */
-class Simplify_Cache
+class Cache
 {
 
   /**
-   * @var Simplify_CacheInterface[]
+   * @var CacheInterface[]
    */
   protected static $handlers;
 
   /**
-   * 
+   *
    * @param unknown_type $id
    * @return boolean
    */
@@ -50,7 +52,7 @@ class Simplify_Cache
   }
 
   /**
-   * 
+   *
    * @param string $id
    * @return mixed
    */
@@ -69,21 +71,21 @@ class Simplify_Cache
     return self::getHandler()->write($id, $data, $ttl);
   }
 
-  public static function setHandler($type, Simplify_CacheInterface $handler)
+  public static function setHandler($type, CacheInterface $handler)
   {
     self::$handler[$type] = $handler;
   }
 
   /**
    * Get the cache implementation
-   * 
+   *
    * @param string $class
-   * @return Simplify_CacheInterface
+   * @return CacheInterface
    */
   public static function getHandler($class = null)
   {
     if (!$class)
-      $class = 'Simplify_Cache_File';
+      $class = 'Simplify\Cache\File';
 
     if (empty(self::$handlers[$class])) {
       self::$handlers[$class] = new $class;

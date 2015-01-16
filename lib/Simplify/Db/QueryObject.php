@@ -21,12 +21,16 @@
  * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
  */
 
+namespace Simplify\Db;
+
+use Simplify;
+
 /**
  *
- * Base class for Simplify_Db_QueryObjectInterface implementations
+ * Base class for Simplify\Db\QueryObjectInterface implementations
  *
  */
-abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterface
+abstract class QueryObject implements QueryObjectInterface
 {
 
   const SELECT = 1;
@@ -79,14 +83,14 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
 
   /**
    *
-   * @var Simplify_Db_Database
+   * @var Simplify\Db\Database
    */
   protected $dao;
 
   /**
    * Construct a new query object
    *
-   * @param Simplify_Db_Database $dao the database object
+   * @param Simplify\Db\Database $dao the database object
    */
   public function __construct($dao)
   {
@@ -95,7 +99,7 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Db_QueryObjectInterface::alias()
+   * @see Simplify\Db\QueryObjectInterface::alias()
    */
   public function alias($alias = null)
   {
@@ -114,11 +118,11 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Db_QueryObjectInterface::insert()
+   * @see Simplify\Db\QueryObjectInterface::insert()
    */
   public function insert($table = null, $data = null)
   {
-    $this->query = Simplify_Db_QueryObject::INSERT;
+    $this->query = QueryObject::INSERT;
 
     $this->from($table);
     $this->data($data);
@@ -128,11 +132,11 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Db_QueryObjectInterface::update()
+   * @see Simplify\Db\QueryObjectInterface::update()
    */
   public function update($table = null, $data = null, $where = null)
   {
-    $this->query = Simplify_Db_QueryObject::UPDATE;
+    $this->query = QueryObject::UPDATE;
 
     $this->from($table);
     $this->data($data);
@@ -143,11 +147,11 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Db_QueryObjectInterface::delete()
+   * @see Simplify\Db\QueryObjectInterface::delete()
    */
   public function delete($table = null, $where = null)
   {
-    $this->query = Simplify_Db_QueryObject::DELETE;
+    $this->query = QueryObject::DELETE;
 
     $this->from($table);
     $this->where($where);
@@ -157,7 +161,7 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Db_QueryObjectInterface::data()
+   * @see Simplify\Db\QueryObjectInterface::data()
    */
   public function data($data = null, $remove = null)
   {
@@ -178,7 +182,7 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Db_QueryObjectInterface::select()
+   * @see Simplify\Db\QueryObjectInterface::select()
    */
   public function select($fields = null, $remove = null)
   {
@@ -189,7 +193,7 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
       $this->fields = array();
     }
     elseif (!empty($fields)) {
-      $this->query = Simplify_Db_QueryObject::SELECT;
+      $this->query = QueryObject::SELECT;
 
       $fields = (array) $fields;
 
@@ -208,7 +212,7 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Db_QueryObjectInterface::from()
+   * @see Simplify\Db\QueryObjectInterface::from()
    */
   public function from($table = null, $remove = null)
   {
@@ -238,7 +242,7 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Db_QueryObjectInterface::join()
+   * @see Simplify\Db\QueryObjectInterface::join()
    */
   public function join($join = null, $type = null, $remove = null)
   {
@@ -255,7 +259,7 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
     }
     elseif (!empty($join)) {
       if (empty($type)) {
-        $type = Simplify_Db_QueryObject::JOIN_INNER;
+        $type = QueryObject::JOIN_INNER;
       }
 
       $join = array($type, $join);
@@ -277,7 +281,7 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
 
   /**
    *
-   * @return Simplify_Db_QueryObjectInterface
+   * @return Simplify\Db\QueryObjectInterface
    */
   public function leftJoin($join = null, $remove = null)
   {
@@ -286,7 +290,7 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
 
   /**
    *
-   * @return Simplify_Db_QueryObjectInterface
+   * @return Simplify\Db\QueryObjectInterface
    */
   public function rightJoin($join = null, $remove = null)
   {
@@ -295,7 +299,7 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
 
   /**
    *
-   * @return Simplify_Db_QueryObjectInterface
+   * @return Simplify\Db\QueryObjectInterface
    */
   public function innerJoin($join = null, $remove = null)
   {
@@ -304,7 +308,7 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Db_QueryObjectInterface::groupBy()
+   * @see Simplify\Db\QueryObjectInterface::groupBy()
    */
   public function groupBy($field = null, $remove = null)
   {
@@ -332,7 +336,7 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Db_QueryObjectInterface::having()
+   * @see Simplify\Db\QueryObjectInterface::having()
    */
   public function having($condition = null, $remove = null)
   {
@@ -360,7 +364,7 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Db_QueryObjectInterface::where()
+   * @see Simplify\Db\QueryObjectInterface::where()
    */
   public function where($condition = null, $remove = null)
   {
@@ -388,7 +392,7 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Db_QueryObjectInterface::orderBy()
+   * @see Simplify\Db\QueryObjectInterface::orderBy()
    */
   public function orderBy($field = null, $direction = null, $remove = null)
   {
@@ -416,7 +420,7 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Db_QueryObjectInterface::limit()
+   * @see Simplify\Db\QueryObjectInterface::limit()
    */
   public function limit($limit = null)
   {
@@ -437,7 +441,7 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Db_QueryObjectInterface::offset()
+   * @see Simplify\Db\QueryObjectInterface::offset()
    */
   public function offset($offset = null)
   {
@@ -458,7 +462,7 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Db_QueryObjectInterface::sql()
+   * @see Simplify\Db\QueryObjectInterface::sql()
    */
   public function sql($sql = null)
   {
@@ -479,7 +483,7 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Db_QueryObjectInterface::buildQuery()
+   * @see Simplify\Db\QueryObjectInterface::buildQuery()
    */
   public function buildQuery()
   {
@@ -498,65 +502,65 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Db_QueryObjectInterface::setParams()
+   * @see Simplify\Db\QueryObjectInterface::setParams()
    */
   public function setParams($params = null)
   {
     if (!empty($params)) {
-      if (isset($params[Simplify_Db_QueryParameters::SQL])) {
-        $this->sql($params[Simplify_Db_QueryParameters::SQL]);
+      if (isset($params[QueryParameters::SQL])) {
+        $this->sql($params[QueryParameters::SQL]);
       }
       else {
-        if (isset($params[Simplify_Db_QueryParameters::SELECT])) {
-          call_user_func(array($this, 'select'), $params[Simplify_Db_QueryParameters::SELECT]);
+        if (isset($params[QueryParameters::SELECT])) {
+          call_user_func(array($this, 'select'), $params[QueryParameters::SELECT]);
         }
 
-        if (isset($params[Simplify_Db_QueryParameters::FROM])) {
-          call_user_func(array($this, 'from'), $params[Simplify_Db_QueryParameters::FROM]);
+        if (isset($params[QueryParameters::FROM])) {
+          call_user_func(array($this, 'from'), $params[QueryParameters::FROM]);
         }
 
-        if (isset($params[Simplify_Db_QueryParameters::JOIN])) {
-          foreach ($params[Simplify_Db_QueryParameters::JOIN] as $join) {
+        if (isset($params[QueryParameters::JOIN])) {
+          foreach ($params[QueryParameters::JOIN] as $join) {
             call_user_func_array(array($this, 'join'), (array) $join);
           }
         }
 
-        if (isset($params[Simplify_Db_QueryParameters::INNER_JOIN])) {
-          foreach ((array) $params[Simplify_Db_QueryParameters::INNER_JOIN] as $join) {
+        if (isset($params[QueryParameters::INNER_JOIN])) {
+          foreach ((array) $params[QueryParameters::INNER_JOIN] as $join) {
             call_user_func_array(array($this, 'innerJoin'), (array) $join);
           }
         }
 
-        if (isset($params[Simplify_Db_QueryParameters::GROUP_BY])) {
-          call_user_func(array($this, 'groupBy'), $params[Simplify_Db_QueryParameters::GROUP_BY]);
+        if (isset($params[QueryParameters::GROUP_BY])) {
+          call_user_func(array($this, 'groupBy'), $params[QueryParameters::GROUP_BY]);
         }
 
-        if (isset($params[Simplify_Db_QueryParameters::HAVING])) {
-          call_user_func(array($this, 'having'), $params[Simplify_Db_QueryParameters::HAVING]);
+        if (isset($params[QueryParameters::HAVING])) {
+          call_user_func(array($this, 'having'), $params[QueryParameters::HAVING]);
         }
 
-        if (isset($params[Simplify_Db_QueryParameters::WHERE])) {
-          foreach ((array) $params[Simplify_Db_QueryParameters::WHERE] as $where) {
+        if (isset($params[QueryParameters::WHERE])) {
+          foreach ((array) $params[QueryParameters::WHERE] as $where) {
             call_user_func(array($this, 'where'), $where);
           }
         }
 
-        if (isset($params[Simplify_Db_QueryParameters::ORDER_BY])) {
-          foreach ((array) $params[Simplify_Db_QueryParameters::ORDER_BY] as $orderBy) {
+        if (isset($params[QueryParameters::ORDER_BY])) {
+          foreach ((array) $params[QueryParameters::ORDER_BY] as $orderBy) {
             call_user_func_array(array($this, 'orderBy'), (array) $orderBy);
           }
         }
 
-        if (isset($params[Simplify_Db_QueryParameters::LIMIT])) {
-          $this->limit($params[Simplify_Db_QueryParameters::LIMIT]);
+        if (isset($params[QueryParameters::LIMIT])) {
+          $this->limit($params[QueryParameters::LIMIT]);
         }
 
-        if (isset($params[Simplify_Db_QueryParameters::OFFSET])) {
-          $this->offset($params[Simplify_Db_QueryParameters::OFFSET]);
+        if (isset($params[QueryParameters::OFFSET])) {
+          $this->offset($params[QueryParameters::OFFSET]);
         }
 
-        if (isset($params[Simplify_Db_QueryParameters::DATA])) {
-          call_user_func(array($this, 'data'), $params[Simplify_Db_QueryParameters::DATA]);
+        if (isset($params[QueryParameters::DATA])) {
+          call_user_func(array($this, 'data'), $params[QueryParameters::DATA]);
         }
       }
     }
@@ -580,7 +584,7 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
       $fields[] = "`$k`";
 
       if ($wildcard === false) {
-        $values[] = s::db()->quote($v);
+        $values[] = Simplify::db()->quote($v);
       }
       elseif (is_string($wildcard)) {
         $values[] = $wildcard;
@@ -606,7 +610,7 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
 
     foreach ($data as $k => $v) {
       if ($wildcard === false) {
-        $v = s::db()->quote($v);
+        $v = Simplify::db()->quote($v);
         $fields[] = "`$k` = $v";
       }
       elseif (is_string($wildcard)) {
@@ -637,7 +641,7 @@ abstract class Simplify_Db_QueryObject implements Simplify_Db_QueryObjectInterfa
     $values = (array) $values;
 
     foreach ($values as &$value) {
-      $value = s::db()->quote($value);
+      $value = Simplify::db()->quote($value);
     }
 
     $s = "`{$field}`";

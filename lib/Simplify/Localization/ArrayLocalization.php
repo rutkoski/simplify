@@ -21,12 +21,17 @@
  * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
  */
 
+namespace Simplify\Localization;
+
+use Simplify\Dictionary;
+use Simplify\Localization;
+
 /**
  *
  * Localization that uses an array of strings identified by a message id
  *
  */
-class Simplify_Localization_Array extends Simplify_Localization
+class ArrayLocalization extends Localization
 {
 
   /**
@@ -37,30 +42,28 @@ class Simplify_Localization_Array extends Simplify_Localization
 
   public function __construct()
   {
-    $this->add('default', Simplify_Localization::DOMAIN_DEFAULT);
+    $this->add('default', Localization::DOMAIN_DEFAULT);
   }
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Localization::add()
+   * @see Localization::add()
    */
-  public function add($name, $domain = Simplify_Localization::DOMAIN_DEFAULT)
+  public function add($name, $domain = Localization::DOMAIN_DEFAULT)
   {
-    $filename = s::config()->get('locale_dir', APP_DIR . '/language', Simplify_Dictionary::FILTER_EMPTY);
+    $filename = \Simplify::config()->get('locale_dir', \Simplify::config()->get('app_dir') . '/language', Dictionary::FILTER_EMPTY);
     $filename .= '/' . $this->locale . '/' . $domain . '.php';
 
-    if (! file_exists($filename)) {
-      throw new Exception("Localization file <b>{$name}</b> for domain <b>{$domain}</b> not found: <b>{$filename}</b>");
+    if (file_exists($filename)) {
+      $lang = require_once ($filename);
+
+      $this->lang[$domain] = array_merge((array) $this->lang[$domain], (array) $lang);
     }
-
-    $lang = require_once ($filename);
-
-    $this->lang[$domain] = array_merge((array) $this->lang[$domain], (array) $lang);
   }
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Localization::dgettext()
+   * @see Localization::dgettext()
    */
   public function dgettext($domain, $msgid)
   {
@@ -73,7 +76,7 @@ class Simplify_Localization_Array extends Simplify_Localization
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Localization::dngettext()
+   * @see Localization::dngettext()
    */
   public function dngettext($domain, $single, $plural, $number)
   {

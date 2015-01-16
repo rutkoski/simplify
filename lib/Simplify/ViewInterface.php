@@ -21,19 +21,21 @@
  * @author Rodrigo Rutkoski Rodrigues, <rutkoski@gmail.com>
  */
 
+namespace Simplify;
+
 /**
- * 
+ *
  * Defines the interface for views
  *
  */
-interface Simplify_ViewInterface
+interface ViewInterface
 {
 
   /**
    *
-   * @param Simplify_RenderableInterface $object renderable
+   * @param RenderableInterface $object renderable
    * @return mixed
    */
-  public function render(Simplify_RenderableInterface $object = null);
+  public function render(\Simplify\RenderableInterface $object = null);
 
 }

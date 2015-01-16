@@ -21,12 +21,14 @@
  * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
  */
 
+namespace Simplify\Db;
+
 /**
  *
  * Common interface for sortable repositories
  *
  */
-interface Simplify_Db_SortableInterface
+interface SortableInterface
 {
 
   /**

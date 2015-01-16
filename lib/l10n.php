@@ -38,7 +38,7 @@ if (!function_exists('__')) {
    */
   function __($msgid)
   {
-    return s::l10n()->gettext($msgid);
+    return Simplify::l10n()->gettext($msgid);
   }
 }
 
@@ -54,7 +54,7 @@ if (!function_exists('_n')) {
    */
   function _n($single, $plural, $number)
   {
-    return s::l10n()->ngettext($single, $plural, $number);
+    return Simplify::l10n()->ngettext($single, $plural, $number);
   }
 }
 
@@ -69,7 +69,7 @@ if (!function_exists('_d')) {
    */
   function _d($domain, $msgid)
   {
-    return s::l10n()->dgettext($domain, $msgid);
+    return Simplify::l10n()->dgettext($domain, $msgid);
   }
 }
 
@@ -86,6 +86,6 @@ if (!function_exists('_dn')) {
    */
   function _dn($domain, $single, $plural, $number)
   {
-    return s::l10n()->dngettext($domain, $single, $plural, $number);
+    return Simplify::l10n()->dngettext($domain, $single, $plural, $number);
   }
 }

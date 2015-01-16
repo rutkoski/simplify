@@ -1,45 +1,111 @@
 <?php
 
-error_reporting(E_ALL);
+class Simplify
+{
 
-ini_set('display_errors', 1);
+  protected static $app;
 
-require_once('autoload.php');
-require_once('debug.php');
-require_once('l10n.php');
+  protected static $config;
 
-Simplify_Autoload::registerPath(APP_DIR);
+  protected static $response;
 
-$config = s::config();
+  protected static $router;
 
-$config['app_dir'] = APP_DIR;
-$config['app_url'] = s::request()->url();
+  protected static $l10n;
 
-$config['cache_dir'] = '{app_dir}/cache';
+  /**
+   * 
+   * @param Simplify\Application $app
+   * @return \Simplify\Application
+   */
+  public static function app(Simplify\Application $app = null)
+  {
+    if (!empty($app)) {
+      self::$app = $app;
+    }
+    elseif (!self::$app) {
+      self::$app = new Simplify\Application();
+    }
+    return self::$app;
+  }
 
-$config['templates_dir'] = '{app_dir}/templates/{theme}';
+  /**
+   * 
+   * @return \Simplify\Config
+   */
+  public static function config()
+  {
+    if (!self::$config) {
+      self::$config = new Simplify\Config();
+    }
+    return self::$config;
+  }
 
-$config['modules_dir'] = '{app_dir}/modules';
+  /**
+   * Get the dbal object
+   *
+   * @return Simplify\Db\Database
+   */
+  public static function db($id = 'default', $engine = null, $params = null)
+  {
+    return Simplify\Db\Database::getInstance($id, $engine, $params);
+  }
 
-$config['public_path'] = '';
+  /**
+   * 
+   * @param \Simplify\Localization $l10n
+   * @return Simplify\Localization
+   */
+  public static function l10n(\Simplify\Localization $l10n = null)
+  {
+    if (empty(self::$l10n)) {
+      if (!empty($l10n)) {
+        self::$l10n = $l10n;
+      }
+      else {
+        self::$l10n = new \Simplify\Localization\ArrayLocalization();
+      }
+    }
+  
+    return self::$l10n;
+  }
 
-$config['www_dir'] = dirname($_SERVER['SCRIPT_FILENAME']) . '{public_path}';
-$config['www_url'] = '{app_url}{public_path}';
+  /**
+   * 
+   * @return \Simplify\Simplify_Request
+   */
+  public static function request()
+  {
+    return Simplify\Request::getInstance();
+  }
 
-$config['files_path'] = '/files';
-$config['files_dir'] = '{www_dir}{files_path}';
-$config['files_url'] = '{www_url}{files_path}';
+  /**
+   * 
+   * @return \Simplify\Response
+   */
+  public static function response()
+  {
+    if (!self::$response) {
+      self::$response = new Simplify\Response();
+    }
+    return self::$response;
+  }
 
-$config['theme'] = 'default';
-$config['theme_dir'] = '{www_dir}/{theme}';
-$config['theme_url'] = '{www_url}/{theme}';
+  /**
+   * 
+   * @return \Simplify\router
+   */
+  public static function router()
+  {
+    if (!self::$router) {
+      self::$router = new Simplify\router();
+    }
+    return self::$router;
+  }
 
-$config['view:helpers:html'] = 'Simplify_View_Helper_Html';
-$config['view:helpers:cycle'] = 'Simplify_View_Helper_Cycle';
-$config['view:helpers:form'] = 'Simplify_View_Helper_Form';
-$config['view:helpers:pager'] = 'Simplify_View_Helper_Pager';
-$config['view:helpers:string'] = 'Simplify_View_Helper_String';
+  public static function session()
+  {
+    return Simplify\Session::getInstance();
+  }
 
-if (file_exists(APP_DIR . '/config/config.php')) {
-  require_once(APP_DIR . '/config/config.php');
 }

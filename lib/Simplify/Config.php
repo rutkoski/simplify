@@ -21,19 +21,23 @@
  * @author Rodrigo Rutkoski Rodrigues, <rutkoski@gmail.com>
  */
 
+namespace Simplify;
+
+use ArrayAccess;
+
 /**
  *
  * Simplify config
  *
  */
-class Simplify_Config implements Simplify_DictionaryInterface, ArrayAccess
+class Config implements DictionaryInterface, ArrayAccess
 {
 
   protected $data = array();
 
   /**
    * (non-PHPdoc)
-   * @see ArrayAccess::offsetExists()
+   * @see ArrayAccesoffsetExists()
    */
   public function offsetExists($offset)
   {
@@ -42,7 +46,7 @@ class Simplify_Config implements Simplify_DictionaryInterface, ArrayAccess
 
   /**
    * (non-PHPdoc)
-   * @see ArrayAccess::offsetGet()
+   * @see ArrayAccesoffsetGet()
    */
   public function offsetGet($offset)
   {
@@ -51,7 +55,7 @@ class Simplify_Config implements Simplify_DictionaryInterface, ArrayAccess
 
   /**
    * (non-PHPdoc)
-   * @see ArrayAccess::offsetSet()
+   * @see ArrayAccesoffsetSet()
    */
   public function offsetSet($offset, $value)
   {
@@ -60,7 +64,7 @@ class Simplify_Config implements Simplify_DictionaryInterface, ArrayAccess
 
   /**
    * (non-PHPdoc)
-   * @see ArrayAccess::offsetUnset()
+   * @see ArrayAccesoffsetUnset()
    */
   public function offsetUnset($offset)
   {
@@ -69,7 +73,7 @@ class Simplify_Config implements Simplify_DictionaryInterface, ArrayAccess
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_DictionaryInterface::copyAll()
+   * @see DictionaryInterface::copyAll()
    */
   public function copyAll($data, $flags = 0)
   {
@@ -80,7 +84,7 @@ class Simplify_Config implements Simplify_DictionaryInterface, ArrayAccess
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_DictionaryInterface::del()
+   * @see DictionaryInterface::del()
    */
   public function del($name)
   {
@@ -98,7 +102,7 @@ class Simplify_Config implements Simplify_DictionaryInterface, ArrayAccess
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_DictionaryInterface::get()
+   * @see DictionaryInterface::get()
    */
   public function get($name, $default = null, $flags = 0)
   {
@@ -111,9 +115,9 @@ class Simplify_Config implements Simplify_DictionaryInterface, ArrayAccess
       $ref = & $ref[$name];
     }
 
-    if ($flags == Simplify_Dictionary::FILTER_NULL && is_null($ref[$sub])) {
+    if ($flags == Dictionary::FILTER_NULL && is_null($ref[$sub])) {
       $value = $default;
-    } elseif ($flags == Simplify_Dictionary::FILTER_EMPTY && empty($ref[$sub])) {
+    } elseif ($flags == Dictionary::FILTER_EMPTY && empty($ref[$sub])) {
       $value = $default;
     } else {
       $value = & $ref[$sub];
@@ -128,7 +132,7 @@ class Simplify_Config implements Simplify_DictionaryInterface, ArrayAccess
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_DictionaryInterface::getAll()
+   * @see DictionaryInterface::getAll()
    */
   public function getAll($flags = 0)
   {
@@ -146,7 +150,7 @@ class Simplify_Config implements Simplify_DictionaryInterface, ArrayAccess
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_DictionaryInterface::getNames()
+   * @see DictionaryInterface::getNames()
    */
   public function getNames()
   {
@@ -155,7 +159,7 @@ class Simplify_Config implements Simplify_DictionaryInterface, ArrayAccess
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_DictionaryInterface::has()
+   * @see DictionaryInterface::has()
    */
   public function has($name, $flags = 0)
   {
@@ -164,7 +168,7 @@ class Simplify_Config implements Simplify_DictionaryInterface, ArrayAccess
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_DictionaryInterface::reset()
+   * @see DictionaryInterface::reset()
    */
   public function reset($data = null)
   {
@@ -174,7 +178,7 @@ class Simplify_Config implements Simplify_DictionaryInterface, ArrayAccess
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_DictionaryInterface::set()
+   * @see DictionaryInterface::set()
    */
   public function set($name, $value = null)
   {

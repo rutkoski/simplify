@@ -21,12 +21,17 @@
  * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
  */
 
+namespace Simplify\Data;
+
+use Iterator;
+use Simplify\Data\View;
+
 /**
  *
  * Simplify Data View Iterator
  *
  */
-class Simplify_Data_ViewIterator implements Iterator
+class ViewIterator implements Iterator
 {
 
   protected $data;
@@ -37,7 +42,7 @@ class Simplify_Data_ViewIterator implements Iterator
 
   /**
    *
-   * @var Simplify_Data_View
+   * @var View
    */
   protected $view;
 
@@ -46,11 +51,11 @@ class Simplify_Data_ViewIterator implements Iterator
    * @param array $data
    * @param string $view
    */
-  public function __construct(&$data, $view = 'Simplify_Data_View')
+  public function __construct(&$data, $view = 'Simplify\Data\View')
   {
     $this->data = &$data;
     
-    if (!($view instanceof Simplify_Data_View)) {
+    if (!($view instanceof View)) {
       $view = new $view();
     }
     

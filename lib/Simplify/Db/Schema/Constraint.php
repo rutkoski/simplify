@@ -1,6 +1,8 @@
 <?php
 
-class Simplify_Db_Constraint
+namespace Simplify\Db\Schema;
+
+class Constraint
 {
 
   const RESTRICT = 'RESTRICT';

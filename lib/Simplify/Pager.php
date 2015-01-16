@@ -21,12 +21,14 @@
  * @author Rodrigo Rutkoski Rodrigues, <rutkoski@gmail.com>
  */
 
+namespace Simplify;
+
 /**
  * 
  * Calculates paging information.
  *
  */
-class Simplify_Pager
+class Pager
 {
 
   /**
@@ -91,10 +93,10 @@ class Simplify_Pager
     
     if ($isOffset) {
       if ($pageOrOffset < 0) {
-        throw new Exception('Current offset must be equal to or greater than 0.');
+        throw new \Exception('Current offset must be equal to or greater than 0.');
       }
       elseif ($pageOrOffset > 0 && $pageOrOffset > $count) {
-        throw new Exception('Current offset must be lesser than the number of items.');
+        throw new \Exception('Current offset must be lesser than the number of items.');
       }
       
       $this->offset = $pageOrOffset;
@@ -102,10 +104,10 @@ class Simplify_Pager
     }
     else {
       if ($pageOrOffset < 1) {
-        throw new Exception('Current page must be equal to or greater than 1.');
+        throw new \Exception('Current page must be equal to or greater than 1.');
       }
       elseif ($pageOrOffset > $this->pages) {
-        throw new Exception('Current page must be lesser than or equal to the number of pages.');
+        throw new \Exception('Current page must be lesser than or equal to the number of pages.');
       }
       
       $this->page = $pageOrOffset;

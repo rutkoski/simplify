@@ -21,12 +21,16 @@
  * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
  */
 
+namespace Simplify\Data;
+
+use Simplify\DictionaryInterface;
+
 /**
- * 
- * A DataHolder is a Simplify_Dictionary that keeps track of changes to values
+ *
+ * A DataHolder is a Dictionary that keeps track of changes to values
  *
  */
-interface Simplify_Data_HolderInterface extends Simplify_DictionaryInterface
+interface HolderInterface extends DictionaryInterface
 {
 
   /**

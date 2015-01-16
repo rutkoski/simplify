@@ -21,20 +21,17 @@
  * @author Rodrigo Rutkoski Rodrigues, <rutkoski@gmail.com>
  */
 
+namespace Simplify;
+
+use Simplify;
+
 /**
  *
  * Basic controller
  *
  */
-abstract class Simplify_Controller extends Simplify_Renderable
+abstract class Controller extends Renderable
 {
-
-  /**
-   * Default controller action name
-   *
-   * @var string
-   */
-  const ACTION_DEFAULT = 'index';
 
   /**
    * Action name
@@ -51,13 +48,6 @@ abstract class Simplify_Controller extends Simplify_Renderable
   protected $action;
 
   /**
-   * Controller base
-   *
-   * @var string
-   */
-  protected $base;
-
-  /**
    * Controller path
    *
    * @var string
@@ -65,18 +55,11 @@ abstract class Simplify_Controller extends Simplify_Renderable
   protected $path;
 
   /**
-   * Controller module
-   *
-   * @var string
-   */
-  protected $module;
-
-  /**
    * Current layout
    *
    * @var string
    */
-  protected $layout = 'default';
+  protected $layout = '/layout/default';
 
   /**
    * Constructor
@@ -86,6 +69,33 @@ abstract class Simplify_Controller extends Simplify_Renderable
   public function __construct()
   {
     $this->initialize();
+  }
+
+  public function callAction($action, $params)
+  {
+    $method = strtolower(Simplify::request()->method());
+
+    $Action = Inflector::variablize("{$method}_{$action}_action");
+
+    if (! method_exists($this, $Action)) {
+      $Action = Inflector::variablize("{$action}_action");
+
+      if (! method_exists($this, $Action)) {
+        throw new \Exception("Action <b>{$action}</b> not found in controller <b>{$this->getPath()}\\{$this->getName()}</b>");
+      }
+    }
+
+    $this->action = $action;
+
+    $func = array($this, $Action);
+
+    $output = call_user_func_array($func, Dispatcher::sortCallbackParameters($func, $params));
+
+    if ($output === Response::AUTO) {
+      $output = $this->getView();
+    }
+
+    return $output;
   }
 
   /**
@@ -98,137 +108,12 @@ abstract class Simplify_Controller extends Simplify_Renderable
   }
 
   /**
-   * This callback runs once after every action
-   *
-   * @param mixed $output the action output
-   * @return mixed
-   */
-  protected function afterAction($output)
-  {
-  }
-
-  /**
-   * This callback runs once before every action
-   *
-   * @return mixed
-   */
-  protected function beforeAction()
-  {
-  }
-
-  /**
    * Default action
    *
    * @return mixed
    */
   protected function indexAction()
   {
-  }
-
-  /**
-   * Order the named params in the route to match the action params
-   *
-   * @param string $action the action
-   * @param array $params action params
-   * @throws BadMethodCallException if any action parameter is missing
-   * @return array action parameters in the right order
-   */
-  protected function orderParams($action, $params)
-  {
-    $controller = $this->getName();
-
-    $func = Simplify_Inflector::variablize($action . 'Action');
-
-    $method = new ReflectionMethod($this, $func);
-    $parameters = $method->getParameters();
-
-    $_params = array();
-
-    foreach ($parameters as $parameter) {
-      $name = $parameter->name;
-
-      if (isset($params[$name])) {
-        $_params[$name] = $params[$name];
-
-        unset($params[$name]);
-      }
-      elseif ($parameter->isDefaultValueAvailable()) {
-        $_params[$name] = $parameter->getDefaultValue();
-      }
-      else {
-        throw new BadMethodCallException("Missing parameter <b>{$name}</b> on action <b>{$action}</b> of controller <b>{$controller}</b>");
-      }
-    }
-
-    unset($parameters, $method);
-
-    foreach ($params as $name => $param) {
-      if (is_numeric($name)) {
-        $_params[$name] = $param;
-      }
-    }
-
-    return $_params;
-  }
-
-  /**
-   * Call an action in the controller and return its result
-   *
-   * @param string $action the action
-   * @param array $params action parameters
-   * @throws RouterException if the action is not found
-   * @return mixed
-   */
-  public function callAction($action, $params = null)
-  {
-    $func = Simplify_Inflector::variablize(strtolower(s::request()->method()) . '_' . $action . '_action');
-
-    if (method_exists($this, $func)) {
-      $action = Simplify_Inflector::variablize(strtolower(s::request()->method()) . '_' . $action);
-    } else {
-      $func = Simplify_Inflector::variablize($action . '_action');
-
-      if (!method_exists($this, $func)) {
-        throw new Simplify_RouterException('Action not found');
-      }
-    }
-
-    $this->action = $action;
-
-    $params = $this->orderParams($action, (array) $params);
-
-    $this->beforeAction();
-
-    $output = call_user_func_array(array($this, $func), (array) $params);
-
-    $this->afterAction($output);
-
-    if ($output === Simplify_Response::AUTO) {
-      $output = $this->getView();
-    }
-
-    return $output;
-  }
-
-  /**
-   * Forward the request to another route
-   *
-   * @param string $uri the route
-   * @return mixed
-   */
-  public function forward($uri)
-  {
-    return s::app()->forward($uri);
-  }
-
-  /**
-   * Get the module name
-   *
-   * @return string
-   */
-  public function getModule()
-  {
-    return $this->module;
   }
 
   /**
@@ -249,7 +134,7 @@ abstract class Simplify_Controller extends Simplify_Renderable
   public function getName()
   {
     if (empty($this->name)) {
-      $this->name = strtolower(substr(get_class($this), 0, strrpos(get_class($this), 'Controller')));
+      $this->name = \Simplify\Inflector::underscore(substr(join('', array_slice(explode('\\', get_class($this)), -1)), 0, -10));
     }
 
     return $this->name;
@@ -262,84 +147,19 @@ abstract class Simplify_Controller extends Simplify_Renderable
    */
   public function getPath()
   {
+    if (empty($this->path)) {
+      $this->path = strtolower(join('/', array_slice(explode('\\', get_class($this)), 0, -1)));
+    }
     return $this->path;
   }
 
   /**
-   * Get the controller path
-   *
-   * @return string
-   */
-  public function getBase()
-  {
-    return $this->base;
-  }
-
-  /**
    * (non-PHPdoc)
-   * @see Simplify_Renderable::getLayoutsPath()
-   */
-  public function getLayoutsPath()
-  {
-    $path = array();
-    $path[] = s::config()->resolveReferences("{$this->getBase()}/templates/{theme}/layouts");
-    $path[] = s::config()->resolveReferences("{$this->getBase()}/templates/layouts");
-    $path[] = s::config()->resolveReferences("{templates_dir}/{$this->getModule()}/layouts");
-    $path[] = s::config()->resolveReferences("{templates_dir}/layouts");
-    return $path;
-  }
-
-  /**
-   * (non-PHPdoc)
-   * @see Simplify_Renderable::getTemplateFilename()
+   * @see Renderable::getTemplateFilename()
    */
   public function getTemplateFilename()
   {
-    return $this->getName() . '_' . $this->getAction();
-  }
-
-  /**
-   * (non-PHPdoc)
-   * @see Simplify_Renderable::getTemplatesPath()
-   */
-  public function getTemplatesPath()
-  {
-    $path = array();
-    $path[] = s::config()->resolveReferences("{templates_dir}/{$this->getModule()}{$this->getPath()}");
-    $path[] = s::config()->resolveReferences("{templates_dir}{$this->getPath()}");
-    $path[] = s::config()->resolveReferences("{$this->getBase()}/templates/{theme}{$this->getPath()}");
-    $path[] = s::config()->resolveReferences("{$this->getBase()}/templates{$this->getPath()}");
-    return $path;
-  }
-
-  /**
-   * Set the controller path
-   *
-   * @param string $path controller path
-   */
-  public function setPath($path)
-  {
-    $this->path = $path;
-  }
-
-  /**
-   * Set the controller base dir
-   *
-   * @param string $base controller base dir
-   */
-  public function setBase($base)
-  {
-    $this->base = $base;
-  }
-
-  /**
-   * Set the module name
-   *
-   * @param string $module module name
-   */
-  public function setModule($module)
-  {
-    $this->module = $module;
+    return $this->getPath() . '/' . $this->getName() . '_' . $this->getAction();
   }
 
 }

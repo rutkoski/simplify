@@ -21,12 +21,16 @@
  * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
  */
 
+namespace Simplify\Db\Pdo;
+
+use Simplify\Db\DatabaseException;
+
 /**
  *
  * PDO Database
  *
  */
-class Simplify_Db_Pdo_Database extends Simplify_Db_Database
+class Database extends \Simplify\Db\Database
 {
 
   /**
@@ -62,12 +66,12 @@ class Simplify_Db_Pdo_Database extends Simplify_Db_Database
       'host' => sy_get_param($this->params, 'host', 'localhost'), 'database' => sy_get_param($this->params, 'name'),
       'charset' => sy_get_param($this->params, 'charset', 'utf8'));
 
-    $this->options = array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8', PDO::ATTR_PERSISTENT => true);
+    $this->options = array(\PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8', \PDO::ATTR_PERSISTENT => true);
   }
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Db_DatabaseInterface::lastInsertId()
+   * @see Simplify\Db\DatabaseInterface::lastInsertId()
    */
   public function lastInsertId()
   {
@@ -76,7 +80,7 @@ class Simplify_Db_Pdo_Database extends Simplify_Db_Database
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Db_DatabaseInterface::beginTransaction()
+   * @see Simplify\Db\DatabaseInterface::beginTransaction()
    */
   public function beginTransaction()
   {
@@ -85,7 +89,7 @@ class Simplify_Db_Pdo_Database extends Simplify_Db_Database
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Db_DatabaseInterface::commit()
+   * @see Simplify\Db\DatabaseInterface::commit()
    */
   public function commit()
   {
@@ -94,7 +98,7 @@ class Simplify_Db_Pdo_Database extends Simplify_Db_Database
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Db_DatabaseInterface::rollback()
+   * @see Simplify\Db\DatabaseInterface::rollback()
    */
   public function rollback()
   {
@@ -112,7 +116,7 @@ class Simplify_Db_Pdo_Database extends Simplify_Db_Database
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Db_DatabaseInterface::connect()
+   * @see Simplify\Db\DatabaseInterface::connect()
    */
   public function connect()
   {
@@ -121,11 +125,11 @@ class Simplify_Db_Pdo_Database extends Simplify_Db_Database
          $this->dsn['charset'];
 
       try {
-        $this->db = new PDO($dsn, sy_get_param($this->dsn, 'username'), sy_get_param($this->dsn, 'password'),
+        $this->db = new \PDO($dsn, sy_get_param($this->dsn, 'username'), sy_get_param($this->dsn, 'password'),
           $this->options);
       }
-      catch (PDOException $e) {
-        throw new Simplify_Db_DatabaseException('Database connection failed with message: ' . $e->getMessage());
+      catch (\PDOException $e) {
+        throw new DatabaseException('Database connection failed with message: ' . $e->getMessage());
       }
     }
 
@@ -134,7 +138,7 @@ class Simplify_Db_Pdo_Database extends Simplify_Db_Database
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Db_DatabaseInterface::disconnect()
+   * @see Simplify\Db\DatabaseInterface::disconnect()
    */
   public function disconnect()
   {
@@ -147,11 +151,11 @@ class Simplify_Db_Pdo_Database extends Simplify_Db_Database
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Db_DatabaseInterface::factoryQueryObject()
+   * @see Simplify\Db\DatabaseInterface::factoryQueryObject()
    */
   public function factoryQueryObject()
   {
-    return new Simplify_Db_Pdo_QueryObject($this);
+    return new QueryObject($this);
   }
 
   /**
@@ -179,7 +183,7 @@ class Simplify_Db_Pdo_Database extends Simplify_Db_Database
 
       $msg = implode("\n", array_filter($info));
 
-      throw Simplify_Db_DatabaseException::factoryException($error[0], $msg, $error[1]);
+      throw DatabaseException::factoryException($error[0], $msg, $error[1]);
     }
   }
 

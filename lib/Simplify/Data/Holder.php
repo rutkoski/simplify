@@ -21,12 +21,16 @@
  * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
  */
 
+namespace Simplify\Data;
+
+use Simplify\Dictionary;
+
 /**
- * 
- * Default implementation of Simplify_Data_HolderInterface
+ *
+ * Default implementation of HolderInterface
  *
  */
-class Simplify_Data_Holder extends Simplify_Dictionary implements Simplify_Data_HolderInterface
+class Holder extends Dictionary implements HolderInterface
 {
 
   /**
@@ -69,7 +73,7 @@ class Simplify_Data_Holder extends Simplify_Dictionary implements Simplify_Data_
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Dictionary::getAll()
+   * @see Dictionary::getAll()
    */
   public function getAll($flags = 0)
   {
@@ -87,7 +91,7 @@ class Simplify_Data_Holder extends Simplify_Dictionary implements Simplify_Data_
 
   /**
    * (non-PHPdoc)
-   * @see SimpleSimplify_Dictionary::getNames()
+   * @see Dictionary::getNames()
    */
   public function getNames()
   {
@@ -105,7 +109,7 @@ class Simplify_Data_Holder extends Simplify_Dictionary implements Simplify_Data_
 
   /**
    * (non-PHPdoc)
-   * @see SimpleSimplify_Dictionary::reset()
+   * @see Dictionary::reset()
    */
   public function reset($data = null)
   {
@@ -115,7 +119,7 @@ class Simplify_Data_Holder extends Simplify_Dictionary implements Simplify_Data_
 
   /**
    * (non-PHPdoc)
-   * @see SimpleSimplify_Dictionary::_del()
+   * @see Dictionary::_del()
    */
   protected function _del($name)
   {
@@ -130,7 +134,7 @@ class Simplify_Data_Holder extends Simplify_Dictionary implements Simplify_Data_
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Dictionary::_get()
+   * @see Dictionary::_get()
    */
   protected function _get($name, $default = null, $flags = 0)
   {
@@ -143,7 +147,7 @@ class Simplify_Data_Holder extends Simplify_Dictionary implements Simplify_Data_
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Dictionary::_has()
+   * @see Dictionary::_has()
    */
   protected function _has($name)
   {
@@ -152,7 +156,7 @@ class Simplify_Data_Holder extends Simplify_Dictionary implements Simplify_Data_
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Dictionary::_set()
+   * @see Dictionary::_set()
    */
   protected function _set($name, $value)
   {

@@ -21,12 +21,14 @@
  * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
  */
 
+namespace Simplify\Db;
+
 /**
  * Interface that represents the result of a SQL query
  *
  * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
  */
-interface Simplify_Db_QueryResultInterface
+interface QueryResultInterface
 {
 
   /**

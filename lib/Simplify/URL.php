@@ -21,19 +21,23 @@
  * @author Rodrigo Rutkoski Rodrigues, <rutkoski@gmail.com>
  */
 
+namespace Simplify;
+
+use Simplify;
+
 /**
  *
  * URL builder
  *
  */
-class Simplify_URL
+class URL
 {
 
   const JSON = 'json';
 
   /**
    *
-   * @var Simplify_URL
+   * @var URL
    */
   protected $extend;
 
@@ -83,7 +87,7 @@ class Simplify_URL
 
   /**
    *
-   * @return Simplify_URL
+   * @return URL
    */
   public function format($format)
   {
@@ -93,7 +97,7 @@ class Simplify_URL
 
   /**
    *
-   * @return Simplify_URL
+   * @return URL
    */
   public static function make($route = null, array $params = null, $keepOriginal = null, array $remove = null, $format = null)
   {
@@ -103,11 +107,11 @@ class Simplify_URL
 
   /**
    *
-   * @return Simplify_URL
+   * @return URL
    */
   public static function parse($url)
   {
-    if ($url instanceof Simplify_URL) {
+    if ($url instanceof URL) {
       return $url;
     }
 
@@ -124,7 +128,7 @@ class Simplify_URL
 
   /**
    *
-   * @return Simplify_URL
+   * @return URL
    */
   public function extend($route = null, array $params = null, $keepOriginal = null, array $remove = null, $format = null)
   {
@@ -135,7 +139,7 @@ class Simplify_URL
 
   /**
    *
-   * @return Simplify_URL
+   * @return URL
    */
   public function copy()
   {
@@ -151,7 +155,7 @@ class Simplify_URL
   /**
    *
    * @param null|boolean $keep
-   * @return Simplify_URL
+   * @return URL
    */
   public function keepOriginal($keep = true)
   {
@@ -162,7 +166,7 @@ class Simplify_URL
   /**
    *
    * @param mixed $remove
-   * @return Simplify_URL
+   * @return URL
    */
   public function remove($remove = null)
   {
@@ -196,7 +200,7 @@ class Simplify_URL
 
   /**
    *
-   * @return Simplify_URL
+   * @return URL
    */
   public function set($name, $value)
   {
@@ -220,7 +224,7 @@ class Simplify_URL
 
     if (!sy_url_is_absolute($url) || strpos($route, 'route://') === 0) {
       if (empty($route)) {
-        $route = s::request()->route();
+        $route = Simplify::request()->route();
       }
 
       elseif (strpos($route, 'route://') === 0) {
@@ -234,7 +238,7 @@ class Simplify_URL
           $params = null;
         }
 
-        $route = s::router()->build($name, $params);
+        $route = Simplify::router()->make($name, $params);
       }
 
       while (strpos($route, '//') !== false) {
@@ -249,17 +253,17 @@ class Simplify_URL
         $route = '/' . $route;
       }
 
-      $url = s::request()->url();
+      $url = Simplify::request()->url();
 
-      if (!s::request()->pretty()) {
-        $url .= '/' . s::request()->self();
+      if (!Simplify::request()->pretty()) {
+        $url .= '/' . Simplify::request()->self();
       }
 
       $url .= $route;
 
       $ext = $this->_format();
       if (empty($ext) && $ext !== false) {
-        $ext = s::request()->extension();
+        $ext = Simplify::request()->extension();
       }
 
       if (!empty($ext)) {
@@ -270,7 +274,7 @@ class Simplify_URL
     $params = $this->_params();
 
     if ($this->_keepOriginal()) {
-      $keep = s::request()->get()->getAll();
+      $keep = Simplify::request()->get()->getAll();
       $params = array_merge($keep, $params);
     }
 
@@ -292,7 +296,7 @@ class Simplify_URL
     try {
       return $this->build();
     }
-    catch (Exception $e) {
+    catch (\Exception $e) {
       trigger_error($e->getMessage());
     }
   }

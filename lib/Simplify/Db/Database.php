@@ -21,12 +21,16 @@
  * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
  */
 
+namespace Simplify\Db;
+
+use Simplify;
+
 /**
  *
  * Base class and factory for DBAL implementations
  *
  */
-abstract class Simplify_Db_Database implements Simplify_Db_DatabaseInterface
+abstract class Database implements DatabaseInterface
 {
 
   /**
@@ -34,7 +38,7 @@ abstract class Simplify_Db_Database implements Simplify_Db_DatabaseInterface
    *
    * @var string
    */
-  public static $defaultEngine = 'Simplify_Db_Pdo_Database';
+  public static $defaultEngine = 'Simplify\Db\Pdo\Database';
 
   /**
    *
@@ -68,11 +72,11 @@ abstract class Simplify_Db_Database implements Simplify_Db_DatabaseInterface
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Db_DatabaseInterface::query()
+   * @see Simplify\Db\DatabaseInterface::query()
    */
   public function query($sql = null)
   {
-    if ($sql instanceof Simplify_Db_QueryObjectInterface) {
+    if ($sql instanceof QueryObjectInterface) {
       return $sql;
     }
 
@@ -81,7 +85,7 @@ abstract class Simplify_Db_Database implements Simplify_Db_DatabaseInterface
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Db_DatabaseInterface::insert()
+   * @see Simplify\Db\DatabaseInterface::insert()
    */
   public function insert($table = null, $data = null)
   {
@@ -90,7 +94,7 @@ abstract class Simplify_Db_Database implements Simplify_Db_DatabaseInterface
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Db_DatabaseInterface::update()
+   * @see Simplify\Db\DatabaseInterface::update()
    */
   public function update($table = null, $data = null, $where = null)
   {
@@ -99,7 +103,7 @@ abstract class Simplify_Db_Database implements Simplify_Db_DatabaseInterface
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Db_DatabaseInterface::delete()
+   * @see Simplify\Db\DatabaseInterface::delete()
    */
   public function delete($table = null, $where = null)
   {
@@ -112,13 +116,13 @@ abstract class Simplify_Db_Database implements Simplify_Db_DatabaseInterface
    * @param string $id configuration profile
    * @param string $engine DBAL engine
    * @param mixed $params extra parameters
-   * @return Simplify_Db_DatabaseInterface
+   * @return Simplify\Db\DatabaseInterface
    */
   public static function getInstance($id = 'default', $engine = null, $params = null)
   {
-    if (!isset(Simplify_Db_Database::$instances[$id])) {
+    if (!isset(Database::$instances[$id])) {
       if (empty($engine)) {
-        $engine = Simplify_Db_Database::$defaultEngine;
+        $engine = Database::$defaultEngine;
       }
 
       $class = $engine;
@@ -127,10 +131,10 @@ abstract class Simplify_Db_Database implements Simplify_Db_DatabaseInterface
 
       $dao = new $class($params);
 
-      Simplify_Db_Database::$instances[$id] = $dao;
+      Database::$instances[$id] = $dao;
     }
 
-    return Simplify_Db_Database::$instances[$id];
+    return Database::$instances[$id];
   }
 
   /**
@@ -142,7 +146,7 @@ abstract class Simplify_Db_Database implements Simplify_Db_DatabaseInterface
    */
   public static function getParams($id = 'default', $params = null)
   {
-    $config = s::config();
+    $config = Simplify::config();
 
     $_params = $config['database'][$id]['*'];
 
@@ -189,7 +193,7 @@ abstract class Simplify_Db_Database implements Simplify_Db_DatabaseInterface
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Db_DatabaseInterface::quote()
+   * @see Simplify\Db\DatabaseInterface::quote()
    */
   public function quote($value, $type = null)
   {

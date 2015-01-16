@@ -1,32 +1,8 @@
 <?php
 
-/**
- * SimplifyPHP Framework
- *
- * This file is part of SimplifyPHP Framework.
- *
- * SimplifyPHP Framework is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
- *
- * SimplifyPHP Framework is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
- */
+namespace Simplify;
 
-/**
- *
- * Basic Simplify_DictionaryInterface implementation.
- *
- */
-class Simplify_Dictionary implements Simplify_DictionaryInterface, ArrayAccess
+class Dictionary implements DictionaryInterface, \ArrayAccess
 {
 
   /**
@@ -45,7 +21,7 @@ class Simplify_Dictionary implements Simplify_DictionaryInterface, ArrayAccess
   const FILTER_EMPTY = 2;
 
   /**
-   * Holds Simplify_Dictionary name/value pairs.
+   * Holds Dictionary name/value pairs.
    *
    * @var array
    */
@@ -54,7 +30,7 @@ class Simplify_Dictionary implements Simplify_DictionaryInterface, ArrayAccess
   /**
    * Constructor.
    *
-   * @param mixed $data initial data to populate the Simplify_Dictionary
+   * @param mixed $data initial data to populate the Dictionary
    * @return void
    */
   public function __construct($data = null)
@@ -64,7 +40,7 @@ class Simplify_Dictionary implements Simplify_DictionaryInterface, ArrayAccess
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_DictionaryInterface::get()
+   * @see DictionaryInterface::get()
    */
   public function __get($name)
   {
@@ -73,7 +49,7 @@ class Simplify_Dictionary implements Simplify_DictionaryInterface, ArrayAccess
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_DictionaryInterface::set()
+   * @see DictionaryInterface::set()
    */
   public function __set($name, $value)
   {
@@ -82,7 +58,7 @@ class Simplify_Dictionary implements Simplify_DictionaryInterface, ArrayAccess
 
   /**
    * (non-PHPdoc)
-   * @see ArrayAccess::offsetSet()
+   * @see ArrayAccesoffsetSet()
    */
   public function offsetSet($offset, $value)
   {
@@ -91,7 +67,7 @@ class Simplify_Dictionary implements Simplify_DictionaryInterface, ArrayAccess
 
   /**
    * (non-PHPdoc)
-   * @see ArrayAccess::offsetExists()
+   * @see ArrayAccesoffsetExists()
    */
   public function offsetExists($offset)
   {
@@ -100,7 +76,7 @@ class Simplify_Dictionary implements Simplify_DictionaryInterface, ArrayAccess
 
   /**
    * (non-PHPdoc)
-   * @see ArrayAccess::offsetUnset()
+   * @see ArrayAccesoffsetUnset()
    */
   public function offsetUnset($offset)
   {
@@ -109,7 +85,7 @@ class Simplify_Dictionary implements Simplify_DictionaryInterface, ArrayAccess
 
   /**
    * (non-PHPdoc)
-   * @see ArrayAccess::offsetGet()
+   * @see ArrayAccesoffsetGet()
    */
   public function offsetGet($offset)
   {
@@ -118,7 +94,7 @@ class Simplify_Dictionary implements Simplify_DictionaryInterface, ArrayAccess
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_DictionaryInterface::copyAll()
+   * @see DictionaryInterface::copyAll()
    */
   public function copyAll($data, $flags = 0)
   {
@@ -127,7 +103,7 @@ class Simplify_Dictionary implements Simplify_DictionaryInterface, ArrayAccess
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_DictionaryInterface::del()
+   * @see DictionaryInterface::del()
    */
   public function del($name)
   {
@@ -136,7 +112,7 @@ class Simplify_Dictionary implements Simplify_DictionaryInterface, ArrayAccess
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_DictionaryInterface::get()
+   * @see DictionaryInterface::get()
    */
   public function get($name, $default = null, $flags = 0)
   {
@@ -154,7 +130,7 @@ class Simplify_Dictionary implements Simplify_DictionaryInterface, ArrayAccess
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_DictionaryInterface::getAll()
+   * @see DictionaryInterface::getAll()
    */
   public function getAll($flags = 0)
   {
@@ -231,7 +207,7 @@ class Simplify_Dictionary implements Simplify_DictionaryInterface, ArrayAccess
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_DictionaryInterface::getNames()
+   * @see DictionaryInterface::getNames()
    */
   public function getNames()
   {
@@ -241,7 +217,7 @@ class Simplify_Dictionary implements Simplify_DictionaryInterface, ArrayAccess
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_DictionaryInterface::has()
+   * @see DictionaryInterface::has()
    */
   public function has($name, $flags = 0)
   {
@@ -249,17 +225,17 @@ class Simplify_Dictionary implements Simplify_DictionaryInterface, ArrayAccess
   }
 
   /**
-   * Create Simplify_Dictionary from $data
+   * Create Dictionary from $data
    *
-   * If $data is already a Simplify_Dictionary, it is returned unchanged.
+   * If $data is already a Dictionary, it is returned unchanged.
    *
    * @param mixed $data
-   * @return Simplify_Dictionary
+   * @return Dictionary
    */
   public static function parseFrom($data)
   {
-    if (!($data instanceof Simplify_DictionaryInterface)) {
-      $data = new Simplify_Dictionary($data);
+    if (!($data instanceof DictionaryInterface)) {
+      $data = new Dictionary($data);
     }
 
     return $data;
@@ -267,7 +243,7 @@ class Simplify_Dictionary implements Simplify_DictionaryInterface, ArrayAccess
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_DictionaryInterface::reset()
+   * @see DictionaryInterface::reset()
    */
   public function reset($data = null)
   {
@@ -277,7 +253,7 @@ class Simplify_Dictionary implements Simplify_DictionaryInterface, ArrayAccess
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_DictionaryInterface::set()
+   * @see DictionaryInterface::set()
    */
   public function set($name, $value)
   {
@@ -307,7 +283,7 @@ class Simplify_Dictionary implements Simplify_DictionaryInterface, ArrayAccess
    * Set the internal array by reference.
    *
    * @param mixed $data
-   * @return SimpleSimplify_Dictionary
+   * @return Dictionary
    */
   public function setData(&$data)
   {
@@ -317,22 +293,22 @@ class Simplify_Dictionary implements Simplify_DictionaryInterface, ArrayAccess
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_DictionaryInterface::copyAll()
+   * @see DictionaryInterface::copyAll()
    */
   protected function _copyAll($data, $flags = 0)
   {
     if (empty($data))
       return;
 
-    if ($data instanceof Simplify_DictionaryInterface) {
+    if ($data instanceof DictionaryInterface) {
       $data = $data->getAll();
     }
 
     foreach ($data as $name => $value) {
-      if ((Simplify_Dictionary::FILTER_NULL & $flags) == $flags && is_null($value))
+      if ((Dictionary::FILTER_NULL & $flags) == $flags && is_null($value))
         continue;
 
-      if ((Simplify_Dictionary::FILTER_EMPTY & $flags) == $flags && empty($value))
+      if ((Dictionary::FILTER_EMPTY & $flags) == $flags && empty($value))
         continue;
 
       $this->set($name, $value);
@@ -343,7 +319,7 @@ class Simplify_Dictionary implements Simplify_DictionaryInterface, ArrayAccess
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_DictionaryInterface::get()
+   * @see DictionaryInterface::get()
    */
   protected function _del($name)
   {
@@ -356,7 +332,7 @@ class Simplify_Dictionary implements Simplify_DictionaryInterface, ArrayAccess
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_DictionaryInterface::get()
+   * @see DictionaryInterface::get()
    */
   protected function _get($name, $default = null, $flags = 0)
   {
@@ -369,7 +345,7 @@ class Simplify_Dictionary implements Simplify_DictionaryInterface, ArrayAccess
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_DictionaryInterface::has()
+   * @see DictionaryInterface::has()
    */
   protected function _has($name, $flags = 0)
   {
@@ -377,11 +353,11 @@ class Simplify_Dictionary implements Simplify_DictionaryInterface, ArrayAccess
       return false;
     }
 
-    if ((Simplify_Dictionary::FILTER_NULL & $flags) == $flags && is_null($this->data[$name])) {
+    if ((Dictionary::FILTER_NULL & $flags) == $flags && is_null($this->data[$name])) {
       return false;
     }
 
-    if ((Simplify_Dictionary::FILTER_EMPTY & $flags) == $flags && empty($this->data[$name])) {
+    if ((Dictionary::FILTER_EMPTY & $flags) == $flags && empty($this->data[$name])) {
       return false;
     }
 
@@ -390,7 +366,7 @@ class Simplify_Dictionary implements Simplify_DictionaryInterface, ArrayAccess
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_DictionaryInterface::set()
+   * @see DictionaryInterface::set()
    */
   protected function _set($name, $value)
   {

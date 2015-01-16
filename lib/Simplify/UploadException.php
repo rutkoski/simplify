@@ -22,11 +22,13 @@
  * @copyright Copyright 2008 Rodrigo Rutkoski Rodrigues
  */
 
+namespace Simplify;
+
 /**
  *
  * Upload exception
  *
  */
-class Simplify_UploadException extends Simplify_ValidationException
+class UploadException extends \Simplify\ValidationException
 {
 }

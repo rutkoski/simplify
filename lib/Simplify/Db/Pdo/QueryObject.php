@@ -21,12 +21,16 @@
  * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
  */
 
+namespace Simplify\Db\Pdo;
+
+use Simplify\Db\QueryObjectInterface;
+
 /**
  *
  * PDO Query Object
  *
  */
-class Simplify_Db_Pdo_QueryObject extends Simplify_Db_QueryObject
+class QueryObject extends \Simplify\Db\QueryObject
 {
 
   /**
@@ -43,7 +47,7 @@ class Simplify_Db_Pdo_QueryObject extends Simplify_Db_QueryObject
 
   /**
    *
-   * @var Simplify_Db_QueryResult
+   * @var Simplify\Db\QueryResult
    */
   public $lastResult;
 
@@ -58,7 +62,7 @@ class Simplify_Db_Pdo_QueryObject extends Simplify_Db_QueryObject
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Db_QueryObjectInterface::execute()
+   * @see Simplify\Db\QueryObjectInterface::execute()
    */
   public function execute($data = null)
   {
@@ -76,14 +80,14 @@ class Simplify_Db_Pdo_QueryObject extends Simplify_Db_QueryObject
       $data = func_get_args();
     }
 
-    $this->lastResult = new Simplify_Db_Pdo_QueryResult($this->stmt, $query, $data, $this->limit, $this->offset);
+    $this->lastResult = new QueryResult($this->stmt, $query, $data, $this->limit, $this->offset);
 
     return $this->lastResult;
   }
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Db_QueryObjectInterface::executeRaw()
+   * @see Simplify\Db\QueryObjectInterface::executeRaw()
    */
   public function executeRaw()
   {
@@ -93,14 +97,14 @@ class Simplify_Db_Pdo_QueryObject extends Simplify_Db_QueryObject
 
     $this->lastQuery = $query;
 
-    $this->lastResult = new Simplify_Db_Pdo_QueryResult($this->stmt, $query);
+    $this->lastResult = new QueryResult($this->stmt, $query);
 
     return $this->lastResult;
   }
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Db_QueryObject::buildQuery()
+   * @see Simplify\Db\QueryObject::buildQuery()
    */
   public function buildQuery()
   {
@@ -108,7 +112,7 @@ class Simplify_Db_Pdo_QueryObject extends Simplify_Db_QueryObject
       $sql = $this->sql;
 
       if (empty($sql)) {
-        if ($this->accept(Simplify_Db_QueryObject::SELECT)) {
+        if ($this->accept(QueryObject::SELECT)) {
           /**
            *
            * fields
@@ -121,7 +125,7 @@ class Simplify_Db_Pdo_QueryObject extends Simplify_Db_QueryObject
           }
           else {
             foreach ($fields as &$field) {
-              if ($field instanceof Simplify_Db_QueryObjectInterface) {
+              if ($field instanceof QueryObjectInterface) {
                 $field = $field->buildQuery();
               }
             }
@@ -131,13 +135,13 @@ class Simplify_Db_Pdo_QueryObject extends Simplify_Db_QueryObject
 
           $sql = "SELECT $fields FROM ";
         }
-        elseif ($this->accept(Simplify_Db_QueryObject::INSERT)) {
+        elseif ($this->accept(QueryObject::INSERT)) {
           $sql = "INSERT INTO ";
         }
-        elseif ($this->accept(Simplify_Db_QueryObject::UPDATE)) {
+        elseif ($this->accept(QueryObject::UPDATE)) {
           $sql = "UPDATE ";
         }
-        elseif ($this->accept(Simplify_Db_QueryObject::DELETE)) {
+        elseif ($this->accept(QueryObject::DELETE)) {
           $sql = "DELETE FROM ";
         }
 
@@ -147,13 +151,13 @@ class Simplify_Db_Pdo_QueryObject extends Simplify_Db_QueryObject
          *
          */
         if (empty($this->table)) {
-          throw new Exception('No table set for query');
+          throw new \Exception('No table set for query');
         }
         else {
           $tables = $this->table;
 
           foreach ($tables as &$table) {
-            if ($table instanceof Simplify_Db_QueryObjectInterface) {
+            if ($table instanceof QueryObjectInterface) {
               $table = $table->buildQuery();
             }
           }
@@ -163,14 +167,14 @@ class Simplify_Db_Pdo_QueryObject extends Simplify_Db_QueryObject
 
         $sql .= "$table ";
 
-        if ($this->accept(Simplify_Db_QueryObject::UPDATE) && !empty($this->data)) {
-          $sql .= 'SET ' . Simplify_Db_QueryObject::buildUpdate($this->data) . ' ';
+        if ($this->accept(QueryObject::UPDATE) && !empty($this->data)) {
+          $sql .= 'SET ' . QueryObject::buildUpdate($this->data) . ' ';
         }
-        elseif ($this->accept(Simplify_Db_QueryObject::INSERT) && !empty($this->data)) {
-          $sql .= Simplify_Db_QueryObject::buildInsert($this->data) . ' ';
+        elseif ($this->accept(QueryObject::INSERT) && !empty($this->data)) {
+          $sql .= QueryObject::buildInsert($this->data) . ' ';
         }
 
-        if ($this->accept(Simplify_Db_QueryObject::SELECT)) {
+        if ($this->accept(QueryObject::SELECT)) {
           /**
            *
            * joins
@@ -180,7 +184,7 @@ class Simplify_Db_Pdo_QueryObject extends Simplify_Db_QueryObject
             $joins = $this->joins;
 
             foreach ($joins as &$join) {
-              if ($join[1] instanceof Simplify_Db_QueryObjectInterface) {
+              if ($join[1] instanceof QueryObjectInterface) {
                 $join[1] = $join->buildQuery();
               }
 
@@ -191,7 +195,7 @@ class Simplify_Db_Pdo_QueryObject extends Simplify_Db_QueryObject
           }
         }
 
-        if ($this->accept(Simplify_Db_QueryObject::ALL ^ Simplify_Db_QueryObject::INSERT)) {
+        if ($this->accept(QueryObject::ALL ^ QueryObject::INSERT)) {
           /**
            *
            * where
@@ -201,18 +205,18 @@ class Simplify_Db_Pdo_QueryObject extends Simplify_Db_QueryObject
             $where = $this->where;
 
             foreach ($where as &$_where) {
-              if ($_where instanceof Simplify_Db_QueryObjectInterface) {
+              if ($_where instanceof QueryObjectInterface) {
                 $_where = $_where->buildQuery();
               }
             }
 
-            $where = Simplify_BoolExpr::parse($where);
+            $where = \Simplify\BoolExpr::parse($where);
 
             $sql .= "WHERE $where ";
           }
         }
 
-        if ($this->accept(Simplify_Db_QueryObject::SELECT)) {
+        if ($this->accept(QueryObject::SELECT)) {
           /**
            *
            * group by and having
@@ -227,19 +231,19 @@ class Simplify_Db_Pdo_QueryObject extends Simplify_Db_QueryObject
               $having = $this->having;
 
               foreach ($having as &$_having) {
-                if ($_having instanceof Simplify_Db_QueryObjectInterface) {
+                if ($_having instanceof QueryObjectInterface) {
                   $_having = $_having->buildQuery();
                 }
               }
 
-              $having = Simplify_BoolExpr::parse($having);
+              $having = \Simplify\BoolExpr::parse($having);
 
               $sql .= "HAVING $having ";
             }
           }
         }
 
-        if ($this->accept(Simplify_Db_QueryObject::ALL ^ Simplify_Db_QueryObject::INSERT)) {
+        if ($this->accept(QueryObject::ALL ^ QueryObject::INSERT)) {
           /**
            *
            * order by
@@ -268,7 +272,7 @@ class Simplify_Db_Pdo_QueryObject extends Simplify_Db_QueryObject
           $sql .= "OFFSET {$this->offset} ";
         }
 
-        if ($this->alias && $this->accept(Simplify_Db_QueryObject::SELECT)) {
+        if ($this->alias && $this->accept(QueryObject::SELECT)) {
           $sql = "({$sql}) {$this->alias}";
         }
       }

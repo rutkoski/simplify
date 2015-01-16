@@ -21,12 +21,14 @@
  * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
  */
 
+namespace Simplify;
+
 /**
  *
  * Language inflector - default english
  *
  */
-class Simplify_Inflector
+class Inflector
 {
 
   /**
@@ -77,19 +79,19 @@ class Simplify_Inflector
   {
     $lowercased_word = strtolower($word);
 
-    foreach (Simplify_Inflector::$plural['uncountable'] as $_uncountable) {
+    foreach (Inflector::$plural['uncountable'] as $_uncountable) {
       if (substr($lowercased_word, (-1 * strlen($_uncountable))) == $_uncountable) {
         return $word;
       }
     }
 
-    foreach (Simplify_Inflector::$plural['irregular'] as $_plural => $_singular) {
+    foreach (Inflector::$plural['irregular'] as $_plural => $_singular) {
       if (preg_match('/(' . $_plural . ')$/i', $word, $arr)) {
         return preg_replace('/(' . $_plural . ')$/i', substr($arr[0], 0, 1) . substr($_singular, 1), $word);
       }
     }
 
-    foreach (Simplify_Inflector::$plural['regular'] as $rule => $replacement) {
+    foreach (Inflector::$plural['regular'] as $rule => $replacement) {
       if (preg_match($rule, $word)) {
         return preg_replace($rule, $replacement, $word);
       }
@@ -107,19 +109,19 @@ class Simplify_Inflector
   public static function singularize($word)
   {
     $lowercased_word = strtolower($word);
-    foreach (Simplify_Inflector::$singular['uncountable'] as $_uncountable) {
+    foreach (Inflector::$singular['uncountable'] as $_uncountable) {
       if (substr($lowercased_word, (-1 * strlen($_uncountable))) == $_uncountable) {
         return $word;
       }
     }
 
-    foreach (Simplify_Inflector::$singular['irregular'] as $_plural => $_singular) {
+    foreach (Inflector::$singular['irregular'] as $_plural => $_singular) {
       if (preg_match('/(' . $_singular . ')$/i', $word, $arr)) {
         return preg_replace('/(' . $_singular . ')$/i', substr($arr[0], 0, 1) . substr($_plural, 1), $word);
       }
     }
 
-    foreach (Simplify_Inflector::$singular['regular'] as $rule => $replacement) {
+    foreach (Inflector::$singular['regular'] as $rule => $replacement) {
       if (preg_match($rule, $word)) {
         return preg_replace($rule, $replacement, $word);
       }
@@ -136,7 +138,7 @@ class Simplify_Inflector
   public static function titleize($word, $uppercase = '')
   {
     $uppercase = $uppercase == 'first' ? 'ucfirst' : 'ucwords';
-    return $uppercase(Simplify_Inflector::humanize(Simplify_Inflector::underscore($word)));
+    return $uppercase(Inflector::humanize(Inflector::underscore($word)));
   }
 
   /**
@@ -179,7 +181,7 @@ class Simplify_Inflector
    */
   public static function variablize($word)
   {
-    $word = Simplify_Inflector::camelize($word);
+    $word = Inflector::camelize($word);
     return strtolower($word[0]) . substr($word, 1);
   }
 
@@ -190,7 +192,7 @@ class Simplify_Inflector
    */
   public static function tableize($class_name)
   {
-    return Simplify_Inflector::pluralize(Simplify_Inflector::underscore($class_name));
+    return Inflector::pluralize(Inflector::underscore($class_name));
   }
 
   /**
@@ -200,7 +202,7 @@ class Simplify_Inflector
    */
   public static function classify($table_name)
   {
-    return Simplify_Inflector::camelize(Simplify_Inflector::singularize($table_name));
+    return Inflector::camelize(Inflector::singularize($table_name));
   }
 
   /**

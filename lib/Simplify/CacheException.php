@@ -21,9 +21,11 @@
  * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
  */
 
+namespace Simplify;
+
 /**
- * 
+ *
  * Cache exception
  *
  */
-class Simplify_CacheException extends Exception {}
+class CacheException extends \Exception {}

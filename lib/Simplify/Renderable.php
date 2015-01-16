@@ -21,12 +21,14 @@
  * @author Rodrigo Rutkoski Rodrigues, <rutkoski@gmail.com>
  */
 
+namespace Simplify;
+
 /**
  *
  * Basic implementation of the renderable interface
  *
  */
-abstract class Simplify_Renderable extends Simplify_Dictionary implements Simplify_RenderableInterface
+abstract class Renderable extends Dictionary implements RenderableInterface
 {
 
   /**
@@ -35,12 +37,24 @@ abstract class Simplify_Renderable extends Simplify_Dictionary implements Simpli
   protected $template;
 
   /**
+   * 
+   * @var string[]
+   */
+  protected $templatesPath;
+
+  /**
+   *
+   * @var string[]
+   */
+  protected $layoutsPath;
+
+  /**
    * @var string|boolean
    */
   protected $layout = false;
 
   /**
-   * @var Simplify_ViewInterface
+   * @var ViewInterface
    */
   protected $view;
 
@@ -48,23 +62,20 @@ abstract class Simplify_Renderable extends Simplify_Dictionary implements Simpli
    * Return a view for this object
    *
    * @param string $type view type
-   * @return Simplify_ViewInterface
+   * @return ViewInterface
    */
   public function getView($type = null)
   {
     if (empty($this->view)) {
       if (is_null($type)) {
         switch (true) {
-          case s::request()->json() :
-            $type = Simplify_View::JSON;
+          case \Simplify::request()->json() :
+            $type = View::JSON;
             break;
-
-          default :
-            $type = Simplify_View::PHP;
         }
       }
 
-      $this->view = Simplify_View::factory($type, $this);
+      $this->view = View::factory($type, $this);
     }
 
     return $this->view;
@@ -72,13 +83,13 @@ abstract class Simplify_Renderable extends Simplify_Dictionary implements Simpli
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_RenderableInterface::getLayout()
+   * @see RenderableInterface::getLayout()
    */
   public function getLayout()
   {
     $filename = empty($this->layout) ? $this->getLayoutFilename() : $this->layout;
 
-    if ((is_null($filename) && s::request()->ajax()) || $filename === false) {
+    if ((is_null($filename) && \Simplify::request()->ajax()) || $filename === false) {
       $layout = false;
     }
 
@@ -86,23 +97,12 @@ abstract class Simplify_Renderable extends Simplify_Dictionary implements Simpli
       $layout = sy_fix_extension($filename, 'php');
 
       if (!file_exists($layout)) {
-        throw new Exception("Layout not found: file not found: <b>{$layout}</b>");
+        throw new \Exception("Layout not found: file not found: <b>{$layout}</b>");
       }
     }
-
+    
     else {
-      $path = (array) $this->getLayoutsPath();
-
-      $layout = array();
-      do {
-        $layout[] = array_shift($path) . '/' . $filename . '_layout.php';
-      } while (count($path) && ! file_exists(end($layout)));
-
-      if (!file_exists(end($layout))) {
-        throw new Exception("Layout not found: <b>{$filename}</b><br/><br/>Using path:<br/><b>".implode('</b><br/><b>', $layout)."</b>");
-      }
-
-      $layout = end($layout);
+      $layout = $filename;
     }
 
     return $layout;
@@ -120,12 +120,27 @@ abstract class Simplify_Renderable extends Simplify_Dictionary implements Simpli
    */
   public function getLayoutsPath()
   {
-    return s::config()->get('templates_dir') . '/layouts';
+    if (empty($this->layoutsPath)) {
+      $this->layoutsPath = array_reverse(\Simplify::config()->get('templates:path'));
+      foreach ($this->layoutsPath as &$value) {
+        $value = \Simplify::config()->resolveReferences($value . '/layout');
+      }
+    }
+    return $this->layoutsPath;
+  }
+  
+  /**
+   * 
+   * @param array $path
+   */
+  public function setLayoutsPath($path)
+  {
+    $this->layoutsPath = $path;
   }
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_RenderableInterface::getTemplate()
+   * @see RenderableInterface::getTemplate()
    */
   public function getTemplate()
   {
@@ -136,32 +151,13 @@ abstract class Simplify_Renderable extends Simplify_Dictionary implements Simpli
     }
 
     elseif (empty($filename)) {
-      throw new Exception('Template not set');
-    }
-
-    elseif (sy_path_is_absolute($filename)) {
-      $template = $filename;
-
-      if (!file_exists($template)) {
-        throw new Exception("Template not found: file not found: <b>{$filename}</b>");
-      }
+      throw new \Exception('Template not set');
     }
 
     else {
-      $path = (array) $this->getTemplatesPath();
-
-      $template = array();
-      do {
-        $template[] = array_shift($path) . '/' . $filename . '.php';
-      } while (count($path) && ! file_exists(end($template)));
-
-      if (!file_exists(end($template))) {
-        throw new Exception("Template not found: <b>{$filename}</b><br/><br/>Using path:<br/><b>".implode('</b><br/><b>', $template)."</b>");
-      }
-
-      $template = end($template);
+      $template = $filename;
     }
-
+    
     return $template;
   }
 
@@ -182,12 +178,27 @@ abstract class Simplify_Renderable extends Simplify_Dictionary implements Simpli
    */
   public function getTemplatesPath()
   {
-    return s::config()->get('templates_dir');
+    if (empty($this->templatesPath)) {
+      $this->templatesPath = \Simplify::config()->get('templates:path');
+      foreach ($this->templatesPath as &$value) {
+        $value = \Simplify::config()->resolveReferences($value);
+      }
+    }
+    return $this->templatesPath;
+  }
+
+  /**
+   * 
+   * @param array $path
+   */
+  public function setTemplatesPath($path)
+  {
+    $this->templatesPath = $path;
   }
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_RenderableInterface::setTemplate()
+   * @see RenderableInterface::setTemplate()
    */
   public function setTemplate($template)
   {
@@ -196,7 +207,7 @@ abstract class Simplify_Renderable extends Simplify_Dictionary implements Simpli
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_RenderableInterface::setLayout()
+   * @see RenderableInterface::setLayout()
    */
   public function setLayout($layout)
   {
@@ -213,7 +224,7 @@ abstract class Simplify_Renderable extends Simplify_Dictionary implements Simpli
     try {
       $output = $this->getView()->render();
     }
-    catch (Exception $e) {
+    catch (\Exception $e) {
       sy_exception_handler($e);
 
       $output = '';

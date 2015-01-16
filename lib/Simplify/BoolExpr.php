@@ -21,12 +21,14 @@
  * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
  */
 
+namespace Simplify;
+
 /**
  * 
  * Builds a boolean expression from an array
  *
  */
-class Simplify_BoolExpr
+class BoolExpr
 {
 
   /**

@@ -21,12 +21,14 @@
  * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
  */
 
+namespace Simplify\Db;
+
 /**
  *
  * Common interface for data repositories
  *
  */
-interface Simplify_Db_RepositoryInterface
+interface RepositoryInterface
 {
 
   /**

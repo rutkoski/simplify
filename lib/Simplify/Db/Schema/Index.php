@@ -1,6 +1,8 @@
 <?php
 
-class Simplify_Db_Index
+namespace Simplify\Db\Schema;
+
+class Index
 {
 
   public $unique;

@@ -21,17 +21,19 @@
  * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
  */
 
+namespace Simplify;
+
 /**
  * 
  * Object that represents an HTML element
  *
  */
-class Simplify_HtmlElement
+class HtmlElement
 {
 
   /**
    *
-   * @var Simplify_HtmlElement
+   * @var \Simplify\HtmlElement
    */
   protected $parent;
 
@@ -64,8 +66,10 @@ class Simplify_HtmlElement
   }
 
   /**
-   *
-   * @return Simplify_HtmlElement|mixed
+   * 
+   * @param unknown_type $name
+   * @param unknown_type $value
+   * @return Ambigous <\Simplify\Simplify_HtmlElement, \Simplify\\Simplify\HtmlElement, boolean>
    */
   public function data($name, $value = null)
   {
@@ -78,8 +82,9 @@ class Simplify_HtmlElement
   }
 
   /**
-   *
-   * @return Simplify_HtmlElement
+   * 
+   * @param unknown_type $class
+   * @return \Simplify\HtmlElement
    */
   public function addClass($class)
   {
@@ -93,7 +98,8 @@ class Simplify_HtmlElement
   }
 
   /**
-   *
+   * 
+   * @param unknown_type $class
    * @return boolean
    */
   public function hasClass($class)
@@ -108,8 +114,9 @@ class Simplify_HtmlElement
   }
 
   /**
-   *
-   * @return Simplify_HtmlElement
+   * 
+   * @param unknown_type $class
+   * @return \Simplify\HtmlElement
    */
   public function removeClass($class)
   {
@@ -124,8 +131,10 @@ class Simplify_HtmlElement
   }
 
   /**
-   *
-   * @return Simplify_HtmlElement
+   * 
+   * @param unknown_type $attr
+   * @param unknown_type $value
+   * @return Ambigous <boolean, multitype:>|\Simplify\HtmlElement
    */
   public function attr($attr, $value = null)
   {
@@ -144,8 +153,9 @@ class Simplify_HtmlElement
   }
 
   /**
-   *
-   * @return Simplify_HtmlElement
+   * 
+   * @param unknown_type $e
+   * @return \Simplify\HtmlElement
    */
   public function after($e)
   {
@@ -161,8 +171,9 @@ class Simplify_HtmlElement
   }
 
   /**
-   *
-   * @return Simplify_HtmlElement
+   * 
+   * @param unknown_type $e
+   * @return \Simplify\HtmlElement
    */
   public function wrap($e)
   {
@@ -177,12 +188,12 @@ class Simplify_HtmlElement
   }
 
   /**
-   *
-   * @return Simplify_HtmlElement
+   * 
+   * @return \Simplify\HtmlElement
    */
   public function remove()
   {
-    if ($this->parent instanceof Simplify_HtmlElement) {
+    if ($this->parent instanceof \Simplify\HtmlElement) {
       if (($i = $this->index()) !== false) {
         $e = $this->parent->children[$i];
         array_splice($this->parent->children, $i, 1);
@@ -208,8 +219,9 @@ class Simplify_HtmlElement
   }
 
   /**
-   *
-   * @return Simplify_HtmlElement
+   * 
+   * @param unknown_type $e
+   * @return \Simplify\HtmlElement
    */
   public function append($e)
   {
@@ -224,8 +236,9 @@ class Simplify_HtmlElement
   }
 
   /**
-   *
-   * @return Simplify_HtmlElement
+   * 
+   * @param unknown_type $e
+   * @return \Simplify\HtmlElement
    */
   public function prepend($e)
   {
@@ -236,8 +249,8 @@ class Simplify_HtmlElement
   }
 
   /**
-   *
-   * @return Simplify_HtmlElement
+   * 
+   * @return \Simplify\HtmlElement
    */
   public function parent()
   {
@@ -245,8 +258,9 @@ class Simplify_HtmlElement
   }
 
   /**
-   *
-   * @return Simplify_HtmlElement|string
+   * 
+   * @param unknown_type $e
+   * @return Ambigous <\Simplify\HtmlElement, string, unknown>|\Simplify\HtmlElement
    */
   public function html($e = null)
   {
@@ -254,7 +268,7 @@ class Simplify_HtmlElement
       $s = '';
       
       foreach ($this->children as $child) {
-        if ($child instanceof Simplify_HtmlElement) {
+        if ($child instanceof \Simplify\HtmlElement) {
           $s .= $child->render();
         }
         else { //if (is_string($child)) {

@@ -1,10 +1,6 @@
 {
     "name": "rutkoski/simplify",
-    "type": "library",
-    "description": "Simplify PHP Framework",
-    "keywords": ["PHP","framework"],
-    "homepage": "https://github.com/rutkoski/simplify",
-    "license": "GPL",
+    "description": "Simplify",
     "authors": [
         {
             "name": "Rodrigo Rutkoski Rodrigues",

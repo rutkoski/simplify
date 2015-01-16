@@ -21,17 +21,19 @@
  * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
  */
 
+namespace Simplify\Db;
+
 /**
  *
- * Base implementation of Simplify_Db_QueryResultInterface
+ * Base implementation of Simplify\Db\QueryResultInterface
  *
  */
-abstract class Simplify_Db_QueryResult implements Simplify_Db_QueryResultInterface
+abstract class QueryResult implements QueryResultInterface
 {
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Db_QueryResultInterface::query()
+   * @see Simplify\Db\QueryResultInterface::query()
    */
   public function query()
   {
@@ -39,7 +41,7 @@ abstract class Simplify_Db_QueryResult implements Simplify_Db_QueryResultInterfa
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Db_QueryResultInterface::columnNames()
+   * @see Simplify\Db\QueryResultInterface::columnNames()
    */
   public function columnNames()
   {
@@ -47,7 +49,7 @@ abstract class Simplify_Db_QueryResult implements Simplify_Db_QueryResultInterfa
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Db_QueryResultInterface::fetchAll()
+   * @see Simplify\Db\QueryResultInterface::fetchAll()
    */
   public function fetchAll()
   {
@@ -55,7 +57,7 @@ abstract class Simplify_Db_QueryResult implements Simplify_Db_QueryResultInterfa
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Db_QueryResultInterface::fetchCol()
+   * @see Simplify\Db\QueryResultInterface::fetchCol()
    */
   public function fetchCol($n = null)
   {
@@ -63,7 +65,7 @@ abstract class Simplify_Db_QueryResult implements Simplify_Db_QueryResultInterfa
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Db_QueryResultInterface::fetchOne()
+   * @see Simplify\Db\QueryResultInterface::fetchOne()
    */
   public function fetchOne()
   {
@@ -71,7 +73,7 @@ abstract class Simplify_Db_QueryResult implements Simplify_Db_QueryResultInterfa
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Db_QueryResultInterface::fetchRow()
+   * @see Simplify\Db\QueryResultInterface::fetchRow()
    */
   public function fetchRow($n = null)
   {
@@ -79,7 +81,7 @@ abstract class Simplify_Db_QueryResult implements Simplify_Db_QueryResultInterfa
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Db_QueryResultInterface::free()
+   * @see Simplify\Db\QueryResultInterface::free()
    */
   public function free()
   {
@@ -87,7 +89,7 @@ abstract class Simplify_Db_QueryResult implements Simplify_Db_QueryResultInterfa
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Db_QueryResultInterface::numCols()
+   * @see Simplify\Db\QueryResultInterface::numCols()
    */
   public function numCols()
   {
@@ -95,7 +97,7 @@ abstract class Simplify_Db_QueryResult implements Simplify_Db_QueryResultInterfa
 
   /**
    * (non-PHPdoc)
-   * @see Simplify_Db_QueryResultInterface::numRows()
+   * @see Simplify\Db\QueryResultInterface::numRows()
    */
   public function numRows()
   {

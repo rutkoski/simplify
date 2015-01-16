@@ -21,12 +21,14 @@
  * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
  */
 
+namespace Simplify;
+
 /**
  *
  * Base class for localization
  *
  */
-abstract class Simplify_Localization
+abstract class Localization
 {
 
   /**
@@ -41,7 +43,7 @@ abstract class Simplify_Localization
    *
    * @var string
    */
-  protected $domain = Simplify_Localization::DOMAIN_DEFAULT;
+  protected $domain = Localization::DOMAIN_DEFAULT;
 
   /**
    * Current locale
@@ -133,7 +135,7 @@ abstract class Simplify_Localization
    * @param string $name
    * @param string $domain
    */
-  public function add($name, $domain = Simplify_Localization::DOMAIN_DEFAULT)
+  public function add($name, $domain = Localization::DOMAIN_DEFAULT)
   {
   }
 

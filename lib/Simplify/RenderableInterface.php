@@ -21,12 +21,14 @@
  * @author Rodrigo Rutkoski Rodrigues, <rutkoski@gmail.com>
  */
 
+namespace Simplify;
+
 /**
- * 
+ *
  * Interface for renderable objects.
  *
  */
-interface Simplify_RenderableInterface extends Simplify_DictionaryInterface
+interface RenderableInterface extends DictionaryInterface
 {
 
   /**

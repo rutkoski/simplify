@@ -21,12 +21,14 @@
  * @author Rodrigo Rutkoski Rodrigues, <rutkoski@gmail.com>
  */
 
+namespace Simplify;
+
 /**
- * 
+ *
  * Handle response
  *
  */
-class Simplify_Response
+class Response
 {
 
   const AUTO = null;
@@ -45,18 +47,18 @@ class Simplify_Response
    * @param string $string the header
    * @param int $http_response_code http response code
    * @param boolean $replace replace previous queued headers
-   * @return Simplify_Response
+   * @return Response
    */
   public function header($header, $http_response_code = null, $replace = false)
   {
     if ($replace) {
       self::$headers = array();
     }
-    
+
     $header = array($header, $http_response_code);
-    
+
     self::$headers[md5(serialize($header))] = $header;
-    
+
     return $this;
   }
 
@@ -70,18 +72,18 @@ class Simplify_Response
   {
     // automagically call __toString if it exists in $content
     $content = '' . $content;
-    
+
     $this->outputHeaders();
-    
+
     echo $content;
-    
+
     return $content;
   }
 
   /**
    * Output headers to the browser
    *
-   * @return Simplify_Response
+   * @return Response
    */
   public function outputHeaders()
   {
@@ -90,7 +92,7 @@ class Simplify_Response
         header($header[0], false, $header[1]);
       }
     }
-    
+
     return $this;
   }
 
@@ -104,11 +106,21 @@ class Simplify_Response
   public function redirect($url = null, $http_response_code = null)
   {
     if (!empty($url)) {
-      $url = Simplify_URL::parse($url);
+      $url = URL::parse($url);
       $this->header("Location: $url", false, $http_response_code);
     }
     $this->outputHeaders();
     exit();
+  }
+
+  /**
+   * Set 404 status.
+   *
+   * @return void
+   */
+  public function set404()
+  {
+    $this->header('HTTP/1.1 404 Not Found');
   }
 
   /**
@@ -119,7 +131,7 @@ class Simplify_Response
    */
   public function redirect404($url = null)
   {
-    $this->header('HTTP/1.1 404 Not Found');
+    $this->set404();
     $this->redirect($url);
   }
 

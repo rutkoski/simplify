@@ -21,11 +21,13 @@
  * @author Rodrigo Rutkoski Rodrigues <rutkoski@gmail.com>
  */
 
+namespace Simplify\Db;
+
 /**
  *
  * Table Not Found
  *
  */
-class Simplify_Db_Exception_ColumnNotFoundException extends Simplify_Db_Exception
+class ColumnNotFoundException extends DatabaseException
 {
 }
