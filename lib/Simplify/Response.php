@@ -77,7 +77,9 @@ class Response
 
     echo $content;
 
-    return $content;
+    //return $content;
+    
+    exit;
   }
 
   /**
@@ -88,7 +90,7 @@ class Response
   public function outputHeaders()
   {
     if (!headers_sent() && !empty(self::$headers)) {
-      foreach (array_unique(self::$headers) as $header) {
+      foreach (self::$headers as $header) {
         header($header[0], false, $header[1]);
       }
     }

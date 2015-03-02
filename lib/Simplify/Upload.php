@@ -310,8 +310,8 @@ class Upload
 
     $subpath .= '/';
     
-    $dir = sy_fix_path($path . '/' . $subpath);
-
+    $dir = sy_fix_path($path . '/' . $subpath) . '/';
+    
     if (!is_dir($dir)) {
       if (!mkdir($dir)) {
         $this->error = __('Could not create upload path: <b>' . sy_fix_path($path . $subpath) . '</b>');

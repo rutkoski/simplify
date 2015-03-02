@@ -59,7 +59,7 @@ abstract class Controller extends Renderable
    *
    * @var string
    */
-  protected $layout = '/layout/default';
+  protected $layout = 'layout/default';
 
   /**
    * Constructor

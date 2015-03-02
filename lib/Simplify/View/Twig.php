@@ -32,6 +32,12 @@ class Twig extends \Simplify\View
 {
 
   /**
+   *
+   * @var \Twig_Environment
+   */
+  protected static $twig;
+  
+  /**
    * (non-PHPdoc)
    * @see Simplify_ViewInterface::render()
    */
@@ -46,10 +52,6 @@ class Twig extends \Simplify\View
     if ($template === false) {
       return '';
     }
-
-    /*if (!file_exists($template)) {
-      throw new \Exception("Template file not found: <b>$template</b>");
-    }*/
 
     \Simplify::response()->header('Content-Type: text/html; charset=UTF-8');
 
@@ -67,7 +69,6 @@ class Twig extends \Simplify\View
       $view->copyAll($this);
       $view->set('layout_content', $output);
       $view->setTemplate($layout);
-      //$view->setTemplatesPath($object->getLayoutsPath());
       $view->setTemplatesPath($object->getTemplatesPath());
       $view->setLayout(false);
 
@@ -104,21 +105,32 @@ class Twig extends \Simplify\View
 
     $path = array_filter($path, function($path) { return is_dir($path); });
 
-    $loader = new \Twig_Loader_Filesystem($path);
+    $twig = self::getTwigInstance();
 
-    $twig = new \Twig_Environment($loader, array(
-      //'cache' => \Simplify::config()->get('cache_dir'),
-      'autoescape' => false,
-    ));
-
-    $this->loadExtensions($twig);
+    $twig->getLoader()->setPaths($path);
 
     $output = $twig->render($template . '.php', $object->getAll());
 
     return $output;
   }
+  
+  public static function getTwigInstance()
+  {
+    if (!self::$twig) {
+      $loader = new \Twig_Loader_Filesystem();
+      
+      self::$twig = new \Twig_Environment($loader, array(
+          //'cache' => \Simplify::config()->get('cache_dir'),
+          'autoescape' => false,
+      ));
+      
+      self::loadExtensions(self::$twig);
+    }
+    
+    return self::$twig;
+  }
 
-  protected function loadExtensions(\Twig_Environment $twig)
+  protected static function loadExtensions(\Twig_Environment $twig)
   {
     foreach ((array)\Simplify::config()->get('view:twig:globals') as $name => $value) {
       $twig->addGlobal($name, $value);
@@ -126,12 +138,29 @@ class Twig extends \Simplify\View
 
     $twig->addGlobal('config', \Simplify::config());
     $twig->addGlobal('request', \Simplify::request());
+    $twig->addGlobal('router', \Simplify::router());
 
     $twig->addFunction(new \Twig_SimpleFunction('makeUrl', array('\Simplify\URL', 'make')));
     $twig->addFunction(new \Twig_SimpleFunction('optionsValue', array('\Amplify\Options', 'value')));
+
+    $twig->addFunction(new \Twig_SimpleFunction('thumb', array('\Simplify\Thumb', 'factory')));
     
-    $twig->addFunction(new \Twig_SimpleFunction('scripts', array('\Simplify\AssetManager', 'javascript')));
-    $twig->addFunction(new \Twig_SimpleFunction('styles', array('\Simplify\AssetManager', 'style')));
+    $twig->addFilter(new \Twig_SimpleFilter('truncate', 'sy_truncate'));
+  }
+
+  public function __toString()
+  {
+    try {
+      return $this->render();
+    }
+    catch (\Twig_Error_Loader $e) {
+      sy_exception(new \Simplify\ViewException($e->getMessage(), 0, $e));
+      trigger_error($e);
+    }
+    catch (\Exception $e) {
+      sy_exception($e);
+      trigger_error($e);
+    }
   }
 
 }

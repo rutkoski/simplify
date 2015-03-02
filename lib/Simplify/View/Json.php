@@ -52,9 +52,7 @@ class Json extends View
       Simplify::response()->header('Content-Type: text/html; charset=UTF-8');
     }
 
-    $data = $object->jsonSerialize();
-
-    $output = json_encode($data);
+    $output = json_encode($object);
 
     return $output;
   }

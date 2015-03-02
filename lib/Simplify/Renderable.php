@@ -97,7 +97,7 @@ abstract class Renderable extends Dictionary implements RenderableInterface
       $layout = sy_fix_extension($filename, 'php');
 
       if (!file_exists($layout)) {
-        throw new \Exception("Layout not found: file not found: <b>{$layout}</b>");
+        throw new \Simplify\ViewException("Layout not found: file not found: <b>{$layout}</b>");
       }
     }
     
@@ -151,7 +151,7 @@ abstract class Renderable extends Dictionary implements RenderableInterface
     }
 
     elseif (empty($filename)) {
-      throw new \Exception('Template not set');
+      throw new \Simplify\ViewException('Template not set');
     }
 
     else {

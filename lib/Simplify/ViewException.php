@@ -4,6 +4,6 @@ namespace Simplify;
 
 use Exception;
 
-class RouterException extends Exception
+class ViewException extends Exception
 {
 }

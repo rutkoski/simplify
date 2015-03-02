@@ -23,16 +23,14 @@ class RouteFilter extends Route
 
   public function parseRoute($uri)
   {
-    if (false !== ($match = $this->match($uri))) {
-      try {
-        $uri = Dispatcher::execute($this->parse, $match->params);
-      }
-      catch (\Exception $e) {
-        //
-      }
-    }
+    try {
+      $match = $this->match($uri);
 
-    return $uri;
+      return Dispatcher::execute($this->parse, $match->params);
+    }
+    catch (\Exception $e) {
+      return $uri;
+    }
   }
 
   public function buildRoute($uri, $params = null)

@@ -40,8 +40,8 @@ define('SY_DEBUG_ALL', 3);
 
 sy_debug_level(SY_DEBUG_ALL);
 
-set_error_handler('sy_exception_error_handler');
-set_exception_handler('sy_exception_handler');
+//set_error_handler('sy_exception_error_handler');
+//set_exception_handler('sy_exception_handler');
 
 function sy_debug_level($level = null)
 {
@@ -120,10 +120,27 @@ function sy_log($file, $data, $lines = 300)
   file_put_contents($file, implode("\n", $a));
 }
 
+function sy_exception($e = null)
+{
+  static $_e;
+  
+  if (!empty($e)) {
+    $_e = $e;
+  }
+  
+  $__e = $_e;
+  
+  if ($e === false) {
+    $_e = null;
+  }
+  
+  return $__e;
+}
+
 function sy_exception_error_handler($errno, $errstr, $errfile, $errline)
 {
   if ((error_reporting() & $errno) == $errno) {
-    return sy_exception_handler(new ErrorException($errstr, 0, $errno, $errfile, $errline));
+    return sy_exception_handler(sy_exception() ? sy_exception(false) : new ErrorException($errstr, 0, $errno, $errfile, $errline));
   }
 
   return false;

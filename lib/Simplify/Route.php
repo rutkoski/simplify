@@ -34,7 +34,7 @@ class Route
     }
 
     if (!preg_match($this->regex, $uri, $found)) {
-      return false;
+      throw new RouterException("Route does not match uri: <b>{$uri}</b>");
     }
 
     array_shift($found);

@@ -72,7 +72,7 @@ class Simplify
 
   /**
    * 
-   * @return \Simplify\Simplify_Request
+   * @return \Simplify\Request
    */
   public static function request()
   {
@@ -93,16 +93,20 @@ class Simplify
 
   /**
    * 
-   * @return \Simplify\router
+   * @return \Simplify\Router
    */
   public static function router()
   {
     if (!self::$router) {
-      self::$router = new Simplify\router();
+      self::$router = new Simplify\Router();
     }
     return self::$router;
   }
 
+  /**
+   * 
+   * @return \Simplify\Session
+   */
   public static function session()
   {
     return Simplify\Session::getInstance();

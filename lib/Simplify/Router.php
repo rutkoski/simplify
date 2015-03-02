@@ -33,7 +33,7 @@ class Router
     return $uri;
   }
 
-  public function parse($uri = null)
+  public function _parse($uri = null)
   {
     if (empty($uri)) {
       $uri = Simplify::request()->route();
@@ -55,6 +55,40 @@ class Router
     return $match;
   }
 
+  public function parse($uri = null)
+  {
+    if (empty($uri)) {
+      $uri = Simplify::request()->route();
+    }
+
+    $uri = $this->parseFilters($uri);
+
+    $match = false;
+
+    reset($this->routes);
+
+    do {
+      $routes = current($this->routes);
+      
+      do {
+        $route = current($routes);
+      
+        try {
+          $match = $route->match($uri);
+        }
+        catch (RouterException $e) {
+          //
+        }
+      }
+      while ($route !== false && ! $match && next($routes) !== false);
+
+      next($this->routes);
+    }
+    while ($routes !== false && ! $match);
+
+    return $match;
+  }
+  
   public function filter($uri, $options = null)
   {
     $filter = new RouteFilter($uri, $options);
@@ -72,7 +106,13 @@ class Router
   {
     $route = new Route($uri, $options);
 
-    $this->routes[] = $route;
+    $priority = sy_get_param($options, 'priority', 0);
+
+    if (!isset($this->routes[$priority])) {
+      $this->routes[$priority] = array();
+    }
+
+    $this->routes[$priority][] = $route;
 
     if (isset($options['as'])) {
       $this->named[$options['as']] = $route;

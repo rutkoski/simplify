@@ -48,7 +48,7 @@ class Holder extends Dictionary implements HolderInterface
 
   /**
    * (non-PHPdoc)
-   * @see DataHolderInterface::commit()
+   * @see \Simplify\Data\HolderInterface::commit()
    */
   public function commit($names = null)
   {
@@ -73,7 +73,7 @@ class Holder extends Dictionary implements HolderInterface
 
   /**
    * (non-PHPdoc)
-   * @see Dictionary::getAll()
+   * @see \Simplify\Dictionary::getAll()
    */
   public function getAll($flags = 0)
   {
@@ -82,7 +82,7 @@ class Holder extends Dictionary implements HolderInterface
 
   /**
    * (non-PHPdoc)
-   * @see DataHolderInterface::getModified()
+   * @see \Simplify\Data\HolderInterface::getModified()
    */
   public function getModified()
   {
@@ -91,7 +91,7 @@ class Holder extends Dictionary implements HolderInterface
 
   /**
    * (non-PHPdoc)
-   * @see Dictionary::getNames()
+   * @see \Simplify\Dictionary::getNames()
    */
   public function getNames()
   {
@@ -100,7 +100,7 @@ class Holder extends Dictionary implements HolderInterface
 
   /**
    * (non-PHPdoc)
-   * @see DataHolderInterface::isDirty()
+   * @see \Simplify\Data\HolderInterface::isDirty()
    */
   public function isDirty()
   {
@@ -109,7 +109,7 @@ class Holder extends Dictionary implements HolderInterface
 
   /**
    * (non-PHPdoc)
-   * @see Dictionary::reset()
+   * @see \Simplify\Dictionary::reset()
    */
   public function reset($data = null)
   {
@@ -119,7 +119,7 @@ class Holder extends Dictionary implements HolderInterface
 
   /**
    * (non-PHPdoc)
-   * @see Dictionary::_del()
+   * @see \Simplify\Dictionary::_del()
    */
   protected function _del($name)
   {
@@ -134,7 +134,7 @@ class Holder extends Dictionary implements HolderInterface
 
   /**
    * (non-PHPdoc)
-   * @see Dictionary::_get()
+   * @see \Simplify\Dictionary::_get()
    */
   protected function _get($name, $default = null, $flags = 0)
   {
@@ -147,7 +147,7 @@ class Holder extends Dictionary implements HolderInterface
 
   /**
    * (non-PHPdoc)
-   * @see Dictionary::_has()
+   * @see \Simplify\Dictionary::_has()
    */
   protected function _has($name)
   {
@@ -156,7 +156,7 @@ class Holder extends Dictionary implements HolderInterface
 
   /**
    * (non-PHPdoc)
-   * @see Dictionary::_set()
+   * @see \Simplify\Dictionary::_set()
    */
   protected function _set($name, $value)
   {

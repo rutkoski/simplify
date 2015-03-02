@@ -23,14 +23,12 @@
 
 namespace Simplify\Data;
 
-use Simplify\DictionaryInterface;
-
 /**
  *
  * A DataHolder is a Dictionary that keeps track of changes to values
  *
  */
-interface HolderInterface extends DictionaryInterface
+interface HolderInterface extends \Simplify\DictionaryInterface
 {
 
   /**

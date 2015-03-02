@@ -211,10 +211,32 @@ class Request
     }
 
     if (!is_null($name)) {
-      return $this->get->get($name, $default, $flags);
+      return $this->sanitize($this->get->get($name, $default, $flags), $default, $flags);
     }
 
     return $this->get;
+  }
+  
+  /**
+   * Sanitize request value
+   * 
+   * @param mixed $input
+   * @param mixed $type
+   * @return sanitized value
+   */
+  public function sanitize($input, $type, $flags)
+  {
+    if (is_int($type)) {
+      $input = intval($input);
+    }
+    elseif (is_float($type)) {
+      $input = floatval($input);
+    }
+    else {
+      //
+    }
+
+    return $input;
   }
 
   /**
@@ -226,7 +248,7 @@ class Request
   public function files($name = null)
   {
     if (! empty($name)) {
-      return $_FILES[$name];
+      return sy_get_param($_FILES, $name);
     }
     return $_FILES;
   }
