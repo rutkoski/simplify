@@ -51,7 +51,7 @@ abstract class View extends Renderable implements ViewInterface
   public static function factory($class = null, RenderableInterface $object = null)
   {
     if (empty($class)) {
-      $class = \Simplify::config()->get('view:default', View::PHP);
+      $class = \Simplify::config()->get('view:default', View::PHP, \Simplify\Dictionary::FILTER_EMPTY);
     }
 
     return new $class($object);

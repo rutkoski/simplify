@@ -12,6 +12,10 @@ require_once('Simplify.php');
 require_once('debug.php');
 require_once('l10n.php');
 
+if (! interface_exists('JsonSerializable')) {
+  require_once('JsonSerializable.php');
+}
+
 $config = Simplify::config();
 
 $config['app_dir'] = SY_APP_DIR; // absolute, trailing slash

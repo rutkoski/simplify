@@ -69,18 +69,20 @@ class Router
 
     do {
       $routes = current($this->routes);
-      
-      do {
-        $route = current($routes);
-      
-        try {
-          $match = $route->match($uri);
+
+      if (is_array($routes)) {
+        do {
+          $route = current($routes);
+
+          try {
+            $match = $route->match($uri);
+          }
+          catch (RouterException $e) {
+            //
+          }
         }
-        catch (RouterException $e) {
-          //
-        }
+        while ($route !== false && ! $match && next($routes) !== false);
       }
-      while ($route !== false && ! $match && next($routes) !== false);
 
       next($this->routes);
     }
@@ -88,7 +90,7 @@ class Router
 
     return $match;
   }
-  
+
   public function filter($uri, $options = null)
   {
     $filter = new RouteFilter($uri, $options);
