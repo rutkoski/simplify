@@ -123,6 +123,10 @@ class Config implements DictionaryInterface, ArrayAccess
       $value = & $ref[$sub];
     }
 
+    if (is_callable($value)) {
+      $value = $value($this);
+    }
+
     if (is_string($value)) {
       $value = $this->resolveReferences($value);
     }

@@ -69,7 +69,7 @@ class Twig extends \Simplify\View
       $view->copyAll($this);
       $view->set('layout_content', $output);
       $view->setTemplate($layout);
-      $view->setTemplatesPath($object->getTemplatesPath());
+      $view->setTemplatesPath($object->getLayoutsPath());
       $view->setLayout(false);
 
       $output = $view->render();

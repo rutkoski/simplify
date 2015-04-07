@@ -123,7 +123,7 @@ abstract class Renderable extends Dictionary implements RenderableInterface
     if (empty($this->layoutsPath)) {
       $this->layoutsPath = array_reverse(\Simplify::config()->get('templates:path'));
       foreach ($this->layoutsPath as &$value) {
-        $value = \Simplify::config()->resolveReferences($value . '/layout');
+        $value = \Simplify::config()->resolveReferences($value);
       }
     }
     return $this->layoutsPath;

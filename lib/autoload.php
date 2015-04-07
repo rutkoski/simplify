@@ -25,6 +25,7 @@ $config['cache_dir'] = '{app_dir}cache/';
 
 $config['templates:path:'] = '{app_dir}templates/{theme_path}';
 $config['templates:path:'] = '{app_dir}templates/';
+$config['templates:path:'] = '{www_dir}dist/app/templates/{theme}';
 
 $config['modules_dir'] = '{app_dir}modules/';
 
@@ -40,7 +41,12 @@ $config['files_url'] = '{www_url}{files_path}';
 $config['theme'] = 'default';
 $config['theme_path'] = '{theme}/';
 $config['theme_dir'] = '{www_dir}{theme_path}';
-$config['theme_url'] = '{www_url}{theme_path}';
+
+$config['theme_url'] = function($config) {
+  $dir = $config['www_dir'] . 'dist/';
+  return is_dir($dir) ? '{www_url}dist/{theme_path}' : '{www_url}{theme_path}';
+};
+
 $config['css_url'] = '{theme_url}stylesheets/';
 $config['js_url'] = '{theme_url}scripts/';
 
