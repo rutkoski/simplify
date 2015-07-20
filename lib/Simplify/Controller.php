@@ -117,6 +117,15 @@ abstract class Controller extends Renderable
   }
 
   /**
+   * Default 404 action
+   *
+   * @return mixed
+   */
+  protected function pageNotFoundAction()
+  {
+  }
+  
+  /**
    * Get the action name
    *
    * @return string

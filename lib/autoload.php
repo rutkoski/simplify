@@ -16,7 +16,11 @@ if (! interface_exists('JsonSerializable')) {
   require_once('JsonSerializable.php');
 }
 
+define('SY_DIR', preg_replace('#[\\\/]+#', '/', __dir__ . '/'));
+
 $config = Simplify::config();
+
+$config['sy_dir'] = SY_DIR;
 
 $config['app_dir'] = SY_APP_DIR; // absolute, trailing slash
 $config['app_url'] = Simplify::request()->url(); // absolute, no trailing slash
