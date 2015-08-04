@@ -51,7 +51,7 @@ class ArrayLocalization extends Localization
    */
   public function add($name, $domain = Localization::DOMAIN_DEFAULT)
   {
-    $filename = \Simplify::config()->get('locale_dir', \Simplify::config()->get('app_dir') . '/language', Dictionary::FILTER_EMPTY);
+    $filename = \Simplify::config()->get('locale_dir', \Simplify::config()->get('app:dir') . '/language', Dictionary::FILTER_EMPTY);
     $filename .= '/' . $this->locale . '/' . $domain . '.php';
 
     if (file_exists($filename)) {

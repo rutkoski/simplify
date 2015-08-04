@@ -129,7 +129,7 @@ class Twig extends \Simplify\View
     
     return self::$twig;
   }
-
+  
   protected static function loadExtensions(\Twig_Environment $twig)
   {
     foreach ((array)\Simplify::config()->get('view:twig:globals') as $name => $value) {
@@ -144,6 +144,9 @@ class Twig extends \Simplify\View
     $twig->addFunction(new \Twig_SimpleFunction('optionsValue', array('\Amplify\Options', 'value')));
 
     $twig->addFunction(new \Twig_SimpleFunction('thumb', array('\Simplify\Thumb', 'factory')));
+    
+    $twig->addFunction(new \Twig_SimpleFunction('asset', array('\Simplify\AssetManager', 'asset')));
+    $twig->addFunction(new \Twig_SimpleFunction('assets', array('\Simplify\AssetManager', 'assets')));
     
     $twig->addFilter(new \Twig_SimpleFilter('truncate', 'sy_truncate'));
   }
@@ -161,6 +164,8 @@ class Twig extends \Simplify\View
       sy_exception($e);
       trigger_error($e);
     }
+    
+    return '';
   }
 
 }

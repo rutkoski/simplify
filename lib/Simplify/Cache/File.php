@@ -56,7 +56,7 @@ class File implements CacheInterface
   public function __construct($path = null, $ttl = null)
   {
     if (empty($path)) {
-      $path = Simplify::config()->get('cache_dir', '{app_dir}/cache');
+      $path = Simplify::config()->get('cache_dir', '{app:dir}/cache');
     }
 
     $path = sy_fix_path($path);
