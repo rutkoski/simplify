@@ -67,7 +67,7 @@ class AssetManager
     
     foreach ($assets as $params) {
       if (! sy_get_param($params, 'output')) {
-        if ($minify) {
+        if ($minify && sy_get_param($params, 'minify')) {
           $dir = $params['dir'];
           
           switch (self::getAssetType($dir)) {
@@ -103,24 +103,29 @@ class AssetManager
     }
     
     if ($minify) {
+      $cacheDir = \Simplify::config()->get('cache:dir');
+      $cacheUrl = \Simplify::config()->get('cache:url');
+
+      \Simplify\File::createDir($cacheDir);
+      
       foreach ($cssPath as $group => $_cssPath) {
         $path = $group . '_' . md5($_cssPath) . '.min.css';
         
-        if (! file_exists(\Simplify::config()->get('cache:dir') . $path)) {
-          $css[$group]->minify(\Simplify::config()->get('cache:dir') . $path);
+        if (! file_exists($cacheDir . $path)) {
+          $css[$group]->minify($cacheDir . $path);
         }
         
-        $output[$group][] = "<link rel=\"stylesheet\" href=\"" . \Simplify::config()->get('cache:url') . $path . "\" />";
+        array_unshift($output[$group], "<link rel=\"stylesheet\" href=\"" . $cacheUrl . $path . "\" />");
       }
       
       foreach ($jsPath as $group => $_jsPath) {
         $path = $group . '_' . md5($_jsPath) . '.min.js';
         
-        if (! file_exists(\Simplify::config()->get('cache:dir') . $path)) {
-          $js[$group]->minify(\Simplify::config()->get('cache:dir') . $path);
+        if (! file_exists($cacheDir . $path)) {
+          $js[$group]->minify($cacheDir . $path);
         }
         
-        $output[$group][] = "<script src=\"" . \Simplify::config()->get('cache:url') . $path . "\"></script>";
+        array_unshift($output[$group], "<script src=\"" . $cacheUrl . $path . "\"></script>");
       }
     }
     
@@ -135,9 +140,9 @@ class AssetManager
     return $output;
   }
 
-  public static function load ($asset, $group = null, $priority = 0)
+  public static function load ($asset, $group = null, $priority = 0, $minify = true)
   {
-    self::loadAsset($asset, $group, $priority);
+    self::loadAsset($asset, $group, $priority, $minify);
   }
 
   public static function asset ($asset, $group = null, $priority = 0)
@@ -151,7 +156,7 @@ class AssetManager
     return self::output(self::loadAsset($asset, $group), $group, $priority);
   }
 
-  public static function loadAsset ($asset, $group = null, $priority = 0)
+  public static function loadAsset ($asset, $group = null, $priority = 0, $minify = true)
   {
     if (empty($asset)) {
       throw new \Exception("Empty asset name");
@@ -177,7 +182,8 @@ class AssetManager
           'dir' => $dir . $asset,
           'url' => $url . $asset,
           'group' => $group,
-          'priority' => $priority
+          'priority' => $priority,
+          'minify' => $minify
       );
     }
     
