@@ -115,6 +115,10 @@ class AssetManager
           $css[$group]->minify($cacheDir . $path);
         }
         
+        if (! isset($output[$group])) {
+          $output[$group] = array();
+        }
+        
         array_unshift($output[$group], "<link rel=\"stylesheet\" href=\"" . $cacheUrl . $path . "\" />");
       }
       
@@ -123,6 +127,10 @@ class AssetManager
         
         if (! file_exists($cacheDir . $path)) {
           $js[$group]->minify($cacheDir . $path);
+        }
+        
+        if (! isset($output[$group])) {
+          $output[$group] = array();
         }
         
         array_unshift($output[$group], "<script src=\"" . $cacheUrl . $path . "\"></script>");
