@@ -104,6 +104,30 @@ class Router
     return $filter;
   }
 
+  /**
+   * Match an uri.
+   * 
+   * Uri example:
+   * /posts/:id/*
+   *    :id - matches named parameter id
+   *    * - extra parameter, matches everything at the end of the uri 
+   * 
+   * Options:
+   * array(
+   *    'controller' => '\Namespace\TheController', // controller class
+   *    'action' => 'index', // controller action
+   *    'patterns' => array( // array of patterns to match against uri named parameters
+   *        'id' => '^\d+' // regular expression to match against id
+   *    ),
+   *    'defaults' => array( // default values for parameters
+   *        'id' => 123
+   *    )
+   * )
+   * 
+   * @param string $uri the url to match
+   * @param array $options
+   * @return \Simplify\Route
+   */
   public function match($uri, $options = null)
   {
     $route = new Route($uri, $options);
