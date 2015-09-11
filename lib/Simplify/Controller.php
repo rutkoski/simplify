@@ -73,6 +73,8 @@ abstract class Controller extends Renderable
 
   public function callAction($action, $params)
   {
+    $this->beforeAction($action, $params);
+    
     $method = strtolower(Simplify::request()->method());
 
     $Action = Inflector::variablize("{$method}_{$action}_action");
@@ -95,9 +97,30 @@ abstract class Controller extends Renderable
       $output = $this->getView();
     }
 
+    $this->afterAction($output);
+    
     return $output;
   }
 
+  /**
+   * Before action
+   * 
+   * @param string $action
+   * @param array $params
+   */
+  protected function beforeAction($action, $params)
+  {
+  }
+  
+  /**
+   * After action
+   * 
+   * @param mixed $output
+   */
+  protected function afterAction($output)
+  {
+  }
+  
   /**
    * Initialize callback runs once
    *
