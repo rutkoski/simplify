@@ -32,7 +32,7 @@ namespace Simplify;
  *    $upload = new Upload();
  *
  *    // optional
- *    $upload->set('files_dir', \Simplify::config()->get('files_dir'));
+ *    $upload->set('files_dir', \Simplify::config()->get('files:dir'));
  *
  *    try {
  *      $upload->upload('my_file');
@@ -160,7 +160,7 @@ class Upload
   public function getUploadPath()
   {
     if (empty($this->uploadPath)) {
-      $this->uploadPath = \Simplify::config()->get('files_path');
+      $this->uploadPath = \Simplify::config()->get('files:path');
     }
 
     return $this->uploadPath;
@@ -297,7 +297,7 @@ class Upload
     $path = $this->getUploadPath();
 
     if (!sy_path_is_absolute($path)) {
-      $path = \Simplify::config()->get('www_dir') . $path;
+      $path = \Simplify::config()->get('www:dir') . $path;
     }
 
     $filename = empty($this->filename) ? $this->file['name'] : $this->filename;
@@ -313,7 +313,7 @@ class Upload
     $dir = sy_fix_path($path . '/' . $subpath) . '/';
     
     if (!is_dir($dir)) {
-      if (!mkdir($dir)) {
+      if (!mkdir($dir, 0777, true)) {
         $this->error = __('Could not create upload path: <b>' . sy_fix_path($path . $subpath) . '</b>');
         throw new \Simplify\UploadException($this->error);
       }

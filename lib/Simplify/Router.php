@@ -121,7 +121,8 @@ class Router
    *    ),
    *    'defaults' => array( // default values for parameters
    *        'id' => 123
-   *    )
+   *    ),
+   *    'as' => 'post' // name this route
    * )
    * 
    * @param string $uri the url to match

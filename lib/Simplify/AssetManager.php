@@ -29,7 +29,7 @@ class AssetManager
   
   public static function assets ($groups = null, $join = '')
   {
-    $minify = \Simplify::config()->get('assets:minify', true, \Simplify\Dictionary::FILTER_NULL);
+    $minify = \Simplify::config()->get('assets:minify', false, \Simplify\Dictionary::FILTER_NULL);
     
     $output = array();
     

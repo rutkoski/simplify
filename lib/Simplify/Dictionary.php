@@ -38,6 +38,16 @@ class Dictionary implements DictionaryInterface, \ArrayAccess
     $this->reset($data);
   }
 
+  public function filter($name, $filter = FILTER_DEFAULT, $options = null)
+  {
+      return filter_var($this->get($name), $filter, $options);
+  }
+
+  public function filterAll($definition, $addEmpty = true)
+  {
+      return filter_var_array($this->getAll(), $definition, $addEmpty);
+  }
+  
   /**
    * (non-PHPdoc)
    * @see DictionaryInterface::get()

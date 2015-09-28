@@ -191,7 +191,7 @@ abstract class Controller extends Renderable
    */
   public function getTemplateFilename()
   {
-    return $this->getPath() . '/' . $this->getName() . '_' . $this->getAction();
+    return $this->getPath() . '/' . $this->getName() . '_' . \Simplify\Inflector::underscore($this->getAction());
   }
 
 }

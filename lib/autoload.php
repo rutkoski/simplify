@@ -34,6 +34,7 @@ $config['cache:dir'] = '{www:dir}cache/';
 $config['cache:url'] = '{www:url}cache/';
 
 $config['app:assets:path:'] = '{app:path}assets/{theme}/';
+$config['app:assets:path:'] = '{app:path}assets/';
 
 $config['templates:path:'] = '{app:dir}templates/{theme}/';
 $config['templates:path:'] = '{app:dir}templates/';
@@ -44,9 +45,9 @@ $config['public_path'] = '/';
 $config['www:dir'] = dirname($_SERVER['SCRIPT_FILENAME']) . '{public_path}';
 $config['www:url'] = '{app:url}{public_path}';
 
-$config['files_path'] = 'files/';
-$config['files_dir'] = '{www:dir}{files_path}';
-$config['files_url'] = '{www:url}{files_path}';
+$config['files:path'] = 'files/';
+$config['files:dir'] = '{www:dir}{files:path}';
+$config['files:url'] = '{www:url}{files:path}';
 
 $config['theme'] = 'default';
 
