@@ -38,7 +38,6 @@ $config['app:assets:path:'] = '{app:path}assets/';
 
 $config['templates:path:'] = '{app:dir}templates/{theme}/';
 $config['templates:path:'] = '{app:dir}templates/';
-$config['templates:path:'] = '{www:dir}dist/app/templates/{theme}';
 
 $config['public_path'] = '/';
 
