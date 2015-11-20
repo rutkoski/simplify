@@ -69,7 +69,7 @@ interface DatabaseInterface
   /**
    * Disconnect from the datasource
    *
-   * @return Simplify\Db\DatabaseInterface
+   * @return \Simplify\Db\DatabaseInterface
    */
   public function disconnect();
 
@@ -84,7 +84,7 @@ interface DatabaseInterface
    * Factory an Simplify\Db\QueryObject for a SELECT operation
    *
    * @param string|null $sql
-   * @return Simplify\Db\QueryObject
+   * @return \Simplify\Db\QueryObject
    */
   public function query($sql = null);
 
@@ -93,7 +93,7 @@ interface DatabaseInterface
    *
    * @param string $table
    * @param array $data
-   * @return Simplify\Db\QueryObject
+   * @return \Simplify\Db\QueryObject
    */
   public function insert($table = null, $data = null);
 
@@ -103,7 +103,7 @@ interface DatabaseInterface
    * @param string $table
    * @param array $data
    * @param string|array $where
-   * @return Simplify\Db\QueryObject
+   * @return \Simplify\Db\QueryObject
    */
   public function update($table = null, $data = null, $where = null);
 
@@ -112,7 +112,7 @@ interface DatabaseInterface
    *
    * @param string $table
    * @param string|array $where
-   * @return Simplify\Db\QueryObject
+   * @return \Simplify\Db\QueryObject
    */
   public function delete($table = null, $where = null);
 

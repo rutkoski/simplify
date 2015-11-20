@@ -94,7 +94,7 @@ abstract class Database implements DatabaseInterface
 
   /**
    * (non-PHPdoc)
-   * @see Simplify\Db\DatabaseInterface::update()
+   * @see \Simplify\Db\DatabaseInterface::update()
    */
   public function update($table = null, $data = null, $where = null)
   {
