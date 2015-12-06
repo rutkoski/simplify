@@ -267,6 +267,9 @@ class URL
       }
 
       if (!empty($ext)) {
+        if (preg_match('#/$#', $url)) {
+            $url = substr($url, 0, strlen($url) - 1);
+        }
         $url .= '.' . $ext;
       }
     }
