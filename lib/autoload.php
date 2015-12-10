@@ -28,8 +28,6 @@ $config['app:path'] = 'app/';
 $config['app:dir'] = SY_APP_DIR; // absolute, trailing slash
 $config['app:url'] = Simplify::request()->url(); // absolute, no trailing slash
 
-$config['view:default'] = '\Simplify\View\Twig';
-
 $config['cache:dir'] = '{www:dir}cache/';
 $config['cache:url'] = '{www:url}cache/';
 

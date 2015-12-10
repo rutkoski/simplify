@@ -94,7 +94,7 @@ abstract class Renderable extends Dictionary implements RenderableInterface
     }
 
     elseif (sy_path_is_absolute($filename)) {
-      $layout = sy_fix_extension($filename, 'php');
+      $layout = sy_fix_extension($filename, 'html');
 
       if (!file_exists($layout)) {
         throw new \Simplify\ViewException("Layout not found: file not found: <b>{$layout}</b>");

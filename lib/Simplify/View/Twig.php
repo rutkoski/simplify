@@ -109,7 +109,7 @@ class Twig extends \Simplify\View
 
     $twig->getLoader()->setPaths($path);
 
-    $output = $twig->render($template . '.php', $object->getAll());
+    $output = $twig->render($template . '.html', $object->getAll());
 
     return $output;
   }

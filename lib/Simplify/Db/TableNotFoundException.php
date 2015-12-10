@@ -28,6 +28,6 @@ namespace Simplify\Db;
  * Table Not Found
  *
  */
-class TableNotFoundException extends \Exception
+class TableNotFoundException extends DatabaseException
 {
 }
