@@ -60,6 +60,12 @@ abstract class Controller extends Renderable
    * @var string
    */
   protected $layout = 'layout/default';
+  
+  /**
+   * 
+   * @var \Simplify\Config
+   */
+  protected $config;
 
   /**
    * Constructor
@@ -68,6 +74,8 @@ abstract class Controller extends Renderable
    */
   public function __construct()
   {
+    $this->config = \Simplify::config();
+    
     $this->initialize();
   }
 
