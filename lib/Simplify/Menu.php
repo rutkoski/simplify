@@ -49,6 +49,12 @@ class Menu extends MenuItem
     return $this->items[$index];
   }
 
+  /**
+   * 
+   * @param string $name
+   * @throws MenuException
+   * @return \Simplify\Menu
+   */
   public function getItemByName($name)
   {
     $index = count($this->items) - 1;
