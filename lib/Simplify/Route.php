@@ -39,7 +39,7 @@ class Route
 
     array_shift($found);
 
-    $params = array();
+    $params = $this->defaults;
 
     foreach ($this->names as $i => $name) {
       $params[$name] = sy_get_param($found, $i, sy_get_param($this->defaults, $name));
