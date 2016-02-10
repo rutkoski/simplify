@@ -120,7 +120,7 @@ class Twig extends \Simplify\View
       $loader = new \Twig_Loader_Filesystem();
       
       self::$twig = new \Twig_Environment($loader, array(
-          //'cache' => \Simplify::config()->get('cache_dir'),
+          'cache' => \Simplify::config()->get('twig:disable_cache') ? false : \Simplify::config()->resolveReferences('{cache:dir}tpl'),
           'autoescape' => false,
       ));
       
