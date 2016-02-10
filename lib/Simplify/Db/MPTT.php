@@ -199,7 +199,7 @@ class MPTT
   /**
    *
    * @param array $params
-   * @return Simplify_Db_QueryObjectInterface
+   * @return \Simplify\Db\QueryObjectInterface
    */
   public function query()
   {

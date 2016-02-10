@@ -54,7 +54,7 @@ interface QueryObjectInterface
    *
    * @param string|string[]|boolean $fields
    * @param boolean|null $remove
-   * @return Simplify\Db\QueryObjectInterface
+   * @return \Simplify\Db\QueryObjectInterface
    */
   public function select($fields = null, $remove = null);
 
@@ -63,7 +63,7 @@ interface QueryObjectInterface
    *
    * @param string $table the table
    * @param string[string] $data associative array of fields/values
-   * @return Simplify\Db\QueryObjectInterface
+   * @return \Simplify\Db\QueryObjectInterface
    */
   public function insert($table = null, $data = null);
 
@@ -74,7 +74,7 @@ interface QueryObjectInterface
    * @param string $table the table
    * @param string[string] $data associative array of fields/values
    * @param string|array $where where expression
-   * @return Simplify\Db\QueryObjectInterface
+   * @return \Simplify\Db\QueryObjectInterface
    */
   public function update($table = null, $data = null, $where = null);
 
@@ -83,7 +83,7 @@ interface QueryObjectInterface
    *
    * @param string $table the table
    * @param string|array $where where expression
-   * @return Simplify\Db\QueryObjectInterface
+   * @return \Simplify\Db\QueryObjectInterface
    */
   public function delete($table = null, $where = null);
 
@@ -92,7 +92,7 @@ interface QueryObjectInterface
    *
    * @param string|string[]|boolean $table the table(s)
    * @param bool|null $remove
-   * @return Simplify\Db\QueryObjectInterface
+   * @return \Simplify\Db\QueryObjectInterface
    */
   public function from($table = null, $remove = null);
 
@@ -101,7 +101,7 @@ interface QueryObjectInterface
    *
    * @param string[mixed] $data the data
    * @param bool|null $remove
-   * @return Simplify\Db\QueryObjectInterface
+   * @return \Simplify\Db\QueryObjectInterface
    */
   public function data($data = null, $remove = null);
 
@@ -112,7 +112,7 @@ interface QueryObjectInterface
    * @param string $join the join expression
    * @param string $type joing type (INNER JOIN, LEFT JOIN, RIGHT JOIN)
    * @param bool|null $remove
-   * @return Simplify\Db\QueryObjectInterface
+   * @return \Simplify\Db\QueryObjectInterface
    */
   public function join($join = null, $type = null, $remove = null);
 
@@ -121,7 +121,7 @@ interface QueryObjectInterface
    *
    * @param string|string[] $field
    * @param bool|null $remove
-   * @return Simplify\Db\QueryObjectInterface
+   * @return \Simplify\Db\QueryObjectInterface
    */
   public function groupBy($field = null, $remove = null);
 
@@ -130,7 +130,7 @@ interface QueryObjectInterface
    *
    * @param string $condition
    * @param bool|null $remove
-   * @return Simplify\Db\QueryObjectInterface
+   * @return \Simplify\Db\QueryObjectInterface
    */
   public function having($condition = null, $remove = null);
 
@@ -140,7 +140,7 @@ interface QueryObjectInterface
    *
    * @param mixed $condition
    * @param bool|null $remove
-   * @return Simplify\Db\QueryObjectInterface
+   * @return \Simplify\Db\QueryObjectInterface
    */
   public function where($condition = null, $remove = null);
 
@@ -150,7 +150,7 @@ interface QueryObjectInterface
    * @param string $field
    * @param string $direction ASC or DESC
    * @param bool|null $remove
-   * @return Simplify\Db\QueryObjectInterface
+   * @return \Simplify\Db\QueryObjectInterface
    */
   public function orderBy($field = null, $direction = null, $remove = null);
 
@@ -158,7 +158,7 @@ interface QueryObjectInterface
    * Set/unset/return the limit for the statement.
    *
    * @param int|boolean $limit
-   * @return Simplify\Db\QueryObjectInterface
+   * @return \Simplify\Db\QueryObjectInterface
    */
   public function limit($limit = null);
 
@@ -166,7 +166,7 @@ interface QueryObjectInterface
    * Set/unset/return the offset for the statement.
    *
    * @param int|boolean $offset
-   * @return Simplify\Db\QueryObjectInterface
+   * @return \Simplify\Db\QueryObjectInterface
    */
   public function offset($offset = null);
 
@@ -177,7 +177,7 @@ interface QueryObjectInterface
    * Simplify\Db\QueryObjectInterface::data() and Simplify\Db\QueryObjectInterface::alias().
    *
    * @param string $sql
-   * @return Simplify\Db\QueryObjectInterface
+   * @return \Simplify\Db\QueryObjectInterface
    */
   public function sql($sql = null);
 
@@ -192,7 +192,7 @@ interface QueryObjectInterface
    * Build, prepare, execute and return the result for the query.
    *
    * @param string[mixed] $data the data for the query
-   * @return Simplify\Db\QueryResultInterface
+   * @return \Simplify\Db\QueryResultInterface
    */
   public function execute($data = null);
 
@@ -200,14 +200,14 @@ interface QueryObjectInterface
    * Build, execute and return the result for the query. Ignores prepared
    * statements.
    *
-   * @return Simplify\Db\QueryResultInterface
+   * @return \Simplify\Db\QueryResultInterface
    */
   public function executeRaw();
 
   /**
    *
    * @param mixed $params
-   * @return Simplify\Db\QueryObjectInterface
+   * @return \Simplify\Db\QueryObjectInterface
    */
   public function setParams($params = null);
 
