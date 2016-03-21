@@ -161,10 +161,12 @@ abstract class Database implements DatabaseInterface
           $regex = preg_quote($regex);
         }
 
-        $regex = '/' . $regex . '$/i';
+        if (isset($_SERVER['SERVER_NAME'])) {
+          $regex = '/' . $regex . '$/i';
 
-        if (preg_match($regex, $_SERVER['SERVER_NAME'])) {
-          $_params = array_merge($_params, $__params);
+          if (preg_match($regex, $_SERVER['SERVER_NAME'])) {
+            $_params = array_merge($_params, $__params);
+          }
         }
       }
     }

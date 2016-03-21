@@ -101,11 +101,11 @@ abstract class Controller extends Renderable
 
     $output = call_user_func_array($func, Dispatcher::sortCallbackParameters($func, $params));
 
+    $this->afterAction($output);
+    
     if ($output === Response::AUTO) {
       $output = $this->getView();
     }
-
-    $this->afterAction($output);
     
     return $output;
   }

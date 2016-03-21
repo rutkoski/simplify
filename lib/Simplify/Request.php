@@ -186,7 +186,11 @@ class Request
   public function post($name = null, $default = null, $flags = 0)
   {
     if (!$this->post) {
-      $this->post = new \Simplify\Data\View(sy_strip_slashes_deep($_POST));
+      if ($this->method('post') && strpos(sy_get_param($_SERVER, 'CONTENT_TYPE'), 'application/json;') === 0) {
+          $this->post = new \Simplify\Data\View(get_object_vars(json_decode(file_get_contents("php://input"))));
+      } else {
+        $this->post = new \Simplify\Data\View(sy_strip_slashes_deep($_POST));
+      }
     }
 
     if (!is_null($name)) {
@@ -321,7 +325,7 @@ class Request
    */
   public function base()
   {
-    return ($this->secure() ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'];
+    return ($this->secure() ? 'https' : 'http') . '://' . sy_get_param($_SERVER, 'HTTP_HOST');
   }
 
   /**

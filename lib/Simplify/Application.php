@@ -7,6 +7,8 @@ class Application
 
   public function dispatch()
   {
+    $this->initialize();
+    
     $match = $this->parseRoute();
 
     if (! $match) {
@@ -18,6 +20,14 @@ class Application
     $this->outputResponse($output);
 
     return $output;
+  }
+
+  /**
+   * 
+   */
+  protected function initialize()
+  {
+    \Simplify::session()->start();
   }
 
   /**

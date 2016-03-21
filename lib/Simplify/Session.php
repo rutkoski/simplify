@@ -86,7 +86,9 @@ class Session implements DictionaryInterface
       session_id($id);
     }
 
-    session_start();
+    if(session_id() == '') {
+      session_start();
+    }
 
     return $this;
   }
