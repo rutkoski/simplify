@@ -1,5 +1,6 @@
 <?php
 
+use Simplify\Dictionary;
 error_reporting(E_ALL);
 
 ini_set('display_errors', 1);
@@ -51,3 +52,5 @@ $config['theme'] = 'default';
 if (file_exists($config['app:dir'] . 'config/config.php')) {
   require_once($config['app:dir'] . 'config/config.php');
 }
+
+date_default_timezone_set($config->get('timezone', 'America/Sao_Paulo', 2));
