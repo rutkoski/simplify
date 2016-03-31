@@ -10,7 +10,7 @@
     "minimum-stability": "dev",
     "require": {
         "php": ">=5.3",
-        "rutkoski/simplify-functions": "dev-master",
+        "rutkoski/simplify-functions": "1.*",
         "twig/twig": "1.*",
         "matthiasmullie/minify": "dev-master"
     },
