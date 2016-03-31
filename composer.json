@@ -10,8 +10,7 @@
     "require": {
         "php": ">=5.3",
         "rutkoski/simplify-functions": "1.*",
-        "twig/twig": "1.*",
-        "matthiasmullie/minify": "dev-master"
+        "twig/twig": "1.*"
     },
     "autoload": {
         "files": [ "lib/autoload.php" ],
