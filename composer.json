@@ -7,7 +7,6 @@
             "email": "rutkoski@gmail.com"
         }
     ],
-    "minimum-stability": "dev",
     "require": {
         "php": ">=5.3",
         "rutkoski/simplify-functions": "1.*",
