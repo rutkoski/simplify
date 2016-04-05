@@ -281,7 +281,7 @@ abstract class QueryObject implements QueryObjectInterface
 
   /**
    *
-   * @return Simplify\Db\QueryObjectInterface
+   * @return \Simplify\Db\QueryObjectInterface
    */
   public function leftJoin($join = null, $remove = null)
   {
@@ -290,7 +290,7 @@ abstract class QueryObject implements QueryObjectInterface
 
   /**
    *
-   * @return Simplify\Db\QueryObjectInterface
+   * @return \Simplify\Db\QueryObjectInterface
    */
   public function rightJoin($join = null, $remove = null)
   {
@@ -299,7 +299,7 @@ abstract class QueryObject implements QueryObjectInterface
 
   /**
    *
-   * @return Simplify\Db\QueryObjectInterface
+   * @return \Simplify\Db\QueryObjectInterface
    */
   public function innerJoin($join = null, $remove = null)
   {

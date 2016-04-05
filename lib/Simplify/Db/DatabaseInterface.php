@@ -34,35 +34,35 @@ interface DatabaseInterface
   /**
    * Begin a transaction
    *
-   * @return Simplify\Db\DatabaseInterface
+   * @return \Simplify\Db\DatabaseInterface
    */
   public function beginTransaction();
 
   /**
    * Commit a transaction
    *
-   * @return Simplify\Db\DatabaseInterface
+   * @return \Simplify\Db\DatabaseInterface
    */
   public function commit();
 
   /**
    * Rollback a transaction
    *
-   * @return Simplify\Db\DatabaseInterface
+   * @return \Simplify\Db\DatabaseInterface
    */
   public function rollback();
 
   /**
    * Factory a query object of the implemented type
    *
-   * @return Simplify\Db\QueryObject
+   * @return \Simplify\Db\QueryObject
    */
   public function factoryQueryObject();
 
   /**
    * Connect to the datasource
    *
-   * @return Simplify\Db\DatabaseInterface
+   * @return \Simplify\Db\DatabaseInterface
    */
   public function connect();
 

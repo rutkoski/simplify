@@ -85,7 +85,7 @@ abstract class Database implements DatabaseInterface
 
   /**
    * (non-PHPdoc)
-   * @see Simplify\Db\DatabaseInterface::insert()
+   * @see \Simplify\Db\DatabaseInterface::insert()
    */
   public function insert($table = null, $data = null)
   {
