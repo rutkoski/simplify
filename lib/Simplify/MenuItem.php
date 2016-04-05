@@ -31,7 +31,7 @@ class MenuItem
 
   /**
    *
-   * @var URL
+   * @var mixed
    */
   public $url;
 
@@ -56,13 +56,13 @@ class MenuItem
    * @param Menu $submenu
    * @param mixed $data
    */
-  public function __construct($name, $label = null, $icon = null, URL $url = null, Menu $submenu = null, $data = null)
+  public function __construct($name, $label = null, $icon = null, $url = null, Menu $submenu = null, $data = null)
   {
     $this->name = $name;
     $this->label = $label;
     $this->icon = $icon;
     $this->data = $data;
-    $this->url = $url;
+    $this->url = URL::parse($url);
     $this->submenu = $submenu;
   }
 
@@ -75,7 +75,7 @@ class MenuItem
    * @param Menu $submenu
    * @return MenuItem
    */
-  public static function factory($name, $label = null, $icon = null, URL $url = null, Menu $submenu = null)
+  public static function factory($name, $label = null, $icon = null, $url = null, Menu $submenu = null)
   {
     return new self($name, $label, $icon, $url, $submenu);
   }
@@ -112,9 +112,9 @@ class MenuItem
    * @param URL $url
    * @return MenuItem
    */
-  public function setUrl(URL $url)
+  public function setUrl($url)
   {
-    $this->url = $url;
+    $this->url = URL::parse($url);
     return $this;
   }
 
