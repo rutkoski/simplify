@@ -175,12 +175,12 @@ class AssetManager
       
       do {
         $path = array_shift($paths);
-        $dir = \Simplify::config()->resolveReferences('{www:dir}' . $path);
+        $dir = \Simplify::config()->resolveReferences((sy_path_is_absolute($path) ? '' : '{www:dir}') . $path);
       }
       while (! empty($paths) && ! file_exists($dir . $asset));
       
       if (! file_exists($dir . $asset)) {
-        throw new \Exception("Asset file not found: {$asset}");
+        throw new \Exception("Asset file not found: {$asset}. Search path: " . implode(';', \Simplify::config()->get('app:assets:path')));
       }
       
       $url = \Simplify::config()->resolveReferences('{www:url}' . $path);
