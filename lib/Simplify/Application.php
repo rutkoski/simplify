@@ -36,18 +36,16 @@ class Application
   protected function pageNotFound()
   {
     \Simplify::response()->set404();
-    
+   
     $output = false;
 
     $match = \Simplify::router()->parse('/page_not_found');
 
     if ($match) {
       $output = $this->forward($match);
-  
-      $this->outputResponse($output);
     }
     
-    return $output;
+    return $this->outputResponse($output);
   }
 
   /**
