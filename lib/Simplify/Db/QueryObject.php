@@ -512,11 +512,15 @@ abstract class QueryObject implements QueryObjectInterface
       }
       else {
         if (isset($params[QueryParameters::SELECT])) {
-          call_user_func(array($this, 'select'), $params[QueryParameters::SELECT]);
+          foreach ($params[QueryParameters::SELECT] as $select) {
+            call_user_func_array(array($this, 'select'), (array) $select);
+          }
         }
 
         if (isset($params[QueryParameters::FROM])) {
-          call_user_func(array($this, 'from'), $params[QueryParameters::FROM]);
+          foreach ($params[QueryParameters::FROM] as $from) {
+            call_user_func_array(array($this, 'from'), (array) $from);
+          }
         }
 
         if (isset($params[QueryParameters::JOIN])) {
