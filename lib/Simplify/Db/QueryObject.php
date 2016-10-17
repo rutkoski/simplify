@@ -431,7 +431,7 @@ abstract class QueryObject implements QueryObjectInterface
       $this->limit = null;
     }
     else {
-      $this->limit = intval($limit);
+      $this->limit = is_null($limit) ? null : intval($limit);
 
       $this->__sql = null;
     }
@@ -452,7 +452,7 @@ abstract class QueryObject implements QueryObjectInterface
       $this->offset = null;
     }
     else {
-      $this->offset = intval($offset);
+      $this->offset = is_null($offset) ? null : intval($offset);
 
       $this->__sql = null;
     }
