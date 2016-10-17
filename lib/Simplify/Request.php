@@ -110,10 +110,19 @@ class Request
 
     $regex = '#' . preg_replace('/\/$/', '', $dirname) . '(?:(' . quotemeta(self::self()) . '))?(.*?)(?:\.([^\?]+))?(?:\/*\?.*)?/*$#';
 
+    if (php_sapi_name() == 'cli' or PHP_SAPI == 'cli')
+    {
+        global $argv, $argc;
+        
+        $uri = ($argc > 1) ? '.' . $argv[1] : '/';
+    }
+    else
+    {
     $uri = self::uri();
+    }
 
     if (!preg_match($regex, $uri, $o)) {
-      throw new Exception('Could not parse url');
+      throw new \Exception('Could not parse url');
     }
 
     $this->pretty = empty($o[1]);
@@ -139,10 +148,10 @@ class Request
   public function method($method = null)
   {
     if (!is_null($method)) {
-      return $_SERVER['REQUEST_METHOD'] == strtoupper($method);
+      return sy_get_param($_SERVER, 'REQUEST_METHOD') == strtoupper($method);
     }
 
-    return $_SERVER['REQUEST_METHOD'];
+    return sy_get_param($_SERVER, 'REQUEST_METHOD');
   }
 
   /**
