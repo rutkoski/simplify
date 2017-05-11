@@ -315,10 +315,10 @@ class Dictionary implements DictionaryInterface, \ArrayAccess
     }
 
     foreach ($data as $name => $value) {
-      if ((Dictionary::FILTER_NULL & $flags) == $flags && is_null($value))
+      if ((Dictionary::FILTER_NULL & $flags) == Dictionary::FILTER_NULL && is_null($value))
         continue;
 
-      if ((Dictionary::FILTER_EMPTY & $flags) == $flags && empty($value))
+      if ((Dictionary::FILTER_EMPTY & $flags) == Dictionary::FILTER_EMPTY && empty($value))
         continue;
 
       $this->set($name, $value);
@@ -363,11 +363,11 @@ class Dictionary implements DictionaryInterface, \ArrayAccess
       return false;
     }
 
-    if ((Dictionary::FILTER_NULL & $flags) == $flags && is_null($this->data[$name])) {
+    if ((Dictionary::FILTER_NULL & $flags) == Dictionary::FILTER_NULL && is_null($this->data[$name])) {
       return false;
     }
 
-    if ((Dictionary::FILTER_EMPTY & $flags) == $flags && empty($this->data[$name])) {
+    if ((Dictionary::FILTER_EMPTY & $flags) == Dictionary::FILTER_EMPTY && empty($this->data[$name])) {
       return false;
     }
 
