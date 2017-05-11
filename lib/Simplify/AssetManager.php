@@ -198,7 +198,7 @@ class AssetManager
     return $asset;
   }
 
-  protected static function output ($asset, $group = null)
+  public static function output ($asset, $group = null)
   {
     $url = self::$assets[$asset]['url'];
     $output = sy_get_param(self::$assets[$asset], 'output');

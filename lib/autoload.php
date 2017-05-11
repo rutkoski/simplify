@@ -32,6 +32,7 @@ $config['app:url'] = Simplify::request()->url(); // absolute, no trailing slash
 $config['cache:dir'] = '{www:dir}cache/';
 $config['cache:url'] = '{www:url}cache/';
 
+$config['app:assets:path:'] = '{app:path}';
 $config['app:assets:path:'] = '{app:path}assets/{theme}/';
 $config['app:assets:path:'] = '{app:path}assets/';
 

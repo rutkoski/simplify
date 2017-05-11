@@ -54,6 +54,10 @@ class Json extends View
 
     $output = json_encode($object);
 
+    if (JSON_ERROR_NONE !== json_last_error()) {
+      throw new \Exception(json_last_error_msg());
+    }
+
     return $output;
   }
 

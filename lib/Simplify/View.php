@@ -77,6 +77,8 @@ abstract class View extends Renderable implements ViewInterface
     catch (\Exception $e) {
       trigger_error($e->getMessage());
     }
+
+    return '';
   }
 
   /**
